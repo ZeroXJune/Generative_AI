@@ -158,7 +158,7 @@ docker-compose up --build
 
 ## Author
 
-Junie Mumar - IS Professional Elective #4 Capstone Project
+Alber June Mumar - IS Professional Elective #4 Mini Capstone Project
 
 ## License
 
