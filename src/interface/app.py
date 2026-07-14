@@ -7,13 +7,25 @@ import streamlit as st
 import json
 import numpy as np
 from pathlib import Path
-from sklearn.metrics.pairwise import cosine_similarity
 import sys
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from embeddings.embedding_generator_mock import MockEmbeddingGenerator
+
+
+def cosine_similarity_simple(a: np.ndarray, B: np.ndarray) -> np.ndarray:
+    """Compute cosine similarity between vector a and vectors in B."""
+    a = np.array(a)
+    B = np.array(B)
+
+    # Normalize
+    a_norm = a / (np.linalg.norm(a) + 1e-8)
+    B_norm = B / (np.linalg.norm(B, axis=1, keepdims=True) + 1e-8)
+
+    # Compute similarities
+    return np.dot(B_norm, a_norm)
 
 
 # Page config
@@ -73,7 +85,7 @@ def find_similar_chunks(query: str, chunks: list, top_k: int = 3) -> list:
     chunk_embeddings = np.array([chunk["embedding"] for chunk in chunks])
 
     # Compute similarities
-    similarities = cosine_similarity([query_embedding], chunk_embeddings)[0]
+    similarities = cosine_similarity_simple(query_embedding, chunk_embeddings)
 
     # Get top-k indices
     top_indices = np.argsort(similarities)[::-1][:top_k]
