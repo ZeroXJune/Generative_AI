@@ -1,0 +1,126 @@
+VECTOR DATABASES - COMPREHENSIVE GUIDE
+
+What is a Vector Database?
+===========================
+A database optimized for storing and searching high-dimensional vectors (embeddings).
+Unlike traditional databases (rows/columns), VectorDBs are designed for:
+- Fast approximate nearest neighbor (ANN) search
+- Similarity-based queries ("find similar items")
+- Billions of high-dimensional vectors
+
+Use Cases:
+- Semantic search (find similar text)
+- Recommendation systems (find similar products)
+- Image similarity (find visually similar images)
+- Anomaly detection (find outliers)
+
+Popular Vector Databases
+=========================
+
+Chroma (Recommended for beginners)
+- Type: In-memory + persistent (SQLite backend)
+- Ease of use: ⭐⭐⭐⭐⭐ (Easiest)
+- Scale: Up to millions of vectors
+- Cost: Free, open-source
+- Setup: pip install chromadb
+- Best for: Prototyping, smaller projects
+
+FAISS (Facebook AI Similarity Search)
+- Type: Approximate nearest neighbor search library
+- Ease of use: ⭐⭐⭐ (Requires more setup)
+- Scale: Billions of vectors
+- Cost: Free, open-source
+- Setup: pip install faiss-cpu (or faiss-gpu)
+- Best for: Large-scale offline search, research
+
+Pinecone (Managed service)
+- Type: Cloud-hosted vector database
+- Ease of use: ⭐⭐⭐⭐ (Good API, managed)
+- Scale: Unlimited (elastically scaled)
+- Cost: ~$25-100/month depending on usage
+- Setup: API credentials, simple HTTP requests
+- Best for: Production apps, don't want to manage infrastructure
+
+Weaviate (Enterprise-grade)
+- Type: Open-source, can self-host or cloud
+- Ease of use: ⭐⭐⭐⭐
+- Scale: Millions to billions
+- Cost: Free (self-hosted) or enterprise pricing
+- Setup: Docker container
+- Best for: Enterprise, hybrid search (vector + keyword)
+
+Milvus (Open-source at scale)
+- Type: Open-source, high-performance
+- Ease of use: ⭐⭐⭐⭐
+- Scale: Billions of vectors
+- Cost: Free, open-source
+- Setup: Kubernetes or Docker
+- Best for: Large-scale deployments, distributed systems
+
+COMPARISON MATRIX
+=================
+Database  | Ease | Scale | Cost | Type | Best For
+----------|------|-------|------|------|----------
+Chroma    | 5    | Small | FREE | Local| Learning, prototypes
+FAISS     | 3    | Large | FREE | Lib  | Research, offline
+Pinecone  | 4    | Huge  | Paid | Cloud| Production, managed
+Weaviate  | 4    | Large | FREE | Self | Hybrid search
+Milvus    | 3    | Large | FREE | Self | Distributed scale
+
+WORKING WITH CHROMA (Code Examples)
+====================================
+
+```python
+import chromadb
+
+# Initialize client
+client = chromadb.Client()
+
+# Create collection
+collection = client.create_collection(name="documents")
+
+# Add embeddings
+collection.add(
+    ids=["doc1", "doc2", "doc3"],
+    embeddings=[[1.1, 2.3], [4.5, 6.9], [3.2, 5.1]],
+    metadatas=[{"source": "notes"}, {"source": "schedule"}, {"source": "guide"}],
+    documents=["First document", "Second document", "Third document"]
+)
+
+# Query
+results = collection.query(
+    query_embeddings=[[1.1, 2.3]],
+    n_results=3  # Top 3 similar
+)
+
+print(results['documents'])  # Returns most similar documents
+print(results['distances'])  # Similarity scores
+```
+
+Distance Metrics Comparison
+===========================
+
+Cosine Similarity
+- Formula: A · B / (||A|| ||B||)
+- Range: [-1, 1], higher is more similar
+- Pros: Scale-invariant, works great for text embeddings
+- Cons: Ignores magnitude
+- Use: ✅ TEXT, DEFAULT CHOICE
+
+Euclidean Distance
+- Formula: sqrt(sum((A_i - B_i)²))
+- Range: [0, ∞], lower is more similar
+- Pros: Intuitive, works for many tasks
+- Cons: Sensitive to scale, high dimensions
+- Use: ⚠️ Use with normalized vectors
+
+Dot Product
+- Formula: A · B
+- Range: [-∞, ∞]
+- Pros: Fast, differentiable
+- Cons: Depends on magnitude, hard to interpret
+- Use: ⚠️ Use with normalized embeddings
+
+RECOMMENDATION FOR CAPSTONE:
+Use Cosine Similarity with Chroma for development,
+migrate to FAISS for scalability if needed.

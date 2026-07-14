@@ -1,0 +1,58 @@
+GLOSSARY OF AI AND MACHINE LEARNING TERMS
+
+EMBEDDINGS: Dense vector representation of text or other data. Mathematically, a point in high-dimensional space where similar items are close together.
+Example: The word "king" and "queen" have similar embeddings because they're semantically related.
+
+TOKENIZATION: Process of breaking text into smaller units (tokens) for processing. Can be at word, subword, or character level.
+Example: "Don't go" → ["Don", "'", "t", "go"] (character-level) or ["Don't", "go"] (word-level)
+
+HALLUCINATION: When an LLM generates false information with confidence. A major problem in generative AI that RAG helps solve.
+Example: "What's the capital of Atlantis?" → Hallucination: "The capital of Atlantis is Poseidon City"
+
+RAG (Retrieval-Augmented Generation): Framework combining document retrieval with language generation to ground responses in real data.
+Example: RAG system retrieving relevant documents before generating an answer, reducing hallucination.
+
+VECTOR DATABASE: Specialized database for storing and searching high-dimensional vectors (embeddings) efficiently.
+Example: Chroma, FAISS, Pinecone are popular vector databases.
+
+TRANSFORMER: Neural network architecture using self-attention mechanism, foundational for modern LLMs like GPT and BERT.
+Example: The "T" in BERT stands for Transformer.
+
+FINE-TUNING: Process of training a pre-trained model on task-specific data to adapt it for a particular use case.
+Example: Fine-tuning BERT for sentiment analysis on customer reviews.
+
+LORA (LOW-RANK ADAPTATION): Efficient fine-tuning technique that freezes base model weights and trains small adaptation layers.
+Example: LoRA allows fine-tuning large models (13B parameters) on a single GPU.
+
+CONTEXT WINDOW: Maximum number of tokens an LLM can process as input. Longer context allows more information.
+Example: GPT-4 has 8K or 32K or 128K context windows depending on version.
+
+PROMPT ENGINEERING: Art of crafting input prompts to elicit desired outputs from LLMs.
+Example: Instead of "Summarize this", try "Summarize in 3 bullet points"
+
+ZERO-SHOT LEARNING: Model performs task without any task-specific training examples.
+Example: Using GPT-4 to classify sentiment without showing examples.
+
+FEW-SHOT LEARNING: Model learns from a few examples in the prompt.
+Example: Showing 2 examples of "happy" and "sad" reviews, then classifying a new one.
+
+SEMANTIC SEARCH: Finding documents/information based on meaning, not just keyword matching.
+Example: Searching for "how to fix my laptop" finds docs about "computer repairs" (semantic match)
+
+SIMILARITY METRIC: Mathematical measure of how similar two vectors are. Common ones: Cosine, Euclidean, Dot Product.
+Example: Cosine similarity of 0.9 means vectors are very similar in direction.
+
+INFERENCE: Process of using a trained model to make predictions on new data.
+Example: Feeding a user's question to an LLM and getting a response.
+
+TEMPERATURE: Hyperparameter controlling randomness in LLM outputs. Higher = more random, Lower = more deterministic.
+Example: Temperature 0.0 produces the same output every time; 0.8 is creative but reasonable.
+
+TOP-K SAMPLING: Technique where only the K most likely next tokens are considered during generation.
+Example: Top-K=10 means model samples from the 10 most probable next tokens.
+
+PERPLEXITY: Metric measuring how well a language model predicts text. Lower is better.
+Example: A model with perplexity 20 is more confident about its predictions than one with perplexity 100.
+
+ATTENTION: Mechanism allowing model to focus on relevant parts of input when generating output.
+Example: When generating "queen", attention focuses on "female", "royalty" tokens.

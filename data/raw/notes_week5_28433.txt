@@ -1,0 +1,56 @@
+WEEK 5 LECTURE NOTES - GENERATIVE AI SYSTEMS
+
+Topic: Vector Databases & Similarity Search
+
+Key Learning Objectives:
+- Understand core concepts related to this week's topic
+- Implement practical examples
+- Apply to capstone project
+
+MAIN CONTENT:
+
+1. Theoretical Foundation
+   - Deep dive into the topic
+   - Mathematical background
+   - Real-world applications
+
+2. Practical Implementation
+   - Code examples using Python
+   - Common libraries and frameworks
+   - Performance optimization tips
+
+3. Capstone Application
+   - How this relates to the personal assistant
+   - Integration points
+   - Best practices
+
+HANDS-ON EXERCISE:
+
+Task: Build a small prototype demonstrating this week's concept
+- Expected time: 2-3 hours
+- Deliverable: Working code with documentation
+- Next class: Present results and discuss challenges
+
+READING ASSIGNMENT:
+- Research paper: [Academic reference]
+- Blog post: [Industry insights]
+- Documentation: [Official framework docs]
+
+DISCUSSION QUESTIONS:
+1. What are the tradeoffs of this approach?
+2. How does this scale to production systems?
+3. What limitations might we encounter?
+
+HOMEWORK:
+- Complete the hands-on exercise
+- Read the assigned materials
+- Prepare 1-2 questions for next class
+- Submit code to GitHub with commit message
+
+RESOURCES:
+- Code examples: [GitHub link]
+- Notebook: [Jupyter notebook]
+- Video tutorial: [Video link]
+- API documentation: [Docs link]
+
+Next Week: Continued exploration and integration

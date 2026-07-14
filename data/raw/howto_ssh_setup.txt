@@ -1,0 +1,127 @@
+HOW TO: Set Up SSH and Secure Remote Access
+
+WHAT IS SSH?
+============
+SSH (Secure Shell) is a cryptographic network protocol for secure remote login and command execution.
+- Replaces insecure telnet
+- Uses public-key cryptography
+- Encrypted channel for sensitive data
+
+WHEN YOU NEED IT
+================
+- Remote server management
+- Deploying code to production
+- Accessing cloud instances (AWS, GCP, Azure)
+- Git operations over SSH
+
+GENERATING SSH KEYS
+===================
+
+Step 1: Open terminal and generate key pair
+```bash
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+
+Step 2: When prompted, accept default location (~/.ssh/id_rsa) or specify custom
+Step 3: Enter passphrase (optional but recommended)
+Step 4: Verify keys were created:
+```bash
+ls -la ~/.ssh/
+```
+You should see: id_rsa (private key) and id_rsa.pub (public key)
+
+IMPORTANT: Never share your private key (id_rsa)!
+
+CONFIGURING SSH ACCESS
+=======================
+
+Copy public key to remote server:
+```bash
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@remote_host.com
+```
+
+Or manually:
+1. SSH into server with password: ssh user@remote_host.com
+2. Paste contents of id_rsa.pub into ~/.ssh/authorized_keys
+3. Set permissions: chmod 600 ~/.ssh/authorized_keys
+
+CONNECTING TO REMOTE SERVER
+=============================
+
+Basic connection:
+```bash
+ssh user@remote_host.com
+```
+
+With specific port:
+```bash
+ssh -p 2222 user@remote_host.com
+```
+
+With key file:
+```bash
+ssh -i ~/.ssh/custom_key user@remote_host.com
+```
+
+RUNNING REMOTE COMMANDS
+=======================
+
+Execute single command:
+```bash
+ssh user@remote_host.com "ls -la /home"
+```
+
+Execute multiple commands:
+```bash
+ssh user@remote_host.com "cd /app && git pull && ./deploy.sh"
+```
+
+BEST PRACTICES
+==============
+
+1. Use strong passphrases for SSH keys
+2. Disable password authentication on server:
+   Edit /etc/ssh/sshd_config: PasswordAuthentication no
+3. Change default SSH port (22) to reduce attacks
+4. Use SSH config file (~/.ssh/config) for frequently used servers:
+
+```
+Host myserver
+    HostName remote_host.com
+    User deploy_user
+    IdentityFile ~/.ssh/deploy_key
+    Port 2222
+```
+
+Then: ssh myserver
+
+5. Rotate keys periodically
+6. Use jump hosts for extra security:
+   ssh -J bastion_host intermediate_host
+
+TROUBLESHOOTING
+================
+
+Connection refused:
+- Check if SSH service is running on server
+- Verify correct hostname and port
+
+Permission denied:
+- Ensure public key is in authorized_keys
+- Check ~/.ssh/config and permissions (chmod 600 for files, 700 for directory)
+
+Key too open permissions:
+- Run: chmod 600 ~/.ssh/id_rsa
+
+Slow connection:
+- Check: ssh -v user@host (verbose mode)
+- May be DNS issue: Add -o StrictHostKeyChecking=no
+
+FOR CAPSTONE PROJECT
+=====================
+Set up SSH deployment to quickly deploy to cloud server:
+1. Generate SSH key pair
+2. Add to cloud provider's key list (AWS, Azure, etc.)
+3. Store private key securely (not in git!)
+4. Use ssh-copy-id to access deployment servers
+5. Automate deployments in CI/CD pipeline using SSH

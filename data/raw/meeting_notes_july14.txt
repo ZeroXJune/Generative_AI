@@ -1,0 +1,82 @@
+MEETING NOTES - PROJECT KICKOFF
+Date: July 14, 2026
+Attendees: Junie Mumar, Instructor Jessie Melendres
+Location: Zoom (make up session)
+
+AGENDA:
+1. Capstone project overview and expectations
+2. Technology stack discussion
+3. Checkpoint timeline and deliverables
+4. Q&A and next steps
+
+DISCUSSION SUMMARY:
+
+1. PROJECT SCOPE
+   - Personal Assistant AI: RAG system for documents + schedules
+   - Theme: Personal/Domain Notes Assistant
+   - Will demonstrate all 4 course CILOs
+   - Individual project with clear component ownership
+   - Must use real dataset of 20-30+ documents
+
+2. TECHNOLOGY CHOICES DISCUSSED
+   - LLM: Agreed on using open-source Llama-2 initially, option to upgrade to GPT-4
+   - Embeddings: Sentence-Transformers (all-MiniLM-L6-v2 or MPNET-base-v2)
+   - Vector DB: Start with Chroma (local), can scale to FAISS
+   - Framework: LangChain preferred for RAG orchestration
+   - Interface: Streamlit for rapid development
+   - Deployment: Docker with docker-compose for simplicity
+
+3. CHECKPOINT 1 CHECKLIST (Due Aug 15)
+   - [x] Project proposal (1-2 pages) ← STARTED
+   - [ ] Dataset finalized (25-30 documents)
+   - [ ] Text preprocessing notebook with before/after examples
+   - [ ] Embedding generation demo and model justification
+   - [ ] Repository organization and README
+   - [ ] Short reflection on data challenges (0.5 page)
+   
+   KEY METRICS:
+   - Data preprocessing: 95%+ artifact removal
+   - Embedding success: All documents vectorized
+   - Documentation clarity: Runnable, well-commented code
+
+4. DATA PIPELINE OVERVIEW
+   User Document Upload → Text Cleaner → Tokenizer → Chunker → 
+   Embedding Generator → Vector Store → Indexed & Searchable
+   
+   Example flow for a schedule document:
+   Raw: "Capstone Checkpoint 1 (Prelim): August 15, 2026!!!"
+   Cleaned: "capstone checkpoint 1 prelim august 15 2026"
+   Tokens: ['capstone', 'checkpoint', '1', 'prelim', 'august', '15', '2026']
+   Embedded: [0.123, -0.456, 0.789, ...] (384-768 dims)
+
+5. RISK DISCUSSION
+   - Concern: Hallucination in responses
+   - Mitigation: Use strict system prompts, temperature control, source attribution
+   
+   - Concern: Small dataset limiting RAG effectiveness
+   - Mitigation: Use overlapping chunks, augment with synthetic queries, optimize similarity threshold
+
+6. NEXT STEPS
+   - Finalize dataset sources by July 17
+   - Implement text preprocessing pipeline by July 22
+   - Generate embeddings and evaluate by July 29
+   - Submit Checkpoint 1 by August 15
+
+ACTION ITEMS:
+- [ ] Junie: Collect and organize 25-30 raw documents by July 17
+- [ ] Junie: Implement TextCleaner class by July 20
+- [ ] Junie: Implement Tokenizer class by July 22
+- [ ] Junie: Run embeddings on sample data by July 25
+- [ ] Junie: Write reflection and finalize documentation by Aug 10
+
+QUESTIONS FOR NEXT MEETING:
+- Should we implement schedule-specific notification logic?
+- Any preference on chunk size and overlap ratio?
+- Should we support PDF parsing initially?
+
+RESOURCES SHARED:
+- LangChain Docs: https://python.langchain.com/
+- Hugging Face Models: https://huggingface.co/models
+- Chroma Getting Started: https://docs.trychroma.com/getting-started
+
+Next Meeting: July 21, 2026 (after data collection)

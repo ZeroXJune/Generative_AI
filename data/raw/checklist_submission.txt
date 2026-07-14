@@ -1,0 +1,130 @@
+CHECKPOINT 1 SUBMISSION CHECKLIST
+
+Due: August 15, 2026, 11:59 PM
+Submit: GitHub repository link + README
+
+DELIVERABLES CHECKLIST
+======================
+
+1. PROJECT PROPOSAL (1-2 pages) ✅
+   - [x] Problem statement: Clear, specific, measurable
+   - [x] Target users: Identified and described
+   - [x] Chosen theme: Personal Assistant AI, RAG-based
+   - [x] Dataset description: 25-30 documents, sources listed
+   - [x] Success criteria: Specific metrics for all CILOs
+   - [ ] File: docs/01_Project_Proposal.md
+
+2. DATASET (25-30 real or simulated documents) ✅
+   - [x] Data collected: At least 25 documents
+   - [x] Diverse sources: Notes, schedules, references, etc.
+   - [x] Reasonable size: 500B-100KB mix
+   - [x] No PII: Personal but not privacy-sensitive
+   - [x] Stored: data/raw/ directory
+   - [x] Documented: List in README
+
+3. TEXT PREPROCESSING (with before/after examples) ⚠️
+   - [ ] Code: TextCleaner class implemented
+   - [ ] Code: Tokenizer class implemented  
+   - [ ] Documentation: How each step works
+   - [ ] Examples: 3-5 before/after comparisons
+   - [ ] Metrics: % artifact removal measured
+   - [ ] Tests: Unit tests for preprocessing
+
+4. EMBEDDING GENERATION (with justification) ⚠️
+   - [ ] Model selected: Justification documented
+   - [ ] Code: EmbeddingGenerator class
+   - [ ] Demo: Successful embedding of sample documents
+   - [ ] Verification: Check embedding dimensions
+   - [ ] Model choice: Written explanation (50-100 words)
+   - [ ] Performance: Time/memory requirements listed
+
+5. REPOSITORY SETUP & DOCUMENTATION ✅
+   - [x] GitHub repo: Created and shared
+   - [x] Branch: Working on claude/personal-assistant-ai-*
+   - [x] README.md: Clear, complete, runnable
+   - [x] Directory structure: Organized (/data, /src, /docs)
+   - [x] .gitignore: Python files configured
+   - [ ] Commit history: Incremental (10+ commits)
+   - [ ] No secrets: No API keys in code
+
+6. REFLECTION (0.5 pages)
+   - [ ] Data challenges encountered
+   - [ ] Solutions implemented
+   - [ ] Lessons learned
+   - [ ] Plans for next checkpoint
+   - [ ] File: docs/CHECKPOINT1_REFLECTION.md
+
+RUBRIC VERIFICATION (100 points total)
+=====================================
+
+Problem & Scope Clarity (20 points):
+- [ ] Problem statement specific and measurable (5 pts)
+- [ ] Dataset appropriately scoped (5 pts)
+- [ ] Success criteria clear (5 pts)
+- [ ] Theme well-motivated (5 pts)
+
+Data Preprocessing (30 points):
+- [ ] Cleaning correctly implemented (10 pts)
+- [ ] Tokenization correctly implemented (10 pts)
+- [ ] Before/after examples demonstrate effectiveness (10 pts)
+
+Embedding Generation (30 points):
+- [ ] Embeddings correctly generated (10 pts)
+- [ ] Model choice well-justified (10 pts)
+- [ ] Demonstration clear and successful (10 pts)
+
+Documentation & Repo (20 points):
+- [ ] README clear and complete (7 pts)
+- [ ] Repository organized and clean (7 pts)
+- [ ] Commit history shows incremental progress (6 pts)
+
+CODE QUALITY STANDARDS
+======================
+
+- [ ] Functions have docstrings
+- [ ] Variables are clearly named
+- [ ] No hardcoded paths (use constants)
+- [ ] Code is DRY (Don't Repeat Yourself)
+- [ ] No print() statements (use logging)
+- [ ] Error handling present
+
+FINAL CHECKLIST
+================
+
+Before submission:
+- [ ] All deliverables completed
+- [ ] README updated with dataset info
+- [ ] No API keys or secrets in code
+- [ ] All files committed to git
+- [ ] Latest commit pushed to GitHub
+- [ ] Branch name correct (claude/personal-assistant-ai-*)
+- [ ] README has clear instructions to run preprocessing
+- [ ] No pending changes (git status clean)
+
+After submission:
+- [ ] Email instructor with repo link
+- [ ] Note any challenges or risks
+- [ ] Request early feedback if possible
+- [ ] Plan for Checkpoint 2
+
+SCORE PREDICTION
+=================
+
+Target: 90+ / 100
+
+Confidence by section:
+- Problem statement: 95% (very complete)
+- Dataset: 85% (need 25-30 finalized)
+- Preprocessing: 70% (still coding)
+- Embedding: 70% (still coding)
+- Documentation: 90% (mostly done)
+- Overall: ~80% → Aim for 90+
+
+ACTION ITEMS FOR NEXT WEEK
+===========================
+- [ ] Complete embedding generation code
+- [ ] Generate embeddings for all documents
+- [ ] Write reflection (500 words)
+- [ ] Final documentation and testing
+- [ ] Commit and push everything
+- [ ] Double-check rubric alignment

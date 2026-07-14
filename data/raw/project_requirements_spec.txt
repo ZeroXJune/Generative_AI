@@ -1,0 +1,193 @@
+PERSONAL ASSISTANT AI - REQUIREMENTS SPECIFICATION
+
+PROJECT CODE: PA-AI-001
+VERSION: 1.0
+DATE: July 14, 2026
+STATUS: APPROVED
+
+EXECUTIVE SUMMARY
+==================
+This document specifies functional and non-functional requirements for the Personal Assistant AI capstone project. The system is a Retrieval-Augmented Generation (RAG) application designed for intelligent document management and scheduling.
+
+FUNCTIONAL REQUIREMENTS
+=======================
+
+FR1: Document Management
+- FR1.1: Users can upload documents in multiple formats (TXT, PDF, MD)
+- FR1.2: System extracts text content from uploaded files
+- FR1.3: Documents are indexed and stored in vector database
+- FR1.4: Users can view list of uploaded documents
+- FR1.5: Users can delete or update documents
+
+FR2: Question Answering
+- FR2.1: Users can ask natural language questions
+- FR2.2: System retrieves relevant document chunks
+- FR2.3: System generates grounded responses using LLM
+- FR2.4: System provides source attribution for responses
+- FR2.5: Users can rate response quality for feedback
+
+FR3: Schedule Management
+- FR3.1: Users can upload schedule/calendar documents
+- FR3.2: System extracts deadlines and events
+- FR3.3: System maintains deadline database
+- FR3.4: System sends notifications for upcoming deadlines
+- FR3.5: Users can customize notification timing
+
+FR4: Conversational Interface
+- FR4.1: Users can have multi-turn conversations
+- FR4.2: System maintains conversation history
+- FR4.3: System recognizes follow-up references ("What about X?")
+- FR4.4: Users can start new conversation sessions
+- FR4.5: Conversation history is persisted
+
+NON-FUNCTIONAL REQUIREMENTS
+============================
+
+NFR1: Performance
+- Response latency: < 2 seconds for 95% of queries
+- Throughput: Support 10+ concurrent users
+- Vector database search: < 200ms for top-K retrieval
+- LLM inference: < 1500ms for response generation
+
+NFR2: Scalability
+- Support 50+ documents without performance degradation
+- Support 10,000+ document chunks
+- Horizontal scaling via Docker containers
+- Database: Handle millions of embeddings (future)
+
+NFR3: Reliability
+- System uptime: 99% (excluding deployments)
+- Data persistence: No loss of uploaded documents
+- Error handling: Graceful degradation
+- Notification reliability: 99.9% delivery
+
+NFR4: Security
+- API keys stored as environment variables
+- No sensitive data in version control
+- HTTPS for communication
+- User data encryption at rest (if cloud-hosted)
+
+NFR5: Usability
+- Responsive design (desktop + mobile)
+- Intuitive interface with clear navigation
+- Error messages are helpful and actionable
+- Documentation accessible in-app
+
+NFR6: Maintainability
+- Clean, documented code (docstrings + comments)
+- Modular architecture (preprocessing, embedding, RAG, interface)
+- Automated tests for core functions
+- Easy to extend with new features
+
+INTERFACE REQUIREMENTS
+======================
+
+User Interface:
+- [ ] Document upload form with drag-and-drop
+- [ ] Chat interface with conversation history
+- [ ] Schedule/deadline display
+- [ ] Settings panel for notifications
+- [ ] Response quality rating system
+
+API Endpoints (Backend):
+- POST /api/documents - Upload document
+- GET /api/documents - List documents
+- DELETE /api/documents/{id} - Remove document
+- POST /api/query - Submit question
+- GET /api/history - Get conversation history
+- POST /api/schedule - Add deadline
+- GET /api/notifications - Get upcoming deadlines
+
+DATA REQUIREMENTS
+=================
+
+Input Data:
+- Documents: TXT, PDF, Markdown, CSV, JSON
+- Schedules: Calendar exports, text lists
+- Max file size: 10MB per document
+- Max total storage: 500MB (initially)
+
+Output Data:
+- Responses: Structured JSON with text + sources
+- Embeddings: 384-768 dimensional vectors
+- Metadata: Document source, chunk position, timestamp
+
+SYSTEM CONSTRAINTS
+===================
+
+Technical:
+- Python 3.10+ (must-have)
+- Modern GPU optional (but helpful for embeddings)
+- Minimum 4GB RAM required
+- Support for Linux and MacOS
+
+External Dependencies:
+- LLM API (OpenAI, open-source alternatives)
+- Embedding model (Hugging Face)
+- Vector database (Chroma, FAISS)
+- Web framework (Streamlit or FastAPI)
+
+TESTING REQUIREMENTS
+====================
+
+Unit Tests:
+- Text preprocessing: 95%+ artifact removal
+- Tokenization: Correct token boundaries
+- Embedding generation: Valid vector dimensions
+- Similarity search: Correct ranking
+
+Integration Tests:
+- End-to-end document upload and retrieval
+- Question answering with known documents
+- Multi-turn conversation coherence
+- Notification triggering
+
+Performance Tests:
+- Latency: Response time < 2 seconds
+- Load: Support 10 concurrent queries
+- Scalability: Test with 50+ documents
+
+DEPLOYMENT REQUIREMENTS
+=======================
+
+Containerization:
+- [ ] Dockerfile with clear stages
+- [ ] docker-compose for local development
+- [ ] Multi-stage build for production
+
+CI/CD:
+- [ ] GitHub Actions for testing
+- [ ] Automated Docker image builds
+- [ ] Deployment to cloud platform
+
+Documentation:
+- [ ] README with setup instructions
+- [ ] Architecture diagram
+- [ ] API documentation
+- [ ] User guide
+
+ACCEPTANCE CRITERIA
+===================
+
+Checkpoint 1 (Prelim):
+- ✅ 25-30 documents collected
+- ✅ Text preprocessing > 95% effective
+- ✅ All documents successfully embedded
+- ✅ Documentation clear and complete
+
+Checkpoint 4 (Final):
+- ✅ Application deployed and running
+- ✅ Demo with 5+ realistic queries
+- ✅ Hallucination rate < 10%
+- ✅ Notification system working
+- ✅ Code well-documented
+- ✅ Presentation successful
+
+GLOSSARY
+========
+- RAG: Retrieval-Augmented Generation
+- LLM: Large Language Model
+- Vector DB: Vector Database (stores embeddings)
+- Embedding: Dense vector representation of text
+- Chunk: Segment of document for embedding
+- Hallucination: LLM generating false information

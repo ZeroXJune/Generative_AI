@@ -1,0 +1,122 @@
+CAPSTONE PROJECT PLAN - PERSONAL ASSISTANT AI
+
+PROJECT OVERVIEW
+================
+Build a Retrieval-Augmented Generation (RAG) system that allows users to:
+1. Upload personal documents and schedules
+2. Ask intelligent questions about their content
+3. Receive proactive notifications about upcoming deadlines
+4. Maintain conversational context across multiple turns
+
+THEME: Personal/Domain Notes Assistant
+
+DELIVERABLES BY CHECKPOINT
+==========================
+
+CHECKPOINT 1 (Prelim - Week 4)
+- Project proposal: Problem framing, dataset, success criteria
+- Dataset: 25-30 documents (notes, schedules, references)
+- Text preprocessing: Cleaning, tokenization with before/after examples
+- Embedding generation: Using Sentence-Transformers model
+- Repository setup: Clean README, organized structure, commit history
+
+CHECKPOINT 2 (Midterm - Week 8)
+- Prompt engineering: 3+ structured system prompts
+- API integration: Chat Completion API (OpenAI or equivalent)
+- Vector database: Set up with embeddings (Chroma/FAISS)
+- Distance metric analysis: Compare Cosine, Euclidean, Dot Product
+- Similarity search demonstration
+
+CHECKPOINT 3 (Semi-Final - Week 12)
+- Ingestion pipeline: Automated document parsing and embedding
+- RAG application: Working CLI/UI using LangChain or LlamaIndex
+- Conversational memory: Multi-turn conversation support
+- Framework comparison: LangChain vs LlamaIndex analysis
+- Live demo: 5+ realistic queries with proper grounding
+
+CHECKPOINT 4 (Final - Week 16)
+- Model customization: PEFT/LoRA/QLoRA analysis
+- Web interface: Streamlit or FastAPI frontend
+- Containerization: Working Dockerfile with multi-stage builds
+- Deployment: Evidence of running in containerized environment
+- Final report: 3-5 page comprehensive technical documentation
+- Presentation & Defense: 10-15 min presentation + Q&A
+
+TEAM STRUCTURE
+==============
+Working individually, but clear ownership of pipeline components:
+- Data/Embeddings: Text preprocessing, embedding generation, vector DB setup
+- Orchestration/RAG: LLM integration, RAG implementation, conversation memory
+- Interface/Deployment: UI development, containerization, deployment
+
+DATA SOURCES
+============
+1. Academic Notes: Course materials, research summaries
+2. Project Documentation: Design docs, specifications, meeting notes
+3. Schedules & Calendars: Class schedules, event lists, deadline lists
+4. Personal References: How-to guides, recipes, reference materials
+5. Technical Guides: API documentation, setup instructions
+6. Meeting Minutes: Summaries with action items
+7. Task Lists: To-do lists with descriptions
+
+TECHNOLOGY CHOICES
+===================
+- LLM: GPT-4 (or open-source Llama-2 alternative)
+- Embeddings: Sentence-Transformers (all-MiniLM or MPNET)
+- Vector DB: Chroma (local) or FAISS for similarity search
+- Framework: LangChain for RAG orchestration
+- Interface: Streamlit for rapid UI development
+- Deployment: Docker containers for portability
+- Fine-tuning: PEFT library for LoRA/QLoRA experiments
+
+SUCCESS METRICS
+===============
+- RAG Retrieval Accuracy: ≥80% relevant context retrieved
+- Hallucination Rate: <10% of responses with false information
+- Response Time: <2 seconds per query
+- Notification Reliability: 100% on-time deadline alerts
+- Document Support: Can handle 50+ documents without degradation
+
+RISK MANAGEMENT
+================
+Risk: Documents too small for effective RAG
+Mitigation: Use overlapping chunks; augment with synthetic data
+
+Risk: High hallucination rate
+Mitigation: Strict system prompts; confidence thresholds; citations
+
+Risk: API rate limits
+Mitigation: Use local LLM; implement caching; batch requests
+
+Risk: Performance degradation at scale
+Mitigation: Use approximate NN (FAISS); optimize chunk size
+
+TIMELINE
+========
+Week 1-2: Data collection, proposal finalization
+Week 2-3: Text preprocessing, embedding generation
+Week 4: Checkpoint 1 submission (Prelim exam)
+Week 5-6: Prompt engineering, vector DB setup
+Week 7: API integration, distance metric analysis
+Week 8: Checkpoint 2 submission (Midterm exam)
+Week 9-10: RAG pipeline development, conversational memory
+Week 11: Live demo preparation, documentation
+Week 12: Checkpoint 3 submission (Semi-Final exam)
+Week 13-14: Interface development, containerization
+Week 15: Deployment, final report writing
+Week 16: Checkpoint 4 submission, presentation & defense (Final exam)
+
+MEETING SCHEDULE
+================
+- Async: Daily commits to GitHub tracking progress
+- Weekly: Self-check against checkpoint rubrics
+- Bi-weekly: Instructor office hours (optional)
+- Pre-submission: Code review with rubric checklist
+
+REFERENCES
+==========
+- Lewis et al. (2020): "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+- LangChain Documentation: https://python.langchain.com/
+- Sentence-Transformers: https://www.sbert.net/
+- Chroma Vector DB: https://www.trychroma.com/
+- PEFT LoRA: https://github.com/huggingface/peft

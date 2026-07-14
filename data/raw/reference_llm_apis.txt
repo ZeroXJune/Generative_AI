@@ -1,0 +1,110 @@
+LLM APIs AND PROVIDERS - QUICK REFERENCE
+
+PROPRIETARY MODELS (API-based)
+===============================
+
+OpenAI (GPT-4, GPT-3.5-Turbo)
+- Models: gpt-4, gpt-4-turbo, gpt-3.5-turbo
+- Pricing: ~$0.03-$0.06 per 1K tokens (input), ~$0.06-$0.18 (output)
+- Strengths: SOTA quality, multimodal (gpt-4-vision), very stable
+- Weaknesses: Proprietary, expensive, rate limited
+- Endpoint: https://api.openai.com/v1/chat/completions
+- Auth: OPENAI_API_KEY environment variable
+
+Anthropic (Claude)
+- Models: claude-3-opus, claude-3-sonnet, claude-3-haiku
+- Pricing: Similar to OpenAI, with volume discounts
+- Strengths: Strong reasoning, good context window (200K tokens)
+- Weaknesses: Proprietary, newer than GPT
+- Endpoint: https://api.anthropic.com
+- Auth: ANTHROPIC_API_KEY
+
+Google (Gemini, PaLM)
+- Models: gemini-pro, gemini-pro-vision
+- Pricing: Free tier available for development
+- Strengths: Multimodal, good for code, Google integration
+- Weaknesses: Newer API, less stable than OpenAI
+- Endpoint: https://generativelanguage.googleapis.com
+- Auth: GOOGLE_API_KEY
+
+OPEN-SOURCE MODELS (Self-hosted)
+=================================
+
+Llama 2 (Meta)
+- Sizes: 7B, 13B, 70B parameters
+- Throughput: ~10-50 tokens/sec (depending on hardware)
+- Strengths: Free, no rate limits, strong base model
+- Weaknesses: Slower than GPT-4, needs GPU (24GB+ for 13B)
+- Common Deployments:
+  * Ollama (local, easy setup)
+  * Replicate (API, paid)
+  * Together.ai (API, cheaper than proprietary)
+
+Mistral (Mistral AI)
+- Sizes: 7B, 8x7B (mixture of experts)
+- Strengths: Faster than Llama, 8x7B is very capable
+- Weaknesses: Smaller community than Llama
+- Deployment: Via Hugging Face Inference API
+
+Zephyr (HuggingFace)
+- Based on Mistral 7B, instruction-tuned
+- Free to use with Inference API
+- Good for cost-conscious projects
+
+RECOMMENDED SETUPS FOR CAPSTONE
+================================
+
+Development (Local):
+- Model: Llama 2 7B or Zephyr-7B (via Ollama)
+- No API costs, full control
+- Slower (~2-5 sec/query), but good for development
+
+Production (Cloud):
+- Model: GPT-3.5-Turbo or Claude-3-Haiku
+- Fast, reliable, reasonable cost
+- OpenAI: ~$0.03-0.06 per 1K tokens (cheap at scale)
+
+CALLING LLMS WITH LANGCHAIN
+============================
+
+```python
+from langchain.llms import OpenAI, HuggingFaceLLM, CTransformers
+
+# OpenAI
+llm = OpenAI(model_name="gpt-3.5-turbo", temperature=0.7, max_tokens=200)
+response = llm.predict(text="Summarize RAG for me.")
+
+# Local Llama
+llm = CTransformers(model="TheBloke/Llama-2-7B-GGML", 
+                    model_file="llama-2-7b.ggmlv3.q8_0.bin",
+                    config={"max_new_tokens": 256, "temperature": 0.8})
+
+# Via Hugging Face API
+llm = HuggingFaceLLM(repo_id="mistralai/Mistral-7B-Instruct-v0.1",
+                     huggingfacehub_api_token=HF_TOKEN)
+```
+
+COST ESTIMATION
+================
+For 1000 queries over semester:
+
+GPT-3.5-Turbo:
+- Avg input: 200 tokens, output: 100 tokens
+- Cost: 1000 * (200*$0.0005 + 100*$0.0015) = ~$250
+
+Llama 2 (Ollama, local):
+- Cost: $0 (except GPU electricity ~$10-20)
+
+Claude Haiku:
+- Cost: Similar to GPT-3.5, ~$250-300
+
+Mistral 7B (Together.ai):
+- Cost: ~$0.2 per 1M tokens = ~$60 for 1000 queries
+
+BEST PRACTICE
+==============
+1. Start with free open-source (Ollama + Llama 2 7B)
+2. Use Langchain abstraction layer (easy to swap models)
+3. Cache common queries to reduce API calls
+4. For production, use GPT-3.5-Turbo (best price/quality)
+5. Monitor costs and set budget alerts

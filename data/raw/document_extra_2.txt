@@ -1,0 +1,50 @@
+ADDITIONAL REFERENCE DOCUMENT 2
+
+This document provides supplementary information for the Personal Assistant AI capstone project.
+
+Content Area 2:
+The capstone project is designed to demonstrate mastery of generative AI concepts, including:
+- Text preprocessing and embeddings
+- Prompt engineering and API integration
+- Vector databases and similarity search
+- RAG orchestration and implementation
+- Deployment and containerization
+
+Key Points:
+1. The project follows a checkpoint-based approach
+2. Each checkpoint builds on previous work
+3. Team or individual work is allowed
+4. Emphasis on clean code and documentation
+5. Final delivery includes containerized application
+
+Technical Stack:
+- Programming Language: Python 3.10+
+- LLM Framework: LangChain or LlamaIndex
+- Vector Store: Chroma or FAISS
+- Web Interface: Streamlit or FastAPI
+- Deployment: Docker and docker-compose
+- Fine-tuning: PEFT library (LoRA/QLoRA)
+
+Project Themes (choose one):
+- Document/Knowledge-Base Q&A Assistant
+- Source Code Analyzer/Reviewer
+- Customer Support/FAQ Bot
+- Academic Research Assistant
+- Personal/Domain Notes Assistant
+- Local Business/Community Assistant
+
+Success Metrics:
+- RAG retrieval accuracy: 80%+
+- Hallucination rate: <10%
+- Response latency: <2 seconds
+- Code quality: Well-documented, modular
+- Deployment: Working containerized application
+
+Resources:
+- LangChain documentation
+- HuggingFace model hub
+- Vector database tutorials
+- RAG research papers
+- Open-source LLM guides
+
+This document serves as reference material for the project.

@@ -1,0 +1,83 @@
+SPRINT 1 TASKS - Personal Assistant AI Capstone
+Sprint Period: July 14-29, 2026
+
+HIGH PRIORITY
+=============
+
+[COMPLETED] Set up GitHub repository
+- Initialize repo with .gitignore, README skeleton
+- Create branch: claude/personal-assistant-ai-yxy5sf
+- Set up directory structure
+
+[IN PROGRESS] Finalize dataset (25-30 documents)
+- 5 Academic notes documents
+- 4 Project documentation files
+- 6 Schedule/deadline documents
+- 3 Personal reference documents
+- 4 Technical guides
+- 3+ Meeting minutes
+- Target: 25-30 total by July 17
+
+[TODO] Implement text preprocessing module
+- TextCleaner class: Remove special chars, normalize whitespace
+- Tokenizer class: Subword tokenization using transformers library
+- Unit tests for both
+- Before/after examples showing effectiveness
+- Deadline: July 22
+
+[TODO] Implement chunking strategy
+- Fixed size chunks (512 tokens)
+- 50% overlap to preserve context
+- Chunk metadata (document_id, source, position)
+- Edge cases: Very short/long documents
+- Deadline: July 24
+
+[TODO] Implement embedding generation
+- Load Sentence-Transformers model (all-MiniLM-L6-v2)
+- Embed all documents end-to-end
+- Save embeddings to disk
+- Create similarity search demo
+- Deadline: July 26
+
+MEDIUM PRIORITY
+================
+
+[TODO] Set up Chroma vector database
+- Initialize local vector store
+- Add embeddings to store
+- Test similarity search
+- Create loading/saving utilities
+
+[TODO] Write Checkpoint 1 reflection
+- Data challenges encountered
+- Solutions implemented
+- Lessons learned (0.5 page)
+
+[TODO] Documentation and code comments
+- Docstrings for all functions
+- README update with architecture diagram
+- Inline comments for complex logic
+
+LOW PRIORITY
+==============
+
+[TODO] Explore alternative embedding models
+- Compare all-MiniLM-L6-v2 vs MPNET-base-v2
+- Benchmark on sample queries
+- Document performance tradeoffs
+
+[TODO] Set up visualization utilities
+- Plot document length distribution
+- Visualize token overlap for chunks
+- Create embedding space visualization (t-SNE)
+
+BLOCKERS
+========
+None currently
+
+NOTES
+=====
+- Vectorstore setup can wait until Checkpoint 2
+- Don't over-engineer; keep preprocessing simple for now
+- Focus on 95%+ artifact removal and clear before/after examples
+- Commit daily to show incremental progress

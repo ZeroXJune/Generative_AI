@@ -1,0 +1,130 @@
+GPU REQUIREMENTS FOR ML/AI PROJECTS
+
+WHY GPU?
+========
+- Vector operations are parallelizable
+- LLM inference 10-100x faster on GPU
+- Embedding generation 5-10x faster
+- Essential for production deployments
+
+GPU TYPES
+=========
+
+NVIDIA GPUs (Recommended)
+- CUDA support (framework standard)
+- CUDNN libraries for deep learning
+- Most research and production use
+- Compatible with: PyTorch, TensorFlow, JAX
+
+AMD GPUs
+- ROCm support (growing ecosystem)
+- Cheaper than NVIDIA
+- Less mature, but improving
+- Compatible with: PyTorch (experimental)
+
+Apple Silicon (M1/M2/M3)
+- Built-in accelerators
+- Good for inference, not training
+- Limited to Mac ecosystem
+- Fair performance for embedding generation
+
+VRAM REQUIREMENTS BY TASK
+==========================
+
+Embedding Generation (Sentence-Transformers):
+- all-MiniLM-L6-v2: 500MB VRAM, 1-2 GB RAM
+- MPNET-base-v2: 800MB VRAM, 2 GB RAM
+- BGE-large: 1.5GB VRAM, 3 GB RAM
+- ✅ Runs on consumer GPUs
+
+LLM Inference (Quantized):
+- Llama-2 7B (4-bit): 6-8 GB VRAM
+- Llama-2 13B (4-bit): 12-16 GB VRAM
+- Llama-2 70B (4-bit): 40-50 GB VRAM
+- ✅ Practical with consumer hardware
+
+Full Precision Models:
+- Llama-2 7B (float32): 28 GB VRAM
+- Llama-2 13B (float32): 52 GB VRAM
+- Not practical for consumer hardware
+
+Fine-tuning with LoRA:
+- Base model: See above
+- LoRA layers: +2-4 GB VRAM
+- Example: Llama-2 7B + LoRA = 12-16 GB
+
+RECOMMENDED SETUPS FOR CAPSTONE
+=================================
+
+Budget Option (No GPU):
+- CPU-only embeddings: 5-10 sec/doc
+- OpenAI API for LLM: Fast responses
+- Total cost: $100-500 in API usage
+- ✅ Works, slower but fine for learning
+
+Budget with GPU (4GB VRAM):
+- GPU: NVIDIA GTX 1050 Ti, RTX 3050 Ti
+- Embeddings: ~0.5 sec per doc
+- LLM: OpenAI API (too expensive to run locally)
+- Cost: $100-200 hardware + API
+- ✅ Balanced, practical option
+
+Mid-range (8GB VRAM):
+- GPU: NVIDIA RTX 3060, RTX 4060 Ti
+- Embeddings: ~0.2 sec per doc (batch)
+- LLM: Run Llama-2 7B locally
+- Cost: $250-400 + hosting
+- ✅ Production-capable
+
+High-end (16GB+ VRAM):
+- GPU: NVIDIA RTX 3080, RTX 4080, H100
+- Embeddings: 0.1 sec per doc
+- LLM: Run Llama-2 13B or fine-tune locally
+- Cost: $1000+
+- ✅ Research/production grade
+
+CLOUD GPU OPTIONS
+==================
+
+AWS:
+- EC2 p3.2xlarge: 1x NVIDIA V100, $3.06/hr
+- EC2 g4dn.xlarge: 1x NVIDIA T4, $0.526/hr
+- SageMaker: Managed, higher cost
+
+Google Cloud:
+- GCP TPU: Best for inference, $2.4/day
+- N1 with P100: $1.95/hr
+- Colab: Free! (with limitations)
+
+Azure:
+- Standard_NC6: 1x NVIDIA K80, $0.90/hr
+- Similar pricing to AWS
+
+Colab (Free):
+- Free T4 GPU (12 GB VRAM)
+- Runtime: 12 hours
+- Perfect for development/prototyping
+- ✅ Use for Checkpoint 1!
+
+OPTIMIZATIONS
+==============
+
+For CPU:
+- Use quantized models
+- Batch embed documents
+- Cache embeddings (don't recompute)
+- Use approximate NN (FAISS)
+
+For GPU:
+- Use mixed precision (float16)
+- Increase batch size
+- Use TorchScript for inference
+- Profile with nvidia-smi
+
+RECOMMENDATION FOR CAPSTONE
+=============================
+Week 1-2: Use Google Colab (free T4 GPU)
+Week 3-4: Move to OpenAI API + CPU if budget tight
+After: Rent GPU on cloud if needed ($100-200/month)
+
+Use embedding caching heavily - don't re-embed same documents!

@@ -1,0 +1,175 @@
+DEPLOYMENT AND DEVOPS FOR RAG APPLICATIONS
+
+Containerization with Docker
+=============================
+
+Why Docker?
+- Reproducibility: Same environment everywhere
+- Isolation: Dependencies don't conflict
+- Portability: Run on any machine with Docker
+- Versioning: Easy to rollback bad deploys
+
+Basic Dockerfile Structure
+```dockerfile
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Copy requirements and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY src/ ./src/
+COPY data/ ./data/
+
+# Expose port
+EXPOSE 8501  # Streamlit default
+
+# Run app
+CMD ["streamlit", "run", "src/interface/app.py"]
+```
+
+Multi-Stage Build (Production)
+```dockerfile
+# Build stage
+FROM python:3.10 AS builder
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# Runtime stage
+FROM python:3.10-slim
+COPY --from=builder /root/.local /root/.local
+COPY src/ ./src/
+COPY data/ ./data/
+ENV PATH=/root/.local/bin:$PATH
+CMD ["streamlit", "run", "src/interface/app.py"]
+```
+
+Environment Variables
+======================
+Never hardcode secrets! Use environment variables:
+
+Required for RAG app:
+- OPENAI_API_KEY: For Chat Completion API
+- VECTOR_DB_PATH: Path to vector database
+- MODEL_NAME: HuggingFace model identifier
+- LOG_LEVEL: DEBUG, INFO, WARNING, ERROR
+
+Secure handling:
+1. Create .env.example (no real secrets)
+2. Load from environment, never commit .env
+3. Use docker-compose for local development with .env file
+
+Example:
+```python
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("OPENAI_API_KEY not set!")
+```
+
+CI/CD Pipeline
+==============
+
+GitHub Actions Example:
+```yaml
+name: Deploy RAG App
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Build Docker image
+        run: docker build -t rag-app:latest .
+      
+      - name: Run tests
+        run: docker run rag-app:latest pytest
+      
+      - name: Push to registry
+        run: docker push rag-app:latest
+      
+      - name: Deploy
+        run: ssh user@prod-server 'docker pull rag-app:latest && docker-compose up -d'
+```
+
+Health Checks and Monitoring
+=============================
+
+Implement /health endpoint:
+```python
+@app.route("/health")
+def health():
+    return {"status": "healthy", "timestamp": datetime.now()}
+```
+
+Monitor:
+- Response time (should be <2 sec)
+- Error rate (should be <1%)
+- Vector DB connectivity
+- LLM API availability
+
+Performance Optimization
+==========================
+
+Caching:
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=100)
+def embed_text(text):
+    return model.encode(text)
+```
+
+Batch processing:
+```python
+# Instead of embedding one doc at a time
+embeddings = model.encode(list_of_documents, batch_size=32)
+```
+
+Connection pooling:
+```python
+# Reuse connections to LLM API and Vector DB
+session = requests.Session()
+connection_pool = session.get_adapter('http://').poolmanager
+```
+
+Common Deployment Platforms
+=============================
+
+Heroku:
+- Easiest for small projects
+- Free tier available
+- git push deployment
+- Limited to 512MB RAM
+
+AWS (EC2, ECS, Lambda):
+- Most flexible, scalable
+- Pay per usage
+- Complex setup, but powerful
+
+Google Cloud (Cloud Run, App Engine):
+- Good middle ground
+- Container-native deployment
+- Easy scaling
+
+Replit, Vercel, Railway:
+- Trendy startup options
+- Simple deployment
+- Limited customization
+
+RECOMMENDATION FOR CAPSTONE:
+1. Develop locally with Docker Compose
+2. Test with GitHub Actions
+3. Deploy to free tier (Heroku, Railway, or Render)
+4. Use environment variables for configuration

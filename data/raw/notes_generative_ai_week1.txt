@@ -1,0 +1,102 @@
+GENERATIVE AI SYSTEMS - WEEK 1 LECTURE NOTES
+Instructor: Jessie A. Melendres
+Date: July 14-18, 2026
+
+TOPIC 1: FOUNDATIONS OF GENERATIVE AI
+
+1.1 What is Generative AI?
+- AI systems that generate new content (text, images, code, etc.)
+- Learn patterns from training data, then generate novel outputs
+- Different from discriminative models (classify/predict)
+- Examples: GPT, DALL-E, Stable Diffusion, LLaMA
+
+1.2 Key Concepts
+- Foundation Models: Large, pre-trained models on diverse data (GPT-4, Claude, LLaMA)
+- Transformer Architecture: Self-attention mechanism enables parallel processing
+- Tokens: Text broken into subword units for processing
+- Embeddings: Dense vector representations of text
+- Sequence-to-Sequence: Input sequence → Output sequence generation
+
+1.3 Evolution Timeline
+- 2012: Deep learning renaissance (AlexNet)
+- 2017: Transformer paper (Vaswani et al.) - "Attention Is All You Need"
+- 2018: BERT (bidirectional) and GPT (unidirectional)
+- 2020: GPT-3 (175B parameters, few-shot learning)
+- 2022: ChatGPT releases (100M users in 2 months)
+- 2023-2024: Multimodal models, open-source alternatives, fine-tuning tools
+
+TOPIC 2: THE TRANSFORMER ARCHITECTURE
+
+2.1 Components
+- Embedding Layer: Convert tokens to vectors
+- Positional Encoding: Track token order (position is important!)
+- Self-Attention: Each token attends to all other tokens
+- Multi-Head Attention: Multiple attention patterns in parallel
+- Feed-Forward Network: Token-wise dense transformation
+- Layer Normalization: Stabilize training
+
+2.2 Attention Mechanism
+Query @ Key = Attention Weights
+Attention Weights @ Values = Output
+
+Allows model to focus on relevant context when generating each token.
+
+2.3 Training Objective
+- Causal Language Modeling (CLM): Predict next token given previous tokens
+- Loss = Cross-entropy between predicted and actual distribution
+- Billions of parameters trained on trillions of tokens
+
+TOPIC 3: TEXT PREPROCESSING & EMBEDDINGS
+
+3.1 Text Preprocessing Steps
+1. Cleaning: Remove HTML, special chars, normalize whitespace
+2. Lowercasing: Convert to uniform case
+3. Tokenization: Break text into tokens (subword, word, character-level)
+4. Removing stopwords: Optional, task-dependent
+
+3.2 Tokenization Approaches
+- Word-level: Simple, but huge vocabulary
+- Character-level: Flexible, but very long sequences
+- Subword (BPE, WordPiece): Balanced approach, used in transformers
+
+3.3 Embeddings
+- Static: Word2Vec, GloVe (same vector for same word everywhere)
+- Contextual: BERT, GPT (different based on context)
+- Sentence: SBERT, MiniLM (compress entire sentence to vector)
+
+HANDS-ON ACTIVITY:
+
+Task: Analyze tokenization differences
+Code:
+```
+from transformers import AutoTokenizer
+
+tokenizer_gpt2 = AutoTokenizer.from_pretrained("gpt2")
+tokenizer_bert = AutoTokenizer.from_pretrained("bert-base-uncased")
+
+text = "The quick brown fox jumps over the lazy dog!"
+
+tokens_gpt2 = tokenizer_gpt2.tokenize(text)
+tokens_bert = tokenizer_bert.tokenize(text)
+
+print(f"GPT2 tokens ({len(tokens_gpt2)}): {tokens_gpt2}")
+print(f"BERT tokens ({len(tokens_bert)}): {tokens_bert}")
+```
+
+Results:
+- GPT2: ['The', ' quick', ' brown', ' fox', ' jumps', ' over', ' the', ' lazy', ' dog', '!'] (10 tokens)
+- BERT: ['the', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog', '!'] (10 tokens)
+
+KEY TAKEAWAYS:
+- GPT-2 preserves spaces; BERT lowercases and removes them
+- Different models have different vocabularies
+- Same text can have very different tokenizations
+
+READING ASSIGNMENTS:
+1. Vaswani et al. (2017) - "Attention Is All You Need" - Sections 1-3
+2. Devlin et al. (2018) - "BERT: Pre-training of Deep Bidirectional Transformers"
+3. OpenAI GPT Papers (GPT-1, 2, 3)
+
+NEXT SESSION:
+- LLM APIs and prompt engineering basics
+- Hands-on: Call GPT-4 API, experiment with prompts

@@ -1,0 +1,71 @@
+SEMESTER SCHEDULE - A.Y. 2026-2027, 1ST SEMESTER
+
+COURSE SCHEDULE:
+
+IS Professional Elective #4: Generative AI Systems
+Instructor: Jessie A. Melendres
+Schedule: TuTh 2:00 PM - 3:30 PM
+Location: Engineering Building, Room 201
+Credits: 3 units
+Pre-requisites: IS Professional Elective #1, #2, #3
+
+DATA STRUCTURES AND ALGORITHMS
+Instructor: Dr. Maria Santos
+Schedule: MWF 10:00 AM - 11:30 AM
+Location: CS Building, Room 105
+Credits: 3 units
+Lab: Th 1:00 PM - 3:00 PM (CS Lab A)
+
+WEB APPLICATION DEVELOPMENT
+Instructor: Prof. Ramon Garcia
+Schedule: MWF 1:00 PM - 2:30 PM
+Location: IT Building, Room 301
+Credits: 3 units
+Project Work: Self-paced, due every Friday
+
+DATABASE SYSTEMS
+Instructor: Dr. Lena Torres
+Schedule: TuTh 10:00 AM - 11:30 AM
+Location: Engineering Building, Room 305
+Credits: 4 units
+Lab: W 2:00 PM - 4:00 PM (CS Lab B)
+
+IMPORTANT DATES:
+
+Sem Start: July 14, 2026
+Prelim Exam Period: August 18-22, 2026
+Midterm Exam Period: September 22-26, 2026
+Semi-Final Exam Period: October 20-24, 2026
+Final Exam Period: November 17-21, 2026
+Semester End: November 25, 2026
+
+Holidays:
+- Founder's Day: August 21, 2026
+- National Holiday: September 9, 2026
+- Class Suspension: October 30-31, 2026 (University Foundation)
+
+ASSIGNMENT DEADLINES:
+
+Capstone Checkpoint 1 (Prelim): August 15, 2026, 11:59 PM
+Capstone Checkpoint 2 (Midterm): September 19, 2026, 11:59 PM
+Capstone Checkpoint 3 (Semi-Final): October 17, 2026, 11:59 PM
+Capstone Checkpoint 4 (Final): November 14, 2026, 11:59 PM
+
+Data Structures Project 1: August 8, 2026
+Data Structures Project 2: August 29, 2026
+Data Structures Final Project: September 26, 2026
+
+Web Dev Project Phase 1: August 22, 2026
+Web Dev Project Phase 2: September 12, 2026
+Web Dev Final Deployment: October 3, 2026
+
+Database Design Assignment: August 31, 2026
+Database Query Optimization: September 28, 2026
+Database Capstone: October 31, 2026
+
+MEETING SCHEDULE:
+
+Capstone Team Sync: Every Monday 4:00 PM - 4:30 PM (Optional)
+Office Hours (Melendres): Th 4:00 PM - 5:30 PM (Room 201)
+Office Hours (Santos): W 12:00 PM - 1:00 PM (CS Building Office)
+Office Hours (Garcia): F 3:00 PM - 4:30 PM (IT Building Office)

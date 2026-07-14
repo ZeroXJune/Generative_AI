@@ -1,0 +1,93 @@
+RETRIEVAL-AUGMENTED GENERATION (RAG) - DEEP DIVE
+
+What is RAG?
+============
+RAG (Retrieval-Augmented Generation) combines two components:
+1. Retriever: Fetches relevant documents/passages from a knowledge base
+2. Generator: Uses retrieved context + user query to generate responses
+
+Benefits over vanilla LLM:
+- Grounded responses (cites sources)
+- Reduced hallucination
+- Updates without retraining (just add new documents)
+- Transparent reasoning (show which documents were used)
+
+RAG Pipeline
+============
+1. USER QUERY
+   - Input: "What is the capstone deadline?"
+
+2. QUERY ENCODING
+   - Convert query to embedding using same model as documents
+   - Result: Dense vector (384-768 dimensions)
+
+3. RETRIEVAL
+   - Search vector database for similar document chunks
+   - Use distance metric (Cosine similarity recommended)
+   - Top-K retrieval (typically K=3-5 for reasonable context length)
+
+4. CONTEXT ASSEMBLY
+   - Combine retrieved chunks into context string
+   - Add metadata (source, relevance score, date)
+   - Format for LLM consumption
+
+5. PROMPT ENGINEERING
+   - Create prompt: "Given: [CONTEXT]\n\nQuestion: [QUERY]\n\nAnswer:"
+   - Use system prompt to guide behavior
+   - Set temperature and max_tokens appropriately
+
+6. GENERATION
+   - Pass to LLM (GPT-4, Llama-2, etc.)
+   - Stream output for better UX
+   - Confidence score (if supported by model)
+
+7. POST-PROCESSING
+   - Extract answer text
+   - Add source attribution
+   - Cache for future similar queries (optional)
+
+Key Metrics
+===========
+Retrieval Quality:
+- Precision@K: What % of top-K results are relevant?
+- Recall: Did we find the right document?
+- MRR (Mean Reciprocal Rank): How high is first relevant result?
+
+Generation Quality:
+- BLEU, ROUGE (automatic, not great)
+- Human evaluation: Relevance, Correctness, Clarity
+- Hallucination rate: % of made-up facts
+
+System Metrics:
+- Latency: Query to answer time
+- Throughput: Queries per second
+- Cost: API calls + compute
+
+Common Pitfalls
+================
+1. Poor chunk boundaries
+   - Problem: Cutting sentences in half
+   - Solution: Semantic chunking, chunk overlap
+
+2. Wrong distance metric
+   - Euclidean good for clustering, Cosine better for text similarity
+
+3. Insufficient context
+   - K too small (< 3)
+   - Solution: Retrieve more, summarize context
+
+4. Over-parameterized prompts
+   - Too many instructions confuses model
+   - Solution: Clear, concise system prompt
+
+5. Stale knowledge base
+   - Forget to update documents
+   - Solution: Version control documents, track update times
+
+Advanced RAG Techniques
+=======================
+- Reranking: Retrieve more (top-50), rerank with cross-encoder (top-5)
+- Hybrid search: Combine keyword + semantic search
+- Iterative retrieval: Multi-hop reasoning for complex questions
+- Query expansion: Expand query before retrieval
+- Active learning: Collect hard examples, retrain ranker
