@@ -13,7 +13,14 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from preprocessing.text_cleaner import TextCleaner
 from preprocessing.chunker import DocumentChunker
-from embeddings.embedding_generator import EmbeddingGenerator
+
+# Try to use real embedding generator, fall back to mock if network restricted
+try:
+    from embeddings.embedding_generator import EmbeddingGenerator
+    USE_MOCK_EMBEDDINGS = False
+except Exception:
+    from embeddings.embedding_generator_mock import MockEmbeddingGenerator as EmbeddingGenerator
+    USE_MOCK_EMBEDDINGS = True
 
 
 class DataPipeline:
@@ -43,7 +50,18 @@ class DataPipeline:
 
         self.cleaner = TextCleaner()
         self.chunker = DocumentChunker(chunk_size=chunk_size, overlap=overlap)
-        self.embedder = EmbeddingGenerator(model_name=embedding_model)
+
+        # Try real embeddings, fall back to mock if network restricted
+        try:
+            self.embedder = EmbeddingGenerator(model_name=embedding_model)
+        except Exception as e:
+            if "Proxy" in str(e) or "403" in str(e):
+                print("⚠ Network restricted (proxy blocking HuggingFace)")
+                print("  Falling back to mock embedding generator")
+                from embeddings.embedding_generator_mock import MockEmbeddingGenerator
+                self.embedder = MockEmbeddingGenerator(model_name=embedding_model)
+            else:
+                raise
 
         print(f"Pipeline initialized")
         print(f"  Raw data: {self.raw_dir}")
