@@ -38,6 +38,7 @@ ENV/
 
 # Data and models (local only)
 data/processed/
+data/raw/*.json
 embeddings.npy
 *.faiss
 chroma_data/
