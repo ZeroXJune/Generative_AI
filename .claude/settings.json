@@ -1,5 +1,16 @@
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "graphify update . 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
@@ -16,6 +27,18 @@
           {
             "type": "command",
             "command": "/usr/local/bin/graphify hook-guard read"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if git diff --quiet HEAD 2>/dev/null; then echo 'No changes'; else echo 'Changes detected - security/code review available'; fi || true",
+            "async": true
           }
         ]
       }
