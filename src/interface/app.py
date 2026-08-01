@@ -12,7 +12,12 @@ import sys
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from embeddings.embedding_generator_mock import MockEmbeddingGenerator
+try:
+    from embeddings.embedding_generator import EmbeddingGenerator
+    USE_REAL_EMBEDDINGS = True
+except ImportError:
+    from embeddings.embedding_generator_mock import MockEmbeddingGenerator
+    USE_REAL_EMBEDDINGS = False
 
 
 def cosine_similarity_simple(a: np.ndarray, B: np.ndarray) -> np.ndarray:
@@ -71,7 +76,10 @@ def load_chunks():
 @st.cache_resource
 def get_embedder():
     """Get embedding generator."""
-    return MockEmbeddingGenerator()
+    if USE_REAL_EMBEDDINGS:
+        return EmbeddingGenerator()
+    else:
+        return MockEmbeddingGenerator()
 
 
 def find_similar_chunks(query: str, chunks: list, top_k: int = 3) -> list:
@@ -122,6 +130,9 @@ def main():
         st.metric("Documents Indexed", len(set(c["doc_id"] for c in chunks)))
         st.metric("Total Chunks", len(chunks))
         st.metric("Total Tokens", sum(c["token_count"] for c in chunks))
+
+        embedding_mode = "🔴 Real Embeddings" if USE_REAL_EMBEDDINGS else "🟡 Mock Embeddings"
+        st.caption(f"Mode: {embedding_mode}")
 
         st.divider()
 
