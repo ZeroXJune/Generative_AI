@@ -67,3 +67,8 @@ htmlcov/
 *.tmp
 *.temp
 /tmp/
+
+# Node.js / npm (for doc generation)
+node_modules/
+package.json
+package-lock.json
