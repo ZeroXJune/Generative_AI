@@ -1,6 +1,8 @@
 # Checkpoint 1 Reflection: Foundation & Data Pipeline
 
-**Author**: Junie Mumar  
+**Authors**: Team Leader:Alber June M. Mumar
+            Members: Julebeth Hinlayagan
+                     Mardy Gonzaga
 **Date**: July 14, 2026  
 **Capstone Theme**: Personal Assistant AI – Personal/Domain Notes Assistant
 
