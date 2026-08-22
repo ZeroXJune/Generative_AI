@@ -109,7 +109,12 @@ personal-assistant-ai/
   - Embedding generation and model justification
   - Repository setup and documentation
 
-- [ ] **Checkpoint 2** (Weeks 5–8, Midterm, 20%): Prompt Architecture & Vector Indexing
+- [x] **Checkpoint 2** (Weeks 5–8, Midterm, 20%): Prompt Architecture & Vector Indexing
+  - Four versioned system prompts with design rationale ([docs](docs/02_Prompt_Engineering.md))
+  - Chat Completion API integration with an offline fallback
+  - Chroma vector database, 26 documents → 150 indexed chunks
+  - Distance metric comparison: Cosine vs Euclidean vs Dot product ([docs](docs/02_Vector_Indexing.md))
+
 - [ ] **Checkpoint 3** (Weeks 9–12, Semi-Final, 30%): RAG Orchestration & Application
 - [ ] **Checkpoint 4** (Weeks 13–16, Final, 30%): Deployment & Defense
 
@@ -134,6 +139,30 @@ pip install -r requirements.txt
 python src/preprocessing/text_cleaner.py --input data/raw/ --output data/processed/
 python src/embeddings/embedding_generator.py --input data/processed/ --output data/processed/embeddings/
 ```
+
+### Checkpoint 2: Vector Indexing & Retrieval
+
+```bash
+# Build the Chroma index from data/raw
+python src/build_index.py
+
+# Full demonstration: prompts, Chat API, retrieval, live queries
+python src/checkpoint2_demo.py
+
+# Reproduce the distance metric comparison
+python src/experiments/metric_comparison.py
+```
+
+By default the Chat Completion client runs an offline extractive responder so
+the pipeline works without credentials. To use a real model:
+
+```bash
+export OPENAI_API_KEY="sk-..."          # any OpenAI-compatible endpoint
+export OPENAI_BASE_URL="https://..."    # optional: Azure, Groq, local vLLM
+```
+
+Likewise, if `huggingface.co` is unreachable, `build_index.py` falls back to a
+deterministic TF-IDF embedder and says so — no silent substitution.
 
 ### Running the Application
 

@@ -1,0 +1,277 @@
+LESSON 3
+Introduction to Large Language Models
+IS Professional Elective #4 · Module 1, Lesson 3
+Estimated time on task: 2.5 – 3 hours (self-paced reading + lab)
+Lesson Learning Objectives
+By the end of this lesson, you will be able to:
+• Describe what a Large Language Model is, how it differs from earlier NLP approaches, and why scale matters.
+• Explain why the Transformer replaced RNNs and LSTMs as the dominant sequence modelling architecture.
+• Trace the flow of data through a Transformer: tokenisation → embeddings → positional encoding → self-attention → feed-forward → output.
+• Interpret the scaled dot-product attention formula and explain the roles of Queries, Keys, and Values.
+• Distinguish the three training stages of a ChatGPT-style model: pretraining, supervised fine tuning, and RLHF.
+• Differentiate between a base model and an instruction-tuned model and predict which is appropriate for a given task.
+Part A — What Is a Large Language Model?
+A Large Language Model (LLM) is a neural network with billions of learnable parameters, trained on enormous text corpora to model the statistical patterns of human language. Once trained, it can generate fluent text, answer questions, write code, translate languages, and reason over documents — all through a single, unified architecture.
+A.1 Why Scale Changed Everything
+Earlier NLP systems were task-specific: a sentiment analyser could not summarise text; a machine translation model could not answer questions. Each required separate training pipelines, hand-crafted features, and domain-specific rules.
+The breakthrough insight behind LLMs is simple: if you train a single model on enough data with enough parameters, it spontaneously develops the ability to perform many tasks without explicit instruction. This is called an emergent capability — a skill that was never directly trained for but arises from scale.
+Era Typical Scale What Changed
+Statistical NLP (1990s–
+2000s) Millions of n-grams Hand-crafted rules; one model per task Word Embeddings (2013–
+2017) Millions of parameters Words → dense vectors; semantic similarity works
+BERT / GPT-1/2 (2018– 2020)
+GPT-3 / PaLM era (2020– 2022)
+110 M – 1.5 B parameters
+175 B – 540 B parameters
+Pre-training + fine-tuning; transfer learning unlocked
+Few-shot and zero-shot emerge; prompting replaces fine-tuning
+GPT-4 / Claude / Llama 2+ (2023–present)
+Estimated 100 B – 1 T+
+Instruction following, multimodality, reasoning chains
+Emergent Capabilities
+Some abilities — multi-step arithmetic, chain-of-thought reasoning, analogy solving — only appear reliably above a certain scale threshold. Below that threshold the model performs at chance; above it, performance jumps dramatically. This non-linear behaviour is one of the most studied (and debated) phenomena in current AI research.
+A.2 What LLMs Can and Cannot Do
+Strong capabilities
+• Fluent, coherent long-form text generation • Summarisation, translation, paraphrasing • Code generation and debugging
+• Question answering over provided context • Instruction following and task planning
+Known limitations
+• No persistent memory between
+conversations (without RAG)
+• Hallucination — generating plausible
+sounding but false facts
+• Knowledge cutoff — unaware of events after training
+• Unreliable arithmetic and formal logic
+• Few-shot learning from examples in the prompt
+• No access to real-time data without tool use
+• Sensitive to prompt wording (brittle without good prompt design)
+A.3 The Current LLM Landscape
+Model Family Organisation Access Notable Strengths GPT-4o / o1 OpenAI API (paid) Reasoning, vision, tool use Claude 3 / 3.5 Anthropic API (paid) Long context, safety, instruction following
+Gemini 1.5 Pro Google
+DeepMind API (paid / free tier) 1 M-token context,
+multimodal
+Llama 3 / 3.1 Meta AI Open weights Best open-source; fine tuneable commercially Mistral / Mixtral Mistral AI Open weights + API Efficient MoE architecture; strong at coding
+Phi-3 / Phi-3.5 Microsoft Open weights Small but capable; good for resource-constrained use
+A.4 Key Terms — Part A
+Term Definition
+Parameters The learnable numerical weights inside a neural network, adjusted during training.
+Pre-training Training a model from scratch on a huge, general-purpose corpus using self-supervised objectives.
+Emergent capability A skill that appears unexpectedly above a certain scale threshold, not explicitly trained for.
+Zero-shot Performing a task from instructions alone, with no examples in the prompt. Few-shot Performing a task given a small number of examples embedded in the prompt.
+Hallucination When an LLM generates text that is fluent and confident but factually incorrect or fabricated.
+Knowledge cutoff The date beyond which the model has no training data and is unaware of subsequent events.
+Context window The maximum number of tokens the model can attend to in a single forward pass.
+A.5 Knowledge Check — Part A
+Answer before moving to Part B. Answer key is at the end of this lesson.
+1. Which of the following is an emergent capability?
+(a) Generating the next word given a training example
+(b) Solving multi-step maths problems that never appeared in training
+(c) Repeating a memorised fact
+(d) Converting tokens to embeddings
+2. True / False: A higher parameter count always means better performance on a given task. 3. Name two real-world tasks where hallucination would be especially dangerous. Explain why. 4. What is the difference between a zero-shot and a few-shot prompt? Give one example of each. 5. Short answer: Why did LLMs make task-specific NLP models largely obsolete for common tasks?
+Part B — The Transformer Architecture
+The Transformer, introduced by Vaswani et al. in 2017, is the architectural backbone of every modern LLM. Understanding it is not optional — every technique in this course (RAG, fine-tuning, prompt engineering, RLHF) makes more sense once you see what happens inside the model.
+B.1 Why the Transformer Replaced RNNs
+Before the Transformer, sequence modelling relied on Recurrent Neural Networks (RNNs) and their improved variants, Long Short-Term Memory networks (LSTMs). They worked by processing text one token at a time, left to right, maintaining a hidden state that summarized everything seen so far.
+RNN / LSTM — Problems
+• Sequential processing: token N cannot start until token N-1 is done. Cannot
+parallelize across a sequence.
+• Vanishing gradient: information from token 1 is diluted across hundreds of time steps — the model forgets early context.
+• Fixed-size hidden state: no matter how long the input, the entire past is
+compressed into a single vector.
+• Slow training on modern GPU/TPU
+hardware because parallelism across the
+sequence dimension is impossible.
+Transformer — Solutions
+• Parallel computation: all positions in the sequence are processed simultaneously.
+Utilizes GPU matrix operations fully.
+• Direct token-to-token connections via attention: token 1 and token 500 can
+directly influence each other with equal
+ease.
+• Explicit attention weights: the model learns which tokens to attend to for each
+prediction, with no information bottleneck.
+• Scales gracefully: doubling the hardware roughly doubles training throughput — the architecture was designed for scale.
+B.2 Data Flow Through a Transformer (Step by Step)
+Every LLM processes your input through the following sequence of stages. Reading them in order gives you a mental model of what the model is actually computing:
+# Stage What Happens
+Raw text is split into tokens (subwords) using a trained tokeniser such as
+1 Tokenization
+2 Token Embeddings 3 Positional Encoding
+Byte-Pair Encoding. Each token maps to an integer ID. Example: "unbelievable" → ["un", "believ", "able"].
+Each integer ID is looked up in an embedding matrix (shape: vocab_size × d_model) to retrieve a dense vector of d_model dimensions. GPT-3 uses d_model = 12,288.
+Because the Transformer has no built-in sense of order, a positional signal is added to each token embedding. Original Transformers used sinusoidal functions; modern LLMs use learned rotary embeddings (RoPE) or ALiBi.
+4Multi-Head Self AttentionThe core operation. Each token computes how much it should attend to
+every other token in the sequence. This is done in parallel across H
+heads, each learning different types of relationships.
+# Stage What Happens
+5 Add & Layer Norm
+6Feed-Forward Network
+7 Repeat ×N layers
+8Softmax over Vocabulary
+A residual connection adds the input of the sub-layer to its output (prevents vanishing gradients), then layer normalisation stabilises the distribution before the next layer.
+Each token's representation passes through a two-layer MLP applied independently and identically at every position. This is where much of the model's "knowledge" is stored.
+Stages 4–6 constitute one Transformer block. GPT-3 stacks 96 such blocks. Each layer can refine the representation using different relationships.
+After all layers, a linear projection maps the final hidden state to a vector of vocabulary size. Softmax converts it to a probability distribution. The model samples the next token from this distribution.
+B.3 Self-Attention in Detail
+Self-attention is the mechanism that allows every token to "look at" every other token and decide how much to borrow from each. Here is the calculation, step by step:
+Step 1 — Create Q, K, V matrices
+Each token embedding is linearly projected into three separate vectors using learned weight matrices: • Query (Q) — what this token is looking for
+• Key (K) — what this token advertises about itself
+• Value (V) — the actual content this token will contribute to others
+Step 2 — Compute raw attention scores
+For each pair of tokens, compute the dot product of the Query of one with the Key of the other. A high score means these two tokens are highly relevant to each other:
+scores = Q × Kᵀ
+Step 3 — Scale and normalise
+Divide by the square root of the key dimension (d_k) to prevent extremely large values that would cause vanishing gradients after softmax:
+scaled_scores = scores / √d_k
+Apply softmax row-wise so each row sums to 1 — these are now attention weights (how much each token attends to every other):
+attention_weights = softmax(scaled_scores)
+Step 4 — Weighted sum of Values
+Multiply the attention weights by V. Each token's output is a weighted combination of all Value vectors — essentially borrowing information from tokens it paid attention to:
+output = attention_weights × V
+The full formula, as written in the original paper:
+Attention(Q, K, V) = softmax( QKᵀ / √d_k ) × V
+Why Multiple Heads?
+Multi-Head Attention runs the attention calculation H times in parallel, each head using different learned Q/K/V projections. Different heads specialise in different relationship types: one head might track syntactic dependencies (subject→verb), another might track coreference (pronoun→antecedent), another semantic
+similarity. Outputs of all heads are concatenated and projected, giving the model a richer representation than any single attention pass.
+B.4 Worked Example — What Attention Sees
+Consider the sentence: "The trophy did not fit in the suitcase because it was too big."
+The word "it" is ambiguous — does it refer to the trophy or the suitcase? A human reader resolves this through world knowledge (things can be too big to fit inside other things). An LLM resolves it through attention:
+• The token "it" will assign a high attention weight to "trophy" because the adjective "big" is more consistent with trophies overflowing containers than suitcases being oversized.
+• This resolution happens automatically from training — the model learned the pattern from millions of similar sentences.
+• This is the "pronoun coreference" task that earlier NLP systems required dedicated hand-crafted modules to handle. Attention learns it implicitly.
+B.5 Encoder vs. Decoder vs. Encoder-Decoder
+Architecture Attention Type Examples Best For
+Encoder-only Bidirectional (sees left and right context)
+Causal / unidirectional
+BERT, RoBERTa, DeBERTa
+Classification, NER, question answering over given text
+Text generation, chat,
+Decoder-only
+(only sees previous tokens)
+GPT-4, Claude, Llama, Mistral
+code completion — the dominant LLM
+architecture
+Encoder-decoder
+Cross-attention
+between encoder and decoder
+T5, BART, mT5
+Translation,
+summarisation,
+document Q&A
+Why Decoder-Only Won
+Decoder-only models are auto-regressive: they generate one token at a time, feeding each output back as input. This turns every task — translation, summarization, coding, Q&A — into the same operation: "predict the next token." The simplicity of this unified formulation, combined with scale, is why decoder only LLMs dominate modern AI products.
+B.6 Key Terms — Part B
+Term Definition
+Tokenizer / BPE An algorithm that splits text into subword units and maps them to integer IDs before the model sees them.
+Token embedding A learnable dense vector representation of a token, retrieved from the embedding matrix by token ID.
+Term Definition
+Positional encoding A signal added to token embeddings to give the model information about each token's position in the sequence.
+Query / Key / Value The three learned projections used in attention: Q asks a question, K signals what's available, V carries the content.
+Attention weight A softmax-normalised score representing how much one token attends to another.
+Multi-Head Attention Running self-attention H times in parallel with different learned projections, then concatenating results.
+Residual connection Adding a sub-layer's input directly to its output to prevent vanishing gradients across many layers.
+Feed-Forward Network (FFN)
+A two-layer MLP applied independently to each token position after the attention sub-layer.
+Causal attention Attention restricted so each token can only attend to positions before it — used in decoder-only LLMs.
+d_model The dimensionality of token representations flowing through the Transformer (e.g., 768 for BERT, 12,288 for GPT-3).
+B.7 Knowledge Check — Part B
+1. What are the three main problems with RNNs that the Transformer was designed to solve? 2. In the attention formula Attention(Q, K, V) = softmax(QKᵀ / √d_k) × V — what does dividing by √d_k prevent?
+3. A decoder-only LLM can only see tokens to the left of the current position. Why is this property essential for text generation?
+4. How many Transformer blocks does GPT-3 have? Based on the pipeline table, list all the operations that happen inside one block.
+5. Short answer: You are building a sentiment classifier. Would you choose an encoder-only or decoder-only architecture? Justify your choice.
+Part C — How ChatGPT Is Trained
+A raw pre-trained Transformer produces fluent text, but it will happily continue a harmful prompt, ignore instructions, or generate offensive content — because it only learned to predict the next token, not to be helpful or safe. Converting a base language model into a useful, instruction-following assistant like ChatGPT requires three carefully orchestrated training stages.
+C.1 The Three-Stage Training Pipeline
+Stage Name What Happens Outcome
+1 Pretraining 2Supervised Fine Tuning (SFT)
+The model is trained on trillions of tokens from the internet, books, and code using next-token prediction as the self-supervised objective.
+Human trainers write ideal responses to thousands of prompts. The model is fine-tuned to imitate these ideal (prompt, response) pairs.
+A powerful base model that knows a lot about language and the world — but has no concept of "following instructions."
+A model that attempts to follow instructions and produce helpful answers — but may still be inconsistent, biased, or unsafe.
+3
+RLHF —
+Reinforcement
+Learning from
+Human Feedback
+A reward model is trained to predict human preferences. The LLM is then optimised using RL to maximise reward scores.
+An instruction-following model that is aligned with human values, preferences, and safety requirements.
+C.2 Stage 1 — Pretraining
+Pretraining is the most computationally expensive phase — GPT-3 required approximately 3,640 petaflop-days of compute; GPT-4 is estimated at 10× more. The objective is deceptively simple:
+Next-token prediction: maximise P(token_n | token_1, token_2, …, token_n-1)
+Given all previous tokens, predict the next one. Repeated across trillions of (token, context) pairs, the model must implicitly learn:
+• Grammar and syntax — to produce grammatical text
+• World knowledge — to predict factually plausible continuations
+• Reasoning patterns — to predict logically consistent sequences
+• Code structure — to predict syntactically valid programs
+Self-Supervised Learning
+No human labelling is needed for pretraining. Every text document automatically provides millions of training examples: for a document with N tokens, there are N-1 (context, next-token) pairs. This is why pretraining can scale to trillions of tokens — the data labels itself.
+C.3 Stage 2 — Supervised Fine-Tuning (SFT)
+After pretraining, the base model knows a lot — but behaves like a text-completion engine, not an assistant. If you prompt it with "Explain quantum entanglement," it might continue with more questions or generate random text, not an explanation.
+SFT bridges this gap by showing the model what good instruction-following looks like:
+Phase Detail
+Data creation Human contractors write diverse prompts covering many tasks (summarise, explain, translate, code, reason, role-play) and write ideal model responses for each.
+The pre-trained model is continued-trained on these (prompt, ideal response) pairs
+Fine-tuning
+using the same next-token prediction loss — but now the target sequence is the ideal response, not random internet text.
+Result
+The model learns the format, tone, and structure of helpful responses. It begins following instructions reliably, using the format "Here is the answer: …" rather than continuing the prompt as raw text.
+C.4 Stage 3 — Reinforcement Learning from Human Feedback (RLHF)
+SFT improves instruction following, but it only trains on what annotators explicitly wrote. RLHF goes further: it trains the model using human preferences as a reward signal, allowing it to optimise for qualities that are hard to specify in advance — helpfulness, harmlessness, appropriate tone.
+Step 1 — Collect Preference Data
+For the same prompt, the SFT model generates multiple candidate responses. Human raters rank them from best to worst. These rankings form a preference dataset.
+Step 2 — Train a Reward Model (RM)
+A separate neural network (the reward model) is trained to predict human preference rankings. Given a (prompt, response) pair, it outputs a scalar reward score. High score = a human would prefer this response.
+Step 3 — Optimise the LLM with RL
+The SFT model (now called the policy) generates responses. The reward model scores each response. The policy is updated via Proximal Policy Optimisation (PPO) to generate responses that maximise the reward score.
+A KL-divergence penalty term constrains the policy from drifting too far from the SFT model — without it, the model might find adversarial responses that fool the reward model but are nonsensical:
+Objective = E[r_RM(prompt, response)] − β · KL( π_RL ‖ π_SFT )
+RLHF in Practice — Challenges
+RLHF is notoriously difficult to get right. The reward model is imperfect, and the policy can over-optimise it ("reward hacking") — producing responses that score highly but are sycophantic or superficially polished rather than genuinely correct. This is an active research area. Newer approaches such as Direct Preference Optimisation (DPO) and Constitutional AI (CAI) aim to sidestep some of these problems.
+C.5 Base Model vs. Instruction-Tuned Model
+Base Model Instruction-Tuned Model
+Trained on Raw internet text via next-token
+prediction only Pretraining + SFT + RLHF
+Prompted with "The capital of France is" "What is the capital of France?"
+Responds with "…Paris, a city located on the Seine River, which…" (text completion)
+Use case Research, fine-tuning starting point, creative text continuation
+"The capital of France is Paris." (direct answer)
+Chat applications, copilots, end-user products
+Example
+Llama 3 (base), GPT-3 (base)
+ChatGPT (GPT-4), Claude 3, Llama 3 Instruct
+C.6 Key Terms — Part C
+Term Definition
+Pretraining Training a model from scratch on massive, unlabelled text using next token prediction.
+Supervised Fine-Tuning (SFT)
+Continued training on a curated set of (prompt, ideal response) pairs written by human annotators.
+RLHF Reinforcement Learning from Human Feedback — optimising the LLM to maximise a reward model trained on human preference rankings.
+Reward model A neural network trained to predict which response a human would prefer, given a prompt.
+PPO Proximal Policy Optimisation — the RL algorithm used to update the LLM's parameters during RLHF.
+KL divergence penalty A regularisation term that prevents the fine-tuned policy from drifting too far from the SFT model, avoiding reward hacking.
+When the policy learns to produce responses that score highly on the
+Reward hacking
+reward model but are not genuinely good (exploiting flaws in the reward model).
+DPO Direct Preference Optimisation — a simpler alternative to RLHF that optimises preferences directly without a separate reward model.
+C.7 Knowledge Check — Part C
+1. Arrange the three training stages in the correct order and give a one-sentence description of each.
+2. Why is pretraining considered "self-supervised"? What provides the labels? 3. A base model is prompted with: "Write a Python function that sorts a list." It responds: "Write a Python function that sorts a list. Here are three common sorting algorithms…" What does this tell you about the model's training?
+4. What is reward hacking, and why does the KL penalty term help prevent it?
+5. Short answer: A startup wants to build a customer support chatbot. Should they start from a base model or an instruction-tuned model? What would they still need to do before deploying?
+Discussion Forum Prompt
+Post to the LMS Discussion Board
+RLHF requires human trainers to rank model responses — but humans have their own biases, cultural backgrounds, and blind spots. In 200–250 words: (1) Give one concrete example of a human bias that could accidentally be encoded into a reward model through RLHF. (2) How might this bias manifest in the LLM's outputs in production? (3) What safeguards would you put in place if you were running the RLHF process for a globally-deployed product? Reply to at least one classmate with a constructive question or counterpoint.
+Lesson Summary
+Part A — What Is an LLM?
+• LLMs are very large neural networks — billions of parameters — trained on trillions of tokens of text.
+• Scale produces emergent capabilities: skills the model was never explicitly trained for but acquires beyond a parameter threshold.
+• LLMs generalise across tasks using zero-shot and few-shot prompting, replacing dozens of task specific models.
+• Key limitations: hallucination, knowledge cutoff, no persistent memory, unreliable formal reasoning.
+Part B — The Transformer
+• The Transformer replaced RNNs by enabling parallel computation across all positions in the sequence.
+• Data flows: tokenise → embed → positional encode → N × [self-attention + FFN + residuals] → softmax over vocabulary.
+• Self-attention computes Attention(Q, K, V) = softmax(QKᵀ / √d_k) × V, learning which tokens to attend to for each prediction.
+• Decoder-only (causal) models dominate LLM products because every task reduces to next-token prediction.
+Part C — How ChatGPT Is Trained
+• Stage 1 — Pretraining: self-supervised next-token prediction on massive internet-scale corpora. • Stage 2 — SFT: fine-tuning on human-written (prompt, ideal response) pairs to teach instruction following.
+• Stage 3 — RLHF: optimising with a reward model trained on human preference rankings to align with human values.
+• Base models complete text; instruction-tuned models answer questions — the distinction matters for every downstream task.

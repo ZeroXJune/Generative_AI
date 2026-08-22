@@ -36,6 +36,22 @@ python src/preprocessing/chunker.py
 python src/embeddings/embedding_generator.py
 ```
 
+### Checkpoint 2 Commands
+
+```bash
+# Build the Chroma vector index from data/raw
+python src/build_index.py
+
+# Full Checkpoint 2 demo: prompts, Chat API, retrieval, 6 live queries
+python src/checkpoint2_demo.py
+
+# Distance metric comparison experiment
+python src/experiments/metric_comparison.py
+
+# Optional: use a real LLM instead of the offline responder
+export OPENAI_API_KEY="sk-..."
+```
+
 ### Full Pipeline Execution
 
 ```bash
@@ -65,21 +81,40 @@ personal-assistant-ai/
 │
 ├── src/
 │   ├── __init__.py
-│   ├── pipeline.py                    # Main orchestration script
+│   ├── pipeline.py                    # Checkpoint 1 data pipeline
+│   ├── build_index.py                 # Build the Chroma index (CP2)
+│   ├── checkpoint2_demo.py            # Full Checkpoint 2 demonstration
 │   │
 │   ├── preprocessing/
 │   │   ├── text_cleaner.py            # Text cleaning & normalization
 │   │   └── chunker.py                 # Document chunking
 │   │
 │   ├── embeddings/
-│   │   └── embedding_generator.py     # Embedding generation
+│   │   ├── embedding_generator.py            # Sentence-Transformers
+│   │   ├── embedding_generator_lexical.py    # Offline TF-IDF fallback
+│   │   └── embedding_generator_mock.py       # Random vectors (plumbing tests)
 │   │
-│   ├── retrieval/                     # Checkpoint 2 (vector DB)
+│   ├── prompts/
+│   │   └── system_prompts.py          # Prompt library + message assembly
+│   │
+│   ├── llm/
+│   │   └── chat_client.py             # Chat Completion API client
+│   │
+│   ├── retrieval/
+│   │   ├── vector_store.py            # Chroma integration
+│   │   ├── retriever.py               # RAG retrieval loop
+│   │   └── distance_metrics.py        # Cosine / Euclidean / Dot product
+│   │
+│   ├── experiments/
+│   │   └── metric_comparison.py       # Distance metric experiment
+│   │
 │   ├── interface/                     # Checkpoint 4 (web UI)
 │   └── deployment/                    # Checkpoint 4 (Docker)
 │
 └── docs/
     ├── 01_Project_Proposal.md         # Problem statement, theme, dataset
+    ├── 02_Prompt_Engineering.md       # Checkpoint 2 prompt architecture
+    ├── 02_Vector_Indexing.md          # Checkpoint 2 vector DB + metrics
     └── CHECKPOINT1_REFLECTION.md      # Data challenges & solutions
 ```
 
@@ -101,21 +136,31 @@ personal-assistant-ai/
 - `src/preprocessing/` – Text cleaning and chunking
 - `src/embeddings/embedding_generator.py` – Embedding creation
 
-### Checkpoint 2: Prompt Architecture & Vector Indexing ⏳
+### Checkpoint 2: Prompt Architecture & Vector Indexing ✅
+**Status**: Complete  
 **Due**: September 19, 2026  
 **Components**:
-- Prompt engineering document (3+ system prompts)
-- API integration demo (Chat Completion API)
-- Vector database setup (Chroma/FAISS)
-- Distance metric comparison (Cosine, Euclidean, Dot Product)
+- [x] Prompt engineering document (4 system prompts)
+- [x] API integration demo (Chat Completion API)
+- [x] Vector database setup (Chroma)
+- [x] Distance metric comparison (Cosine, Euclidean, Dot Product)
 
-**Next Steps**:
-1. Create `docs/02_Prompt_Engineering.md`
-2. Implement `src/retrieval/vector_store.py` (Chroma integration)
-3. Create `src/retrieval/retriever.py` (similarity search)
-4. Set up LangChain/LlamaIndex orchestration
+**Key Files**:
+- `docs/02_Prompt_Engineering.md` – 4 versioned system prompts with rationale
+- `docs/02_Vector_Indexing.md` – Chroma setup + distance metric analysis
+- `src/prompts/system_prompts.py` – Prompt library and message assembly
+- `src/llm/chat_client.py` – Chat Completion API client
+- `src/retrieval/vector_store.py` – Chroma integration
+- `src/retrieval/retriever.py` – RAG retrieval loop
+- `src/retrieval/distance_metrics.py` – Metric implementations
+- `src/experiments/metric_comparison.py` – Reproducible experiment
 
-### Checkpoint 3: RAG Orchestration ⏳
+**Headline result**: On L2-normalized embeddings all three distance metrics
+produce identical rankings (cosine and dot product are algebraically equal;
+Euclidean is a monotonic transform of both). Cosine was chosen because it is
+the only one robust to unnormalized input — see `docs/02_Vector_Indexing.md`.
+
+### Checkpoint 3: RAG Orchestration ⏳ (next)
 **Due**: October 17, 2026  
 **Components**:
 - Automated ingestion pipeline
@@ -306,5 +351,5 @@ For technical issues or clarifications on project requirements, please reach out
 
 ---
 
-**Last Updated**: July 14, 2026  
-**Version**: 0.1.0 (Checkpoint 1)
+**Last Updated**: August 22, 2026  
+**Version**: 0.2.0 (Checkpoint 2)

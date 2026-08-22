@@ -1,0 +1,124 @@
+{
+  "corpus": {
+    "num_documents": 26,
+    "num_chunks": 150,
+    "top_k": 5
+  },
+  "variants": {
+    "normalized": {
+      "vector_norms": {
+        "min": 0.9999999403953552,
+        "max": 1.0000001192092896,
+        "mean": 1.0
+      },
+      "quality": {
+        "cosine": {
+          "hit_rate@1": 0.625,
+          "hit_rate@5": 0.875,
+          "mrr": 0.6916666666666667
+        },
+        "euclidean": {
+          "hit_rate@1": 0.625,
+          "hit_rate@5": 0.875,
+          "mrr": 0.6916666666666667
+        },
+        "dot_product": {
+          "hit_rate@1": 0.625,
+          "hit_rate@5": 0.875,
+          "mrr": 0.6916666666666667
+        }
+      },
+      "agreement": {
+        "mean_overlap": {
+          "cosine_vs_euclidean": 1.0,
+          "cosine_vs_dot_product": 1.0,
+          "euclidean_vs_dot_product": 1.0
+        },
+        "identical_order_rate": {
+          "cosine_vs_euclidean": 1.0,
+          "cosine_vs_dot_product": 1.0,
+          "euclidean_vs_dot_product": 1.0
+        }
+      },
+      "mean_retrieved_tokens": {
+        "cosine": 107.15,
+        "euclidean": 107.15,
+        "dot_product": 107.15
+      },
+      "timing_ms_per_query": {
+        "cosine": 0.03570961750000379,
+        "euclidean": 0.13936822499999835,
+        "dot_product": 0.004564472499737349
+      }
+    },
+    "unnormalized": {
+      "vector_norms": {
+        "min": 4.7288289070129395,
+        "max": 28.730009078979492,
+        "mean": 18.711610794067383
+      },
+      "quality": {
+        "cosine": {
+          "hit_rate@1": 0.625,
+          "hit_rate@5": 0.875,
+          "mrr": 0.6916666666666667
+        },
+        "euclidean": {
+          "hit_rate@1": 0.125,
+          "hit_rate@5": 0.125,
+          "mrr": 0.125
+        },
+        "dot_product": {
+          "hit_rate@1": 0.625,
+          "hit_rate@5": 0.75,
+          "mrr": 0.6875
+        }
+      },
+      "agreement": {
+        "mean_overlap": {
+          "cosine_vs_euclidean": 0.025,
+          "cosine_vs_dot_product": 0.8500000000000001,
+          "euclidean_vs_dot_product": 0.0
+        },
+        "identical_order_rate": {
+          "cosine_vs_euclidean": 0.0,
+          "cosine_vs_dot_product": 0.0,
+          "euclidean_vs_dot_product": 0.0
+        }
+      },
+      "mean_retrieved_tokens": {
+        "cosine": 107.15,
+        "euclidean": 22.8,
+        "dot_product": 114.125
+      },
+      "timing_ms_per_query": {
+        "cosine": 0.04274602999998933,
+        "euclidean": 0.05505364500010046,
+        "dot_product": 0.0047252300001332515
+      }
+    }
+  },
+  "chroma_verification": {
+    "cosine": {
+      "chroma_space": "cosine",
+      "exact_order_match_with_numpy": 0.875,
+      "score_sequence_match_with_numpy": 1.0,
+      "chroma_hit_rate@5": 0.875,
+      "indexed_chunks": 150
+    },
+    "euclidean": {
+      "chroma_space": "l2",
+      "exact_order_match_with_numpy": 0.875,
+      "score_sequence_match_with_numpy": 1.0,
+      "chroma_hit_rate@5": 0.875,
+      "indexed_chunks": 150
+    },
+    "dot_product": {
+      "chroma_space": "ip",
+      "exact_order_match_with_numpy": 0.875,
+      "score_sequence_match_with_numpy": 1.0,
+      "chroma_hit_rate@5": 0.875,
+      "indexed_chunks": 150
+    }
+  }
+}
