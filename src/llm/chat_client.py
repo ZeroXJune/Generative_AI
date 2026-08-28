@@ -26,6 +26,33 @@ from typing import Dict, List, Optional
 # this file is run directly or imported from the pipeline.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+
+def _load_dotenv_file() -> None:
+    """
+    Load credentials from a .env file at the project root, if one exists.
+
+    Without this, a key placed in .env is silently ignored and every call
+    falls back to the offline responder with no explanation. The path is
+    resolved from this file rather than the working directory, so it works
+    no matter where a script is launched from.
+    """
+    env_path = Path(__file__).resolve().parents[2] / ".env"
+    if not env_path.is_file():
+        return
+
+    try:
+        from dotenv import load_dotenv
+
+        # Real environment variables win over the file, so an explicit
+        # `export` in the shell still overrides .env.
+        load_dotenv(env_path, override=False)
+    except ImportError:
+        # python-dotenv is optional; exported variables still work without it.
+        pass
+
+
+_load_dotenv_file()
+
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 SENTENCE_PATTERN = re.compile(r"(?<=[.!?])\s+")
 

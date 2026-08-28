@@ -182,6 +182,31 @@ export OPENAI_BASE_URL="https://..."    # optional: Azure, Groq, Together
 export OPENAI_MODEL="gpt-3.5-turbo"
 ```
 
+### Configuring credentials with a `.env` file
+
+Rather than exporting variables in every shell, copy the template and fill it
+in. `.env` is git-ignored, so a real key is never committed:
+
+```bash
+cp .env.example .env
+# then edit .env and set OPENAI_API_KEY (or the Ollama settings)
+```
+
+The file is loaded automatically — no `export` required. Exported shell
+variables take precedence over `.env`, so a one-off override still works.
+Never put a real key in `.env.example`; that file **is** committed.
+
+Verify what the client picked up before spending anything:
+
+```bash
+python -c "import sys; sys.path.insert(0,'src'); \
+from llm.chat_client import ChatClient; print(ChatClient().get_info())"
+```
+
+`live: true` with `backend: openai` means a hosted call will be attempted;
+`backend: offline` means the key was not found and the extractive responder
+will answer instead.
+
 `ChatClient.get_info()` reports which backend actually served a call
 (`offline`, `local`, or `openai`), so a local run is never mistaken for a paid
 API run.
