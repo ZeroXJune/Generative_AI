@@ -127,6 +127,37 @@ budget is spent, so a long retrieval set can never overrun the context window.
 
 ---
 
+## 4.1 Running the Prompts Against a Real Model
+
+`ChatClient` targets the OpenAI-compatible `/v1/chat/completions` contract
+rather than one vendor, so the prompts can be exercised against a hosted API
+or a local server with no code change:
+
+| Backend | Requirement | Reported as |
+|---|---|---|
+| Offline extractive responder | none (default) | `offline` |
+| Ollama / vLLM / LM Studio | server running locally | `local` |
+| OpenAI / Azure / Groq | paid API key | `openai` |
+
+```bash
+export OPENAI_BASE_URL="http://localhost:11434/v1"
+export OPENAI_MODEL="llama3.2"
+python src/checkpoint2_demo.py
+```
+
+A self-hosted endpoint authenticates nothing, so the client supplies a
+placeholder key rather than refusing to start — but `get_info()` still reports
+`api_key_configured: false`, and every response records the backend that
+actually served it. A local run is therefore never mistaken for a paid API run
+in the transcripts.
+
+**Verification status**: the HTTP path was tested against a local
+OpenAI-compatible server — request shape, system/context separation, response
+parsing, and token-usage extraction all confirmed. It has not been run against
+a hosted provider, since no API key was available in the build environment.
+
+---
+
 ## 5. Reflection
 
 The clearest lesson from this checkpoint is that **most prompt failures are

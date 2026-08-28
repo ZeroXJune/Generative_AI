@@ -29,6 +29,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 SENTENCE_PATTERN = re.compile(r"(?<=[.!?])\s+")
 
+# Ollama exposes an OpenAI-compatible /v1/chat/completions endpoint, so it
+# needs no separate client - only a base URL.
+OLLAMA_BASE_URL = "http://localhost:11434/v1"
+
+# Self-hosted servers (Ollama, vLLM, LM Studio) ignore the API key but the
+# OpenAI SDK requires the field to be non-empty.
+LOCAL_KEY_PLACEHOLDER = "not-needed-for-local"
+
+# Hosts that genuinely require a paid credential.
+HOSTED_URL_MARKERS = ("api.openai.com", "openai.azure.com")
+
 # Reused so the offline responder scores overlap on content words only.
 # Matching on function words such as "the" makes every sentence look relevant
 # and defeats the refusal path the grounded_qa prompt depends on.
@@ -70,7 +81,7 @@ class ChatClient:
 
     def __init__(
         self,
-        model: str = "gpt-3.5-turbo",
+        model: Optional[str] = None,
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         timeout: float = 30.0,
@@ -81,7 +92,10 @@ class ChatClient:
         Configure the client.
 
         Args:
-            model: Model identifier passed to the endpoint
+            model: Model identifier passed to the endpoint; falls back to the
+                OPENAI_MODEL env var, then to gpt-3.5-turbo. Must name a model
+                the endpoint actually serves - an Ollama server has no
+                'gpt-3.5-turbo'.
             api_key: API key; falls back to the OPENAI_API_KEY env var
             base_url: Override for OpenAI-compatible providers; falls back to
                 the OPENAI_BASE_URL env var
@@ -90,7 +104,7 @@ class ChatClient:
             force_offline: Skip the network entirely and use the offline
                 responder, useful for deterministic tests
         """
-        self.model = model
+        self.model = model or os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
         self.timeout = timeout
         self.max_retries = max_retries
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
@@ -98,7 +112,16 @@ class ChatClient:
         self.client = None
         self.backend = "offline"
 
-        if force_offline or not self.api_key:
+        if force_offline:
+            return
+
+        # A self-hosted endpoint authenticates nothing, so requiring a key
+        # would keep the client offline for no reason. Only hosted providers
+        # actually need one.
+        if self.base_url and not self.is_hosted_endpoint:
+            self.api_key = self.api_key or LOCAL_KEY_PLACEHOLDER
+
+        if not self.api_key:
             return
 
         try:
@@ -109,10 +132,42 @@ class ChatClient:
                 kwargs["base_url"] = self.base_url
 
             self.client = OpenAI(**kwargs)
-            self.backend = "openai"
+            self.backend = "local" if self.is_local_endpoint else "openai"
         except ImportError:
             # SDK missing; the offline responder keeps the pipeline usable.
             self.client = None
+
+    @property
+    def is_hosted_endpoint(self) -> bool:
+        """True when the configured base URL belongs to a paid hosted provider."""
+        if not self.base_url:
+            return True
+        return any(marker in self.base_url for marker in HOSTED_URL_MARKERS)
+
+    @property
+    def is_local_endpoint(self) -> bool:
+        """True when talking to a self-hosted server rather than a paid API."""
+        return bool(self.base_url) and not self.is_hosted_endpoint
+
+    @classmethod
+    def for_ollama(
+        cls, model: str = "llama3.2", base_url: str = OLLAMA_BASE_URL, **kwargs
+    ) -> "ChatClient":
+        """
+        Build a client pointed at a local Ollama server.
+
+        Requires `ollama serve` to be running and the model pulled
+        (`ollama pull llama3.2`). No API key and no network access needed.
+
+        Args:
+            model: Ollama model tag, e.g. 'llama3.2' or 'mistral'
+            base_url: Ollama's OpenAI-compatible endpoint
+            **kwargs: Passed through to __init__
+
+        Returns:
+            A ChatClient targeting the local server
+        """
+        return cls(model=model, base_url=base_url, api_key=LOCAL_KEY_PLACEHOLDER, **kwargs)
 
     @property
     def is_live(self) -> bool:
@@ -154,7 +209,9 @@ class ChatClient:
                 return ChatResponse(
                     content=response.choices[0].message.content or "",
                     model=response.model,
-                    backend="openai",
+                    # Report the endpoint that actually served the call, so a
+                    # local Ollama run is distinguishable from a paid API run.
+                    backend=self.backend,
                     prompt_tokens=getattr(usage, "prompt_tokens", 0),
                     completion_tokens=getattr(usage, "completion_tokens", 0),
                     latency_seconds=time.perf_counter() - started,
@@ -300,7 +357,10 @@ class ChatClient:
             "backend": self.backend if self.is_live else "offline",
             "base_url": self.base_url or "https://api.openai.com/v1",
             "live": self.is_live,
-            "api_key_configured": bool(self.api_key),
+            "local_endpoint": self.is_local_endpoint,
+            # A placeholder key for a local server is not a real credential.
+            "api_key_configured": bool(self.api_key)
+            and self.api_key != LOCAL_KEY_PLACEHOLDER,
         }
 
 

@@ -153,13 +153,38 @@ python src/checkpoint2_demo.py
 python src/experiments/metric_comparison.py
 ```
 
-By default the Chat Completion client runs an offline extractive responder so
-the pipeline works without credentials. To use a real model:
+By default the Chat Completion client runs an offline extractive responder, so
+the pipeline works with no credentials and no network. To answer with a real
+model, point it at any OpenAI-compatible endpoint.
+
+**Option A — Ollama (free, local, no API key).** Recommended for development
+and for the live demo:
 
 ```bash
-export OPENAI_API_KEY="sk-..."          # any OpenAI-compatible endpoint
-export OPENAI_BASE_URL="https://..."    # optional: Azure, Groq, local vLLM
+ollama serve                 # start the server
+ollama pull llama3.2         # one-time model download
+
+export OPENAI_BASE_URL="http://localhost:11434/v1"
+export OPENAI_MODEL="llama3.2"
+
+python src/checkpoint2_demo.py
 ```
+
+Ollama serves the same `/v1/chat/completions` contract as OpenAI, so this
+needs no code change and no key. In Python, `ChatClient.for_ollama()` does the
+same thing without environment variables.
+
+**Option B — a hosted provider.** Requires a paid credential:
+
+```bash
+export OPENAI_API_KEY="sk-..."
+export OPENAI_BASE_URL="https://..."    # optional: Azure, Groq, Together
+export OPENAI_MODEL="gpt-3.5-turbo"
+```
+
+`ChatClient.get_info()` reports which backend actually served a call
+(`offline`, `local`, or `openai`), so a local run is never mistaken for a paid
+API run.
 
 Likewise, if `huggingface.co` is unreachable, `build_index.py` falls back to a
 deterministic TF-IDF embedder and says so — no silent substitution.

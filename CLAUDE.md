@@ -48,7 +48,12 @@ python src/checkpoint2_demo.py
 # Distance metric comparison experiment
 python src/experiments/metric_comparison.py
 
-# Optional: use a real LLM instead of the offline responder
+# Optional: answer with a real LLM instead of the offline responder.
+# Free local option - no API key required:
+export OPENAI_BASE_URL="http://localhost:11434/v1"   # ollama serve
+export OPENAI_MODEL="llama3.2"                       # ollama pull llama3.2
+
+# Or a hosted provider:
 export OPENAI_API_KEY="sk-..."
 ```
 
