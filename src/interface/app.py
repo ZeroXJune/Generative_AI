@@ -19,6 +19,19 @@ except ImportError:
     from embeddings.embedding_generator_mock import MockEmbeddingGenerator
     USE_REAL_EMBEDDINGS = False
 
+from schedule.extractor import extract_from_corpus
+from schedule.reminders import ReminderEngine
+from schedule.store import load_deadlines
+
+# Colour per urgency band, used by the deadline panel.
+URGENCY_STYLE = {
+    "overdue": ("🔴", "error"),
+    "today": ("🟠", "error"),
+    "urgent": ("🟠", "warning"),
+    "soon": ("🟡", "warning"),
+    "upcoming": ("🟢", "info"),
+}
+
 
 def cosine_similarity_simple(a: np.ndarray, B: np.ndarray) -> np.ndarray:
     """Compute cosine similarity between vector a and vectors in B."""
@@ -80,6 +93,78 @@ def get_embedder():
         return EmbeddingGenerator()
     else:
         return MockEmbeddingGenerator()
+
+
+def get_reminder_engine() -> ReminderEngine:
+    """
+    Build a ReminderEngine from the stored deadlines.
+
+    Falls back to scanning data/raw when the store has not been built yet, so
+    the panel works before anyone runs the CLI.
+
+    Returns:
+        A ReminderEngine over the available deadlines
+    """
+    deadlines = load_deadlines()
+    if not deadlines:
+        deadlines = extract_from_corpus()
+    return ReminderEngine(deadlines)
+
+
+def render_deadline_panel(engine: ReminderEngine, horizon_days: int):
+    """
+    Render the upcoming-deadline panel.
+
+    Args:
+        engine: The reminder engine to read from
+        horizon_days: How far ahead to show
+    """
+    st.subheader("⏰ Upcoming Deadlines")
+
+    overdue = engine.overdue()
+    upcoming = engine.upcoming(horizon_days)
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Overdue", len(overdue))
+    col2.metric(f"Next {horizon_days} days", len(upcoming))
+
+    following = engine.next_deadline()
+    col3.metric(
+        "Next deadline",
+        following.deadline.date.isoformat() if following else "—",
+        f"in {following.days_until} days" if following else None,
+    )
+
+    if overdue:
+        with st.expander(f"🔴 Overdue ({len(overdue)})", expanded=False):
+            for reminder in overdue:
+                st.error(
+                    f"**{reminder.deadline.title}** — "
+                    f"{abs(reminder.days_until)} day(s) overdue "
+                    f"({reminder.deadline.date.isoformat()}) "
+                    f"· `{reminder.deadline.source_doc}`"
+                )
+
+    if not upcoming:
+        st.success(f"Nothing due in the next {horizon_days} days.")
+        return
+
+    for reminder in upcoming:
+        icon, level = URGENCY_STYLE.get(reminder.urgency, ("🟢", "info"))
+        when = (
+            "TODAY"
+            if reminder.days_until == 0
+            else "tomorrow"
+            if reminder.days_until == 1
+            else f"in {reminder.days_until} days"
+        )
+        at_time = f" at {reminder.deadline.time}" if reminder.deadline.time else ""
+        message = (
+            f"{icon} **{reminder.deadline.title}** — {when} "
+            f"({reminder.deadline.date.isoformat()}{at_time}) "
+            f"· `{reminder.deadline.source_doc}`"
+        )
+        getattr(st, level)(message)
 
 
 def find_similar_chunks(query: str, chunks: list, top_k: int = 3) -> list:
@@ -149,7 +234,18 @@ def main():
         top_k = st.slider("Number of results", 1, 10, 3)
         similarity_threshold = st.slider("Min similarity", 0.0, 1.0, 0.3)
 
+        st.divider()
+
+        st.header("⏰ Reminders")
+        horizon_days = st.slider("Look ahead (days)", 1, 90, 14)
+
     # Main content
+    st.divider()
+
+    # Deadline reminders - the schedule-tracking objective from the proposal
+    engine = get_reminder_engine()
+    render_deadline_panel(engine, horizon_days)
+
     st.divider()
 
     # Chat interface
@@ -225,7 +321,7 @@ def main():
     # Footer
     st.markdown("""
     ---
-    **Personal Assistant AI** | Checkpoint 1: Data Pipeline
+    **Personal Assistant AI** | Semantic search + deadline reminders
     Built with [Streamlit](https://streamlit.io) | Powered by Semantic Search
     """)
 

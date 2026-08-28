@@ -108,6 +108,14 @@ personal-assistant-ai/
 │   ├── experiments/
 │   │   └── metric_comparison.py       # Distance metric experiment
 │   │
+│   ├── schedule/
+│   │   ├── date_parser.py             # Date/time parsing (stdlib only)
+│   │   ├── extractor.py               # Deadline extraction + filters
+│   │   ├── store.py                   # Deadline persistence
+│   │   └── reminders.py               # ReminderEngine, urgency bands
+│   │
+│   ├── reminders.py                   # Deadline reminder CLI
+│   │
 │   ├── interface/                     # Checkpoint 4 (web UI)
 │   └── deployment/                    # Checkpoint 4 (Docker)
 │
@@ -115,6 +123,8 @@ personal-assistant-ai/
     ├── 01_Project_Proposal.md         # Problem statement, theme, dataset
     ├── 02_Prompt_Engineering.md       # Checkpoint 2 prompt architecture
     ├── 02_Vector_Indexing.md          # Checkpoint 2 vector DB + metrics
+    ├── 03_Schedule_Reminders.md       # Deadline reminders (official)
+    ├── 03_Schedule_Reminders_EXPLAINED.md  # Companion explainer
     └── CHECKPOINT1_REFLECTION.md      # Data challenges & solutions
 ```
 
@@ -159,6 +169,25 @@ personal-assistant-ai/
 produce identical rankings (cosine and dot product are algebraically equal;
 Euclidean is a monotonic transform of both). Cosine was chosen because it is
 the only one robust to unnormalized input — see `docs/02_Vector_Indexing.md`.
+
+### Schedule Reminders ✅ (proposal objective)
+**Status**: Implemented  
+**Components**:
+- [x] Date/time parser (stdlib only, strict — rejects unparseable dates)
+- [x] Deadline extraction with holiday/metadata/quoted-example filters
+- [x] Persistent deadline store
+- [x] Urgency banding (overdue / today / urgent / soon / upcoming)
+- [x] CLI digest + Streamlit panel
+
+**Key Files**:
+- `src/schedule/` – parser, extractor, store, reminder engine
+- `src/reminders.py` – CLI entry point
+- `docs/03_Schedule_Reminders.md` – official feature document
+- `docs/03_Schedule_Reminders_EXPLAINED.md` – section-by-section companion
+
+**Design rule**: the LLM finds candidate dates; **Python decides what is
+approaching**. Date arithmetic never touches the model, so alerts are exact
+and work with no API key — see `docs/03_Schedule_Reminders.md` §2.
 
 ### Checkpoint 3: RAG Orchestration ⏳ (next)
 **Due**: October 17, 2026  

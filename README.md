@@ -164,6 +164,19 @@ export OPENAI_BASE_URL="https://..."    # optional: Azure, Groq, local vLLM
 Likewise, if `huggingface.co` is unreachable, `build_index.py` falls back to a
 deterministic TF-IDF embedder and says so — no silent substitution.
 
+### Deadline Reminders
+
+```bash
+python src/reminders.py                      # what's due in the next 14 days
+python src/reminders.py --days 30            # widen the horizon
+python src/reminders.py --refresh            # re-scan data/raw first
+python src/reminders.py --as-of 2026-09-15   # reproducible demo output
+```
+
+Implements the schedule-tracking objective from the proposal. Date arithmetic
+is plain Python, not an LLM call, so alerts are exact and work offline — see
+[docs/03_Schedule_Reminders.md](docs/03_Schedule_Reminders.md).
+
 ### Running the Application
 
 ```bash
