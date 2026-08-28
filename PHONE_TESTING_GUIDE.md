@@ -44,7 +44,7 @@ ipconfig
 Run from your computer (in the project directory):
 
 ```bash
-cd /home/user/TrikRide_App
+cd /home/user/Generative_AI
 
 streamlit run src/interface/app.py --server.address 0.0.0.0
 ```

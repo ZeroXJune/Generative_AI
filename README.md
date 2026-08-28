@@ -109,7 +109,12 @@ personal-assistant-ai/
   - Embedding generation and model justification
   - Repository setup and documentation
 
-- [ ] **Checkpoint 2** (Weeks 5–8, Midterm, 20%): Prompt Architecture & Vector Indexing
+- [x] **Checkpoint 2** (Weeks 5–8, Midterm, 20%): Prompt Architecture & Vector Indexing
+  - Four versioned system prompts with design rationale ([docs](docs/02_Prompt_Engineering.md))
+  - Chat Completion API integration with an offline fallback
+  - Chroma vector database, 26 documents → 150 indexed chunks
+  - Distance metric comparison: Cosine vs Euclidean vs Dot product ([docs](docs/02_Vector_Indexing.md))
+
 - [ ] **Checkpoint 3** (Weeks 9–12, Semi-Final, 30%): RAG Orchestration & Application
 - [ ] **Checkpoint 4** (Weeks 13–16, Final, 30%): Deployment & Defense
 
@@ -134,6 +139,68 @@ pip install -r requirements.txt
 python src/preprocessing/text_cleaner.py --input data/raw/ --output data/processed/
 python src/embeddings/embedding_generator.py --input data/processed/ --output data/processed/embeddings/
 ```
+
+### Checkpoint 2: Vector Indexing & Retrieval
+
+```bash
+# Build the Chroma index from data/raw
+python src/build_index.py
+
+# Full demonstration: prompts, Chat API, retrieval, live queries
+python src/checkpoint2_demo.py
+
+# Reproduce the distance metric comparison
+python src/experiments/metric_comparison.py
+```
+
+By default the Chat Completion client runs an offline extractive responder, so
+the pipeline works with no credentials and no network. To answer with a real
+model, point it at any OpenAI-compatible endpoint.
+
+**Option A — Ollama (free, local, no API key).** Recommended for development
+and for the live demo:
+
+```bash
+ollama serve                 # start the server
+ollama pull llama3.2         # one-time model download
+
+export OPENAI_BASE_URL="http://localhost:11434/v1"
+export OPENAI_MODEL="llama3.2"
+
+python src/checkpoint2_demo.py
+```
+
+Ollama serves the same `/v1/chat/completions` contract as OpenAI, so this
+needs no code change and no key. In Python, `ChatClient.for_ollama()` does the
+same thing without environment variables.
+
+**Option B — a hosted provider.** Requires a paid credential:
+
+```bash
+export OPENAI_API_KEY="sk-..."
+export OPENAI_BASE_URL="https://..."    # optional: Azure, Groq, Together
+export OPENAI_MODEL="gpt-3.5-turbo"
+```
+
+`ChatClient.get_info()` reports which backend actually served a call
+(`offline`, `local`, or `openai`), so a local run is never mistaken for a paid
+API run.
+
+Likewise, if `huggingface.co` is unreachable, `build_index.py` falls back to a
+deterministic TF-IDF embedder and says so — no silent substitution.
+
+### Deadline Reminders
+
+```bash
+python src/reminders.py                      # what's due in the next 14 days
+python src/reminders.py --days 30            # widen the horizon
+python src/reminders.py --refresh            # re-scan data/raw first
+python src/reminders.py --as-of 2026-09-15   # reproducible demo output
+```
+
+Implements the schedule-tracking objective from the proposal. Date arithmetic
+is plain Python, not an LLM call, so alerts are exact and work offline — see
+[docs/03_Schedule_Reminders.md](docs/03_Schedule_Reminders.md).
 
 ### Running the Application
 

@@ -197,6 +197,12 @@ class DataPipeline:
         total_tokens = sum(c["token_count"] for c in final_chunks)
         total_dims = len(final_chunks[0]["embedding"]) if final_chunks else 0
 
+        # The mock and lexical embedders report the model name they were asked
+        # for, so the summary must also state which backend actually ran -
+        # otherwise a fallback run looks identical to a real MiniLM run.
+        model_info = self.embedder.get_model_info()
+        embedder_type = model_info.get("type", "sentence-transformers")
+
         results = {
             "num_documents": len(documents),
             "num_chunks": len(final_chunks),
@@ -204,6 +210,7 @@ class DataPipeline:
             "avg_chunk_size": total_tokens // len(final_chunks) if final_chunks else 0,
             "embedding_dimension": total_dims,
             "embedding_model": self.embedder.model_name,
+            "embedder_type": embedder_type,
         }
 
         print("\n" + "=" * 60)
@@ -215,6 +222,9 @@ class DataPipeline:
         print(f"Avg chunk size: {results['avg_chunk_size']} tokens")
         print(f"Embedding dimension: {results['embedding_dimension']}")
         print(f"Embedding model: {results['embedding_model']}")
+        print(f"Embedder backend: {embedder_type}")
+        if embedder_type == "mock":
+            print("  ⚠ MOCK embeddings (random vectors) - not suitable for retrieval")
         print(f"Output: {self.processed_dir}")
         print("=" * 60)
 

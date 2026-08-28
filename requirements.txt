@@ -18,7 +18,9 @@ llama-index>=0.9.0
 openai>=1.0.0
 
 # Vector Database
-chromadb==0.4.15
+# Lower bound rather than a pin: the VectorStore uses the PersistentClient API,
+# which is stable across 0.4.x and 1.x. Verified against chromadb 1.5.9.
+chromadb>=0.4.15
 faiss-cpu==1.7.4
 
 # API & Interface

@@ -37,12 +37,20 @@ ENV/
 .DS_Store
 
 # Data and models (local only)
-data/processed/
+# Git will not descend into an excluded directory, so the checkpoint results
+# file is re-included via 'data/processed/*' plus an explicit negation.
+data/processed/*
+!data/processed/metric_comparison.json
 data/raw/*.json
 embeddings.npy
 *.faiss
 chroma_data/
 *.db
+
+# Generated Chroma indexes
+data/vector_store/
+data/vector_store_demo/
+data/vector_store_experiments/
 
 # Environment variables
 .env

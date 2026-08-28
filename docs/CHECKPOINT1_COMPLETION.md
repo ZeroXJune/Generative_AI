@@ -340,8 +340,8 @@ src/
 **Local Windows PC:**
 ```bash
 # 1. Clone repository
-git clone https://github.com/ZeroXJune/trikride_app.git
-cd trikride_app
+git clone https://github.com/ZeroXJune/Generative_AI.git
+cd Generative_AI
 git checkout claude/personal-assistant-ai-yxy5sf
 
 # 2. Setup environment (Anaconda)
