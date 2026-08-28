@@ -21,7 +21,7 @@ A Retrieval-Augmented Generation system that allows users to upload documents, a
 
 ```bash
 # Clone repo (already done)
-cd /home/user/TrikRide_App
+cd /home/user/Generative_AI
 
 # Install dependencies
 pip install -r requirements.txt
