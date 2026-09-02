@@ -115,7 +115,12 @@ personal-assistant-ai/
   - Chroma vector database, 26 documents → 150 indexed chunks
   - Distance metric comparison: Cosine vs Euclidean vs Dot product ([docs](docs/02_Vector_Indexing.md))
 
-- [ ] **Checkpoint 3** (Weeks 9–12, Semi-Final, 30%): RAG Orchestration & Application
+- [x] **Checkpoint 3** (Weeks 9–12, Semi-Final, 30%): RAG Orchestration & Application
+  - Automated ingestion pipeline with content-hash change detection
+  - LangChain integration via `Embeddings` and `BaseRetriever` adapters
+  - Conversational memory with reference resolution before retrieval
+  - Live demo, 7 queries ([docs](docs/04_RAG_Orchestration.md))
+
 - [ ] **Checkpoint 4** (Weeks 13–16, Final, 30%): Deployment & Defense
 
 ## Quick Start
@@ -213,6 +218,15 @@ API run.
 
 Likewise, if `huggingface.co` is unreachable, `build_index.py` falls back to a
 deterministic TF-IDF embedder and says so — no silent substitution.
+
+### Checkpoint 3: Conversational RAG
+
+```bash
+python src/checkpoint3_demo.py     # ingestion + LangChain + memory + 7 queries
+```
+
+The ingestion pipeline is incremental — re-running it only processes documents
+whose contents changed.
 
 ### Deadline Reminders
 

@@ -51,6 +51,10 @@ chroma_data/
 data/vector_store/
 data/vector_store_demo/
 data/vector_store_experiments/
+data/vector_store_cp3/
+data/vector_store_lc/
+data/vector_store_tmp/
+data/vector_store_ingest_test/
 
 # Environment variables
 .env

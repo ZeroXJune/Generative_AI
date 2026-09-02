@@ -12,7 +12,11 @@ transformers==4.35.2
 tokenizers==0.14.1
 
 # LLM & RAG Framework
+# Checkpoint 3 uses langchain-core interfaces (Embeddings, BaseRetriever) and
+# langchain-text-splitters. Verified against langchain 1.3.18 / core 1.6.1;
+# the 1.x API differs substantially from 0.1.x.
 langchain>=0.1.0
+langchain-community>=0.0.10
 langchain-openai>=0.0.5
 llama-index>=0.9.0
 openai>=1.0.0

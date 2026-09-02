@@ -113,6 +113,18 @@ personal-assistant-ai/
 │   ├── experiments/
 │   │   └── metric_comparison.py       # Distance metric experiment
 │   │
+│   ├── ingestion/
+│   │   └── pipeline.py                # Incremental ingestion (CP3)
+│   │
+│   ├── memory/
+│   │   └── conversation.py            # Conversational memory (CP3)
+│   │
+│   ├── integrations/
+│   │   └── langchain_adapters.py      # LangChain interop (CP3)
+│   │
+│   ├── rag_app.py                     # Conversational RAG app (CP3)
+│   ├── checkpoint3_demo.py            # Checkpoint 3 demonstration
+│   │
 │   ├── schedule/
 │   │   ├── date_parser.py             # Date/time parsing (stdlib only)
 │   │   ├── extractor.py               # Deadline extraction + filters
@@ -130,6 +142,8 @@ personal-assistant-ai/
     ├── 02_Vector_Indexing.md          # Checkpoint 2 vector DB + metrics
     ├── 03_Schedule_Reminders.md       # Deadline reminders (official)
     ├── 03_Schedule_Reminders_EXPLAINED.md  # Companion explainer
+    ├── 04_RAG_Orchestration.md        # Checkpoint 3 analysis
+    ├── 00_Project_Overview.md         # Whole-project overview
     └── CHECKPOINT1_REFLECTION.md      # Data challenges & solutions
 ```
 
@@ -194,13 +208,27 @@ the only one robust to unnormalized input — see `docs/02_Vector_Indexing.md`.
 approaching**. Date arithmetic never touches the model, so alerts are exact
 and work with no API key — see `docs/03_Schedule_Reminders.md` §2.
 
-### Checkpoint 3: RAG Orchestration ⏳ (next)
+### Checkpoint 3: RAG Orchestration ✅
+**Status**: Complete  
 **Due**: October 17, 2026  
 **Components**:
-- Automated ingestion pipeline
-- RAG application (LangChain/LlamaIndex)
-- Conversational memory
-- Live demo with 5+ queries
+- [x] Automated ingestion pipeline (incremental, content-hash change detection)
+- [x] RAG application (LangChain `Embeddings` + `BaseRetriever` adapters)
+- [x] Conversational memory (reference resolution before retrieval)
+- [x] Live demo with 7 queries
+
+**Key Files**:
+- `src/ingestion/pipeline.py` – incremental ingestion, self-healing manifest
+- `src/memory/conversation.py` – multi-turn memory + query resolution
+- `src/integrations/langchain_adapters.py` – real LangChain interop
+- `src/rag_app.py` – the orchestrated application
+- `src/checkpoint3_demo.py` – full demonstration
+- `docs/04_RAG_Orchestration.md` – analysis
+
+**Design rule**: reference resolution runs **before** retrieval. A follow-up
+like "when is it due?" embeds to a vector with no topical content, so search
+fails regardless of the distance metric — no Checkpoint 2 tuning can fix a
+query that is empty of topic.
 
 ### Checkpoint 4: Deployment & Defense ⏳
 **Due**: November 14, 2026  
@@ -386,4 +414,4 @@ For technical issues or clarifications on project requirements, please reach out
 ---
 
 **Last Updated**: August 22, 2026  
-**Version**: 0.2.0 (Checkpoint 2)
+**Version**: 0.3.0 (Checkpoint 3)

@@ -193,6 +193,32 @@ class VectorStore:
             return 1.0 - distance
         return 1.0 / (1.0 + distance)
 
+    def delete_document(self, doc_id: str) -> int:
+        """
+        Remove every chunk belonging to one document.
+
+        Needed by the incremental ingestion pipeline: a modified document must
+        have its old chunks removed before the new ones are added, or the index
+        ends up serving both versions.
+
+        Args:
+            doc_id: The document identifier to purge
+
+        Returns:
+            Number of chunks removed
+        """
+        existing = self.collection.get(where={"doc_id": doc_id}, include=[])
+        ids = existing.get("ids") or []
+        if ids:
+            self.collection.delete(ids=ids)
+        return len(ids)
+
+    def list_documents(self) -> List[str]:
+        """Return the distinct doc_ids currently present in the index."""
+        records = self.collection.get(include=["metadatas"])
+        metadatas = records.get("metadatas") or []
+        return sorted({m.get("doc_id", "unknown") for m in metadatas})
+
     def count(self) -> int:
         """Return the number of chunks currently indexed."""
         return self.collection.count()
