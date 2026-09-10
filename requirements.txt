@@ -1,4 +1,11 @@
 # Core Dependencies
+#
+# These pins target Python 3.11 and are from 2023. On a newer interpreter
+# several have no wheels and will try to compile from source, which fails on
+# Windows without a C++ toolchain.
+#
+# For a smaller, version-flexible install of only what the code imports, use:
+#   python -m pip install -r requirements-core.txt
 
 # Data Processing
 pandas==2.1.3

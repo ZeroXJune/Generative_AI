@@ -126,16 +126,54 @@ personal-assistant-ai/
 ## Quick Start
 
 ### Prerequisites
-- Python 3.10+
-- Docker & Docker Compose (for deployment)
-- HuggingFace API key (optional, for hosted models)
+- Python 3.11 or 3.12 (3.13+ works only with `requirements-core.txt`)
+- Docker & Docker Compose (Checkpoint 4, for deployment)
 
 ### Installation
 
 ```bash
-git clone <repo>
-cd personal-assistant-ai
-pip install -r requirements.txt
+git clone https://github.com/ZeroXJune/Generative_AI.git
+cd Generative_AI
+
+# Create an isolated environment. Python 3.11 or 3.12 is recommended -
+# the pinned versions in requirements.txt have no wheels for 3.13+.
+py -3.12 -m venv .venv          # Windows; use `python3.12 -m venv .venv` elsewhere
+.venv\Scripts\Activate.ps1       # Windows PowerShell
+# source .venv/bin/activate     # Mac/Linux
+
+python -m pip install -r requirements-core.txt
+```
+
+**Two dependency sets:**
+
+| File | Packages | Use when |
+|---|---|---|
+| `requirements-core.txt` | 8 | Default. Only what the code imports; version ranges, so it installs on newer Python. |
+| `requirements.txt` | 25 | Full declared stack, pinned to 2023 versions. Needs Python 3.11. |
+
+**Disk space**: `sentence-transformers` pulls in PyTorch, which dominates the
+install. On Windows the default wheel may bundle CUDA (~2.5 GB). For a CPU-only
+build (~200 MB), install torch first:
+
+```bash
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
+Or omit `sentence-transformers` entirely — the pipeline falls back to a
+deterministic lexical embedder and still runs end to end.
+
+**If PowerShell blocks activation** with *"running scripts is disabled"*, either
+allow local scripts once:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+or skip activation entirely and call the environment's Python by path:
+
+```powershell
+.venv\Scripts\python.exe -m pip install -r requirements-core.txt
+.venv\Scripts\python.exe src/build_index.py
 ```
 
 ### Running the Data Pipeline

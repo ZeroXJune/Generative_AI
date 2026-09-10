@@ -1,0 +1,41 @@
+# Minimal runtime dependencies - everything the code actually imports.
+#
+# Use this instead of requirements.txt when disk space is tight, or when
+# installing on a Python newer than 3.11. Versions are ranges rather than
+# pins so pip can pick a build that has wheels for your interpreter; the
+# 2023-era pins in requirements.txt only have wheels for Python 3.11.
+#
+#   python -m pip install -r requirements-core.txt
+#
+# Omitted from requirements.txt because nothing imports them: pandas, nltk,
+# llama-index, faiss-cpu, fastapi, uvicorn, docker, peft, bitsandbytes,
+# loguru, tqdm, python-dateutil, langchain-openai, transformers, tokenizers.
+# peft/bitsandbytes return in Checkpoint 4 for the fine-tuning analysis.
+
+# Vector store and math
+chromadb>=0.4.15
+numpy>=1.24
+
+# Embeddings.
+# NOTE: this pulls in torch, by far the largest dependency here. On Windows
+# the default wheel may include CUDA (~2.5 GB). For a CPU-only build (~200 MB)
+# install torch first:
+#   python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+# Skip this package entirely to run on the lexical fallback embedder - the
+# pipeline still works, retrieval quality is just lower.
+sentence-transformers>=2.2.2
+
+# RAG orchestration (Checkpoint 3). Only these two langchain packages are
+# imported; the langchain metapackage is not needed.
+langchain-core>=0.1.0
+langchain-text-splitters>=0.0.1
+
+# Chat Completion API client
+openai>=1.0.0
+python-dotenv>=1.0.0
+
+# Web interface
+streamlit>=1.29.0
+
+# Optional: used only by the demo block in embeddings/embedding_generator.py
+# scikit-learn>=1.3.0
