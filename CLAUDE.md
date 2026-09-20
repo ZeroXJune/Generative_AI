@@ -113,6 +113,18 @@ personal-assistant-ai/
 │   ├── experiments/
 │   │   └── metric_comparison.py       # Distance metric experiment
 │   │
+│   ├── ingestion/
+│   │   └── pipeline.py                # Incremental ingestion (CP3)
+│   │
+│   ├── memory/
+│   │   └── conversation.py            # Conversational memory (CP3)
+│   │
+│   ├── integrations/
+│   │   └── langchain_adapters.py      # LangChain interop (CP3)
+│   │
+│   ├── rag_app.py                     # Conversational RAG app (CP3)
+│   ├── checkpoint3_demo.py            # Checkpoint 3 demonstration
+│   │
 │   ├── schedule/
 │   │   ├── date_parser.py             # Date/time parsing (stdlib only)
 │   │   ├── extractor.py               # Deadline extraction + filters
@@ -121,8 +133,12 @@ personal-assistant-ai/
 │   │
 │   ├── reminders.py                   # Deadline reminder CLI
 │   │
-│   ├── interface/                     # Checkpoint 4 (web UI)
-│   └── deployment/                    # Checkpoint 4 (Docker)
+│   ├── finetuning/
+│   │   └── vram_calculator.py         # LoRA/QLoRA memory estimates (CP4)
+│   │
+│   ├── interface/
+│   │   └── app.py                     # Streamlit UI over RAGApplication
+│   └── deployment/                    # (reserved)
 │
 └── docs/
     ├── 01_Project_Proposal.md         # Problem statement, theme, dataset
@@ -130,6 +146,10 @@ personal-assistant-ai/
     ├── 02_Vector_Indexing.md          # Checkpoint 2 vector DB + metrics
     ├── 03_Schedule_Reminders.md       # Deadline reminders (official)
     ├── 03_Schedule_Reminders_EXPLAINED.md  # Companion explainer
+    ├── 04_RAG_Orchestration.md        # Checkpoint 3 analysis
+    ├── 00_Project_Overview.md         # Whole-project overview
+    ├── 05_Deployment.md               # Checkpoint 4 container design
+    ├── 06_Fine_Tuning_Analysis.md     # Checkpoint 4 LoRA/QLoRA analysis
     └── CHECKPOINT1_REFLECTION.md      # Data challenges & solutions
 ```
 
@@ -194,22 +214,53 @@ the only one robust to unnormalized input — see `docs/02_Vector_Indexing.md`.
 approaching**. Date arithmetic never touches the model, so alerts are exact
 and work with no API key — see `docs/03_Schedule_Reminders.md` §2.
 
-### Checkpoint 3: RAG Orchestration ⏳ (next)
+### Checkpoint 3: RAG Orchestration ✅
+**Status**: Complete  
 **Due**: October 17, 2026  
 **Components**:
-- Automated ingestion pipeline
-- RAG application (LangChain/LlamaIndex)
-- Conversational memory
-- Live demo with 5+ queries
+- [x] Automated ingestion pipeline (incremental, content-hash change detection)
+- [x] RAG application (LangChain `Embeddings` + `BaseRetriever` adapters)
+- [x] Conversational memory (reference resolution before retrieval)
+- [x] Live demo with 7 queries
 
-### Checkpoint 4: Deployment & Defense ⏳
+**Key Files**:
+- `src/ingestion/pipeline.py` – incremental ingestion, self-healing manifest
+- `src/memory/conversation.py` – multi-turn memory + query resolution
+- `src/integrations/langchain_adapters.py` – real LangChain interop
+- `src/rag_app.py` – the orchestrated application
+- `src/checkpoint3_demo.py` – full demonstration
+- `docs/04_RAG_Orchestration.md` – analysis
+
+**Design rule**: reference resolution runs **before** retrieval. A follow-up
+like "when is it due?" embeds to a vector with no topical content, so search
+fails regardless of the distance metric — no Checkpoint 2 tuning can fix a
+query that is empty of topic.
+
+### Checkpoint 4: Deployment & Defense 🔶
+**Status**: Mostly complete — deployment evidence blocked  
 **Due**: November 14, 2026  
 **Components**:
-- Fine-tuning analysis (LoRA/QLoRA)
-- Web interface (Streamlit)
-- Containerization (Docker)
-- Deployment evidence
-- Final presentation & defense
+- [x] Fine-tuning analysis (LoRA/QLoRA) — with a runnable VRAM calculator
+- [x] Web interface (Streamlit) — rewritten to drive the real RAG app
+- [x] Containerization (Dockerfile, compose, entrypoint)
+- [ ] Deployment evidence — image not built; Docker Hub's blob CDN is
+      blocked by network policy in the build environment
+- [ ] Final presentation & defense
+
+**Key Files**:
+- `Dockerfile`, `docker-compose.yml`, `docker/entrypoint.sh`
+- `src/interface/app.py` – Streamlit UI over RAGApplication
+- `src/finetuning/vram_calculator.py` – reproducible memory estimates
+- `docs/05_Deployment.md` – container design, verified vs unproven
+- `docs/06_Fine_Tuning_Analysis.md` – LoRA/QLoRA analysis
+
+**Fine-tuning verdict**: QLoRA makes it feasible (4.8 GB for a 7B model, a free
+Colab T4) but it remains the wrong tool here. Fine-tuning moves knowledge into
+weights where it cannot be cited, checked, or updated — and 26 documents cannot
+produce a training set. Fine-tune for behaviour, retrieve for facts.
+
+**To finish**: run `docker compose up --build` on a machine with unrestricted
+Docker access and capture the output — see `docs/05_Deployment.md` §5.
 
 ## Technology Stack
 
@@ -386,4 +437,4 @@ For technical issues or clarifications on project requirements, please reach out
 ---
 
 **Last Updated**: August 22, 2026  
-**Version**: 0.2.0 (Checkpoint 2)
+**Version**: 0.4.0 (Checkpoint 4)

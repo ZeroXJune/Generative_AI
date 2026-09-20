@@ -1,29 +1,30 @@
 """
-Personal Assistant AI - Web Interface
-Streamlit app for testing RAG pipeline locally
+Personal Assistant AI - web interface.
+
+Checkpoint 4 deliverable. The earlier version read chunks.jsonl directly and
+fell back to random mock vectors, bypassing everything built in Checkpoints 2
+and 3. This one drives the real application: the Chroma index, conversational
+memory, the grounded prompt, and the deadline reminder engine.
+
+Run locally:  streamlit run src/interface/app.py
+In Docker:    docker compose up --build
 """
 
-import streamlit as st
-import json
-import numpy as np
-from pathlib import Path
 import sys
+from pathlib import Path
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+import streamlit as st
 
-try:
-    from embeddings.embedding_generator import EmbeddingGenerator
-    USE_REAL_EMBEDDINGS = True
-except ImportError:
-    from embeddings.embedding_generator_mock import MockEmbeddingGenerator
-    USE_REAL_EMBEDDINGS = False
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from rag_app import RAGApplication
 from schedule.extractor import extract_from_corpus
 from schedule.reminders import ReminderEngine
 from schedule.store import load_deadlines
 
-# Colour per urgency band, used by the deadline panel.
+REFUSAL = "I don't have that in your notes."
+
+# Colour per urgency band for the deadline panel.
 URGENCY_STYLE = {
     "overdue": ("🔴", "error"),
     "today": ("🟠", "error"),
@@ -32,86 +33,109 @@ URGENCY_STYLE = {
     "upcoming": ("🟢", "info"),
 }
 
+SUGGESTED_QUESTIONS = [
+    "What is retrieval augmented generation?",
+    "When is the capstone final defense?",
+    "Which distance metric should a vector database use?",
+    "How much butter does the cookie recipe need?",
+]
 
-def cosine_similarity_simple(a: np.ndarray, B: np.ndarray) -> np.ndarray:
-    """Compute cosine similarity between vector a and vectors in B."""
-    a = np.array(a)
-    B = np.array(B)
-
-    # Normalize
-    a_norm = a / (np.linalg.norm(a) + 1e-8)
-    B_norm = B / (np.linalg.norm(B, axis=1, keepdims=True) + 1e-8)
-
-    # Compute similarities
-    return np.dot(B_norm, a_norm)
-
-
-# Page config
 st.set_page_config(
     page_title="Personal Assistant AI",
     page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
 )
 
-# Custom CSS
-st.markdown("""
-    <style>
-    .main {
-        max-width: 1200px;
-    }
-    .stChatMessage {
-        background-color: #f0f2f6;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-    }
-    </style>
-""", unsafe_allow_html=True)
+
+@st.cache_resource(show_spinner="Loading index and models...")
+def get_app() -> RAGApplication:
+    """
+    Build the RAG application once per session.
+
+    Cached as a resource because the embedder and Chroma client are expensive
+    to construct and safe to share across reruns.
+
+    Returns:
+        A ready RAGApplication with its index up to date
+    """
+    app = RAGApplication()
+    app.ingest()
+    return app
 
 
-@st.cache_resource
-def load_chunks():
-    """Load processed chunks from JSONL file."""
-    chunks_file = Path(__file__).parent.parent.parent / "data" / "processed" / "chunks.jsonl"
-
-    if not chunks_file.exists():
-        return None
-
-    chunks = []
-    with open(chunks_file, "r") as f:
-        for line in f:
-            chunks.append(json.loads(line))
-
-    return chunks
-
-
-@st.cache_resource
-def get_embedder():
-    """Get embedding generator."""
-    if USE_REAL_EMBEDDINGS:
-        return EmbeddingGenerator()
-    else:
-        return MockEmbeddingGenerator()
-
-
+@st.cache_resource(show_spinner=False)
 def get_reminder_engine() -> ReminderEngine:
     """
-    Build a ReminderEngine from the stored deadlines.
-
-    Falls back to scanning data/raw when the store has not been built yet, so
-    the panel works before anyone runs the CLI.
+    Build the reminder engine, scanning the corpus if no store exists yet.
 
     Returns:
         A ReminderEngine over the available deadlines
     """
-    deadlines = load_deadlines()
-    if not deadlines:
-        deadlines = extract_from_corpus()
+    deadlines = load_deadlines() or extract_from_corpus()
     return ReminderEngine(deadlines)
 
 
-def render_deadline_panel(engine: ReminderEngine, horizon_days: int):
+def render_sidebar(app: RAGApplication, horizon_days: int) -> int:
+    """
+    Render the sidebar: system status, corpus stats, and settings.
+
+    Args:
+        app: The running application
+        horizon_days: Current reminder horizon
+
+    Returns:
+        The reminder horizon chosen by the user
+    """
+    info = app.get_info()
+
+    with st.sidebar:
+        st.header("📊 Index")
+        st.metric("Documents", info["indexed_documents"])
+        st.metric("Chunks", info["indexed_chunks"])
+
+        st.divider()
+        st.header("⚙️ System")
+
+        # Report what is actually running, never what was requested. A fallback
+        # run must never look like a real one.
+        if info["using_real_model"]:
+            st.success(f"Embeddings: {info['embedder']}")
+        else:
+            st.warning(f"Embeddings: {info['embedder']} (fallback)")
+            st.caption(
+                "The sentence-transformers model could not be loaded, so a "
+                "deterministic lexical embedder is in use. Retrieval works but "
+                "cannot match synonyms."
+            )
+
+        backend = info["llm_backend"]
+        if backend == "offline":
+            st.warning("LLM: offline responder")
+            st.caption(
+                "No API key or local server configured. Answers are extracted "
+                "from your notes rather than generated. Set OPENAI_API_KEY, or "
+                "OPENAI_BASE_URL for a local Ollama server."
+            )
+        else:
+            st.success(f"LLM: {backend}")
+
+        st.caption(f"Distance metric: {info['distance_space']}")
+
+        st.divider()
+        st.header("⏰ Reminders")
+        horizon = st.slider("Look ahead (days)", 1, 90, horizon_days)
+
+        st.divider()
+        if st.button("Clear conversation", use_container_width=True):
+            app.reset_conversation()
+            st.session_state.messages = []
+            st.rerun()
+
+    return horizon
+
+
+def render_deadline_panel(engine: ReminderEngine, horizon_days: int) -> None:
     """
     Render the upcoming-deadline panel.
 
@@ -123,12 +147,11 @@ def render_deadline_panel(engine: ReminderEngine, horizon_days: int):
 
     overdue = engine.overdue()
     upcoming = engine.upcoming(horizon_days)
+    following = engine.next_deadline()
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Overdue", len(overdue))
     col2.metric(f"Next {horizon_days} days", len(upcoming))
-
-    following = engine.next_deadline()
     col3.metric(
         "Next deadline",
         following.deadline.date.isoformat() if following else "—",
@@ -136,12 +159,11 @@ def render_deadline_panel(engine: ReminderEngine, horizon_days: int):
     )
 
     if overdue:
-        with st.expander(f"🔴 Overdue ({len(overdue)})", expanded=False):
+        with st.expander(f"🔴 Overdue ({len(overdue)})"):
             for reminder in overdue:
                 st.error(
-                    f"**{reminder.deadline.title}** — "
-                    f"{abs(reminder.days_until)} day(s) overdue "
-                    f"({reminder.deadline.date.isoformat()}) "
+                    f"**{reminder.deadline.title}** — {abs(reminder.days_until)} "
+                    f"day(s) overdue ({reminder.deadline.date.isoformat()}) "
                     f"· `{reminder.deadline.source_doc}`"
                 )
 
@@ -159,171 +181,94 @@ def render_deadline_panel(engine: ReminderEngine, horizon_days: int):
             else f"in {reminder.days_until} days"
         )
         at_time = f" at {reminder.deadline.time}" if reminder.deadline.time else ""
-        message = (
+        getattr(st, level)(
             f"{icon} **{reminder.deadline.title}** — {when} "
             f"({reminder.deadline.date.isoformat()}{at_time}) "
             f"· `{reminder.deadline.source_doc}`"
         )
-        getattr(st, level)(message)
 
 
-def find_similar_chunks(query: str, chunks: list, top_k: int = 3) -> list:
-    """Find most similar chunks to query."""
-    embedder = get_embedder()
+def render_answer(result: dict) -> None:
+    """
+    Render one answer with its provenance.
 
-    # Embed query
-    query_embedding = embedder.embed_texts([query])[0]
+    Args:
+        result: The dictionary returned by RAGApplication.ask
+    """
+    st.markdown(result["answer"])
 
-    # Get chunk embeddings
-    chunk_embeddings = np.array([chunk["embedding"] for chunk in chunks])
+    if result["was_rewritten"]:
+        st.caption(
+            f"🔄 Resolved from conversation: _{result['resolved_query']}_ — "
+            "a follow-up has no topical content on its own, so it is rewritten "
+            "before retrieval."
+        )
 
-    # Compute similarities
-    similarities = cosine_similarity_simple(query_embedding, chunk_embeddings)
+    if not result["sources"]:
+        st.caption("No passage cleared the relevance threshold.")
+        return
 
-    # Get top-k indices
-    top_indices = np.argsort(similarities)[::-1][:top_k]
-
-    # Return chunks with scores
-    results = []
-    for idx in top_indices:
-        results.append({
-            "chunk": chunks[idx],
-            "similarity": float(similarities[idx])
-        })
-
-    return results
+    with st.expander(f"📎 {len(result['sources'])} source(s)"):
+        for source in result["sources"]:
+            st.write(f"`{source['doc_id']}` — score {source['score']:.3f}")
+        st.caption(f"Prompt: grounded_qa · {result['llm']['backend']} backend")
 
 
 def main():
-    """Main app."""
-
-    # Header
+    """Run the web interface."""
     st.title("🤖 Personal Assistant AI")
-    st.markdown("*Ask questions about your documents*")
+    st.caption("Ask questions about your notes. Answers are grounded in your own documents.")
 
-    # Load chunks
-    chunks = load_chunks()
+    app = get_app()
+    horizon = render_sidebar(app, st.session_state.get("horizon", 14))
+    st.session_state.horizon = horizon
 
-    if chunks is None:
-        st.error("❌ No processed data found. Please run the pipeline first:")
-        st.code("python src/pipeline.py", language="bash")
-        return
-
-    # Sidebar info
-    with st.sidebar:
-        st.header("📊 Dataset Info")
-        st.metric("Documents Indexed", len(set(c["doc_id"] for c in chunks)))
-        st.metric("Total Chunks", len(chunks))
-        st.metric("Total Tokens", sum(c["token_count"] for c in chunks))
-
-        embedding_mode = "🔴 Real Embeddings" if USE_REAL_EMBEDDINGS else "🟡 Mock Embeddings"
-        st.caption(f"Mode: {embedding_mode}")
-
-        st.divider()
-
-        st.header("📚 Documents")
-        docs = sorted(set(c["doc_id"] for c in chunks))
-        for doc in docs[:10]:  # Show first 10
-            st.text(f"📄 {doc}")
-        if len(docs) > 10:
-            st.text(f"... and {len(docs)-10} more")
-
-        st.divider()
-
-        st.header("⚙️ Settings")
-        top_k = st.slider("Number of results", 1, 10, 3)
-        similarity_threshold = st.slider("Min similarity", 0.0, 1.0, 0.3)
-
-        st.divider()
-
-        st.header("⏰ Reminders")
-        horizon_days = st.slider("Look ahead (days)", 1, 90, 14)
-
-    # Main content
+    render_deadline_panel(get_reminder_engine(), horizon)
     st.divider()
 
-    # Deadline reminders - the schedule-tracking objective from the proposal
-    engine = get_reminder_engine()
-    render_deadline_panel(engine, horizon_days)
+    st.subheader("💬 Ask a question")
 
-    st.divider()
-
-    # Chat interface
-    st.subheader("💬 Ask a Question")
-
-    # Initialize session state
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Display chat history
+    if not st.session_state.messages:
+        st.caption("Try one of these:")
+        columns = st.columns(len(SUGGESTED_QUESTIONS))
+        for column, suggestion in zip(columns, SUGGESTED_QUESTIONS):
+            if column.button(suggestion, use_container_width=True):
+                st.session_state.pending = suggestion
+                st.rerun()
+
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+            if message["role"] == "assistant" and "result" in message:
+                render_answer(message["result"])
+            else:
+                st.markdown(message["content"])
 
-    # Input
-    query = st.chat_input("What would you like to know about your documents?")
+    question = st.chat_input("What would you like to know?") or st.session_state.pop(
+        "pending", None
+    )
 
-    if query:
-        # Add user message
-        st.session_state.messages.append({"role": "user", "content": query})
-
+    if question:
+        st.session_state.messages.append({"role": "user", "content": question})
         with st.chat_message("user"):
-            st.markdown(query)
+            st.markdown(question)
 
-        # Find similar chunks
-        results = find_similar_chunks(query, chunks, top_k=top_k)
+        with st.chat_message("assistant"):
+            with st.spinner("Searching your notes..."):
+                result = app.ask(question)
+            render_answer(result)
 
-        # Filter by threshold
-        results = [r for r in results if r["similarity"] >= similarity_threshold]
-
-        if not results:
-            response = f"❌ No relevant documents found (threshold: {similarity_threshold})"
-            with st.chat_message("assistant"):
-                st.markdown(response)
-        else:
-            # Build response
-            response = f"Found **{len(results)}** relevant chunk(s):\n\n"
-
-            for i, result in enumerate(results, 1):
-                chunk = result["chunk"]
-                similarity = result["similarity"]
-
-                response += f"### Result {i} (Similarity: {similarity:.1%})\n"
-                response += f"📄 **Source**: {chunk['doc_id']}\n"
-                response += f"📍 **Chunk**: {chunk['chunk_index']}\n"
-                response += f"📏 **Tokens**: {chunk['token_count']}\n\n"
-                response += f"**Content**:\n{chunk['text'][:300]}...\n\n"
-                response += "---\n\n"
-
-            response += "💡 **Note**: Results based on semantic similarity. For best results, ask specific questions about your documents."
-
-            st.session_state.messages.append({"role": "assistant", "content": response})
-
-            with st.chat_message("assistant"):
-                st.markdown(response)
-
-                # Show detailed view
-                with st.expander("📊 Detailed Similarity Analysis"):
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.subheader("Similarity Scores")
-                        for i, result in enumerate(results, 1):
-                            st.write(f"Result {i}: **{result['similarity']:.1%}**")
-
-                    with col2:
-                        st.subheader("Full Chunks")
-                        for i, result in enumerate(results, 1):
-                            with st.expander(f"Chunk {i}"):
-                                st.text(result['chunk']['text'])
+        st.session_state.messages.append(
+            {"role": "assistant", "content": result["answer"], "result": result}
+        )
 
     st.divider()
-
-    # Footer
-    st.markdown("""
-    ---
-    **Personal Assistant AI** | Semantic search + deadline reminders
-    Built with [Streamlit](https://streamlit.io) | Powered by Semantic Search
-    """)
+    st.caption(
+        "Personal Assistant AI · Chroma vector index · conversational memory · "
+        "grounded prompts with citations"
+    )
 
 
 if __name__ == "__main__":

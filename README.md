@@ -115,22 +115,69 @@ personal-assistant-ai/
   - Chroma vector database, 26 documents → 150 indexed chunks
   - Distance metric comparison: Cosine vs Euclidean vs Dot product ([docs](docs/02_Vector_Indexing.md))
 
-- [ ] **Checkpoint 3** (Weeks 9–12, Semi-Final, 30%): RAG Orchestration & Application
+- [x] **Checkpoint 3** (Weeks 9–12, Semi-Final, 30%): RAG Orchestration & Application
+  - Automated ingestion pipeline with content-hash change detection
+  - LangChain integration via `Embeddings` and `BaseRetriever` adapters
+  - Conversational memory with reference resolution before retrieval
+  - Live demo, 7 queries ([docs](docs/04_RAG_Orchestration.md))
+
 - [ ] **Checkpoint 4** (Weeks 13–16, Final, 30%): Deployment & Defense
+  - Containerization: Dockerfile, compose, entrypoint ([docs](docs/05_Deployment.md))
+  - Web interface rewritten to drive the real RAG application
+  - Fine-tuning analysis with a runnable VRAM calculator ([docs](docs/06_Fine_Tuning_Analysis.md))
+  - Deployment evidence still outstanding — image build blocked by network policy
 
 ## Quick Start
 
 ### Prerequisites
-- Python 3.10+
-- Docker & Docker Compose (for deployment)
-- HuggingFace API key (optional, for hosted models)
+- Python 3.11 or 3.12 (3.13+ works only with `requirements-core.txt`)
+- Docker & Docker Compose (Checkpoint 4, for deployment)
 
 ### Installation
 
 ```bash
-git clone <repo>
-cd personal-assistant-ai
-pip install -r requirements.txt
+git clone https://github.com/ZeroXJune/Generative_AI.git
+cd Generative_AI
+
+# Create an isolated environment. Python 3.11 or 3.12 is recommended -
+# the pinned versions in requirements.txt have no wheels for 3.13+.
+py -3.12 -m venv .venv          # Windows; use `python3.12 -m venv .venv` elsewhere
+.venv\Scripts\Activate.ps1       # Windows PowerShell
+# source .venv/bin/activate     # Mac/Linux
+
+python -m pip install -r requirements-core.txt
+```
+
+**Two dependency sets:**
+
+| File | Packages | Use when |
+|---|---|---|
+| `requirements-core.txt` | 8 | Default. Only what the code imports; version ranges, so it installs on newer Python. |
+| `requirements.txt` | 25 | Full declared stack, pinned to 2023 versions. Needs Python 3.11. |
+
+**Disk space**: `sentence-transformers` pulls in PyTorch, which dominates the
+install. On Windows the default wheel may bundle CUDA (~2.5 GB). For a CPU-only
+build (~200 MB), install torch first:
+
+```bash
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
+Or omit `sentence-transformers` entirely — the pipeline falls back to a
+deterministic lexical embedder and still runs end to end.
+
+**If PowerShell blocks activation** with *"running scripts is disabled"*, either
+allow local scripts once:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+or skip activation entirely and call the environment's Python by path:
+
+```powershell
+.venv\Scripts\python.exe -m pip install -r requirements-core.txt
+.venv\Scripts\python.exe src/build_index.py
 ```
 
 ### Running the Data Pipeline
@@ -182,12 +229,46 @@ export OPENAI_BASE_URL="https://..."    # optional: Azure, Groq, Together
 export OPENAI_MODEL="gpt-3.5-turbo"
 ```
 
+### Configuring credentials with a `.env` file
+
+Rather than exporting variables in every shell, copy the template and fill it
+in. `.env` is git-ignored, so a real key is never committed:
+
+```bash
+cp .env.example .env
+# then edit .env and set OPENAI_API_KEY (or the Ollama settings)
+```
+
+The file is loaded automatically — no `export` required. Exported shell
+variables take precedence over `.env`, so a one-off override still works.
+Never put a real key in `.env.example`; that file **is** committed.
+
+Verify what the client picked up before spending anything:
+
+```bash
+python -c "import sys; sys.path.insert(0,'src'); \
+from llm.chat_client import ChatClient; print(ChatClient().get_info())"
+```
+
+`live: true` with `backend: openai` means a hosted call will be attempted;
+`backend: offline` means the key was not found and the extractive responder
+will answer instead.
+
 `ChatClient.get_info()` reports which backend actually served a call
 (`offline`, `local`, or `openai`), so a local run is never mistaken for a paid
 API run.
 
 Likewise, if `huggingface.co` is unreachable, `build_index.py` falls back to a
 deterministic TF-IDF embedder and says so — no silent substitution.
+
+### Checkpoint 3: Conversational RAG
+
+```bash
+python src/checkpoint3_demo.py     # ingestion + LangChain + memory + 7 queries
+```
+
+The ingestion pipeline is incremental — re-running it only processes documents
+whose contents changed.
 
 ### Deadline Reminders
 
@@ -208,7 +289,27 @@ is plain Python, not an LLM call, so alerts are exact and work offline — see
 streamlit run src/interface/app.py
 ```
 
-### Running with Docker
+### Running with Docker (Checkpoint 4)
+
+```bash
+docker compose up --build       # web interface on http://localhost:8501
+docker compose run --rm app reminders   # deadline digest
+```
+
+The default image omits `sentence-transformers` (PyTorch, ~2.5 GB) and runs on
+the lexical embedder. For full-quality embeddings:
+
+```bash
+docker build --build-arg WITH_LOCAL_EMBEDDINGS=true -t personal-assistant-ai:full .
+```
+
+### Fine-tuning analysis
+
+```bash
+python src/finetuning/vram_calculator.py    # regenerates the memory tables
+```
+
+### Legacy Docker notes
 
 ```bash
 docker-compose up --build

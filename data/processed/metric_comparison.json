@@ -46,9 +46,9 @@
         "dot_product": 107.15
       },
       "timing_ms_per_query": {
-        "cosine": 0.07275343999992856,
-        "euclidean": 0.2668704174999448,
-        "dot_product": 0.005962809999999763
+        "cosine": 0.06312235999985205,
+        "euclidean": 0.24607834500017134,
+        "dot_product": 0.005906172499976492
       }
     },
     "unnormalized": {
@@ -92,9 +92,9 @@
         "dot_product": 114.125
       },
       "timing_ms_per_query": {
-        "cosine": 0.04995894750010166,
-        "euclidean": 0.06872479250006336,
-        "dot_product": 0.005680754999985993
+        "cosine": 0.056991372499908266,
+        "euclidean": 0.07275671999991573,
+        "dot_product": 0.005721587499749603
       }
     }
   },
