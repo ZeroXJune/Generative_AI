@@ -259,8 +259,14 @@ Colab T4) but it remains the wrong tool here. Fine-tuning moves knowledge into
 weights where it cannot be cited, checked, or updated — and 26 documents cannot
 produce a training set. Fine-tune for behaviour, retrieve for facts.
 
-**To finish**: run `docker compose up --build` on a machine with unrestricted
-Docker access and capture the output — see `docs/05_Deployment.md` §5.
+**To finish**: run `./scripts/verify_deployment.sh` on a machine with
+unrestricted Docker access. It builds, starts, healthchecks, exercises the CLI
+entrypoints and writes `docs/deployment_evidence.txt`. Exit 0 = evidence
+captured.
+
+**Before demoing**: run `python scripts/doctor.py`. It reports whether real
+embeddings and a live LLM are active or whether fallbacks are silently in
+play — a degraded run otherwise looks identical to a working one.
 
 ## Technology Stack
 

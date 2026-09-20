@@ -303,6 +303,24 @@ the lexical embedder. For full-quality embeddings:
 docker build --build-arg WITH_LOCAL_EMBEDDINGS=true -t personal-assistant-ai:full .
 ```
 
+### Checking your setup
+
+```bash
+python scripts/doctor.py        # is this machine running the real system?
+```
+
+Reports whether real embeddings and a live LLM are active, or whether
+fallbacks are silently in play. Exit 0 = fully operational, 1 = degraded,
+2 = broken.
+
+### Capturing deployment evidence
+
+```bash
+./scripts/verify_deployment.sh  # build, start, healthcheck, capture
+```
+
+Writes a full transcript to `docs/deployment_evidence.txt`.
+
 ### Fine-tuning analysis
 
 ```bash
