@@ -1,0 +1,31 @@
+# Personal Assistant AI - local deployment
+#
+#   docker compose up --build        start the web interface on :8501
+#   docker compose run --rm app reminders    print the deadline digest
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        # Set to "true" for real MiniLM embeddings. Adds ~2.5 GB (PyTorch).
+        WITH_LOCAL_EMBEDDINGS: "false"
+    image: personal-assistant-ai:latest
+    ports:
+      - "8501:8501"
+    environment:
+      # Optional. Without a key the app uses its offline extractive responder.
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      OPENAI_BASE_URL: "${OPENAI_BASE_URL:-}"
+      OPENAI_MODEL: "${OPENAI_MODEL:-gpt-3.5-turbo}"
+    volumes:
+      # Notes are mounted read-only: the container indexes them, never edits them.
+      - ./data/raw:/app/data/raw:ro
+      # Named volume so the index survives container replacement.
+      - assistant_index:/app/data/vector_store_cp3
+      - assistant_processed:/app/data/processed
+    restart: unless-stopped
+
+volumes:
+  assistant_index:
+  assistant_processed:

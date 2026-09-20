@@ -122,6 +122,10 @@ personal-assistant-ai/
   - Live demo, 7 queries ([docs](docs/04_RAG_Orchestration.md))
 
 - [ ] **Checkpoint 4** (Weeks 13–16, Final, 30%): Deployment & Defense
+  - Containerization: Dockerfile, compose, entrypoint ([docs](docs/05_Deployment.md))
+  - Web interface rewritten to drive the real RAG application
+  - Fine-tuning analysis with a runnable VRAM calculator ([docs](docs/06_Fine_Tuning_Analysis.md))
+  - Deployment evidence still outstanding — image build blocked by network policy
 
 ## Quick Start
 
@@ -285,7 +289,27 @@ is plain Python, not an LLM call, so alerts are exact and work offline — see
 streamlit run src/interface/app.py
 ```
 
-### Running with Docker
+### Running with Docker (Checkpoint 4)
+
+```bash
+docker compose up --build       # web interface on http://localhost:8501
+docker compose run --rm app reminders   # deadline digest
+```
+
+The default image omits `sentence-transformers` (PyTorch, ~2.5 GB) and runs on
+the lexical embedder. For full-quality embeddings:
+
+```bash
+docker build --build-arg WITH_LOCAL_EMBEDDINGS=true -t personal-assistant-ai:full .
+```
+
+### Fine-tuning analysis
+
+```bash
+python src/finetuning/vram_calculator.py    # regenerates the memory tables
+```
+
+### Legacy Docker notes
 
 ```bash
 docker-compose up --build

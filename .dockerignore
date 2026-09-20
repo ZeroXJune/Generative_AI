@@ -1,0 +1,38 @@
+# Version control and CI
+.git
+.github
+.gitignore
+
+# Python bytecode and build artifacts
+__pycache__
+*.py[cod]
+*.egg-info
+build/
+dist/
+
+# Local environments - never bake a host venv into the image
+.venv
+venv/
+env/
+.conda
+
+# Secrets. .env holds real credentials and must never enter an image layer;
+# it is injected at runtime instead (see docker-compose.yml).
+.env
+.env.*
+!.env.example
+
+# Generated at runtime inside the container
+data/vector_store*/
+data/processed/
+
+# Editor and OS noise
+.vscode
+.idea
+.DS_Store
+*.swp
+
+# Docs are not needed to run the app
+docs/
+*.md
+!README.md
