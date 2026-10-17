@@ -23,8 +23,9 @@ A Retrieval-Augmented Generation system that allows users to upload documents, a
 # Clone repo (already done)
 cd /home/user/Generative_AI
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies (requirements-core.txt installs on any Python 3.10+;
+# requirements.txt is pinned to 2023 versions and needs Python 3.11)
+pip install -r requirements-core.txt
 
 # Run text preprocessing demo
 python src/preprocessing/text_cleaner.py
@@ -64,9 +65,9 @@ export OPENAI_API_KEY="sk-..."
 python src/pipeline.py
 
 # This will:
-# 1. Load 25 documents from data/raw/
+# 1. Load 38 documents from data/raw/
 # 2. Clean and preprocess text
-# 3. Chunk documents (512 tokens, 50% overlap)
+# 3. Chunk documents (512 tokens, 100-token overlap)
 # 4. Generate embeddings (384-dim vectors)
 # 5. Save processed data to data/processed/
 ```
@@ -77,7 +78,8 @@ python src/pipeline.py
 personal-assistant-ai/
 ├── README.md                          # Main documentation
 ├── CLAUDE.md                          # This file
-├── requirements.txt                   # Python dependencies
+├── requirements-core.txt              # Runtime dependencies (default)
+├── requirements.txt                   # Full pinned stack (Python 3.11 only)
 ├── .gitignore                         # Git configuration
 │
 ├── data/
@@ -163,7 +165,7 @@ personal-assistant-ai/
 **Due**: August 15, 2026  
 **Components**:
 - [x] Project proposal (1-2 pages)
-- [x] Dataset (25 documents)
+- [x] Dataset (25 documents at submission; corpus now 38)
 - [x] Text preprocessing with before/after examples
 - [x] Embedding generation with model justification
 - [x] Repository documentation and setup
@@ -259,7 +261,7 @@ query that is empty of topic.
 
 **Fine-tuning verdict**: QLoRA makes it feasible (4.8 GB for a 7B model, a free
 Colab T4) but it remains the wrong tool here. Fine-tuning moves knowledge into
-weights where it cannot be cited, checked, or updated — and 26 documents cannot
+weights where it cannot be cited, checked, or updated — and 38 documents cannot
 produce a training set. Fine-tune for behaviour, retrieve for facts.
 
 **To finish**: run `./scripts/verify_deployment.sh` on a machine with
@@ -286,7 +288,7 @@ play — a degraded run otherwise looks identical to a working one.
 ## Data Pipeline Overview
 
 ```
-Raw Documents (25 files, .txt)
+Raw Documents (38 files, .txt)
            ↓
    [TextCleaner]
    - Remove HTML/URLs
@@ -300,7 +302,7 @@ Raw Documents (25 files, .txt)
            ↓
     [Chunker]
     - 512 token chunks
-    - 50% overlap
+    - 100-token overlap
     - Preserve metadata
            ↓
 [EmbeddingGenerator]
@@ -348,7 +350,7 @@ python src/embeddings/embedding_generator.py
 ```bash
 python src/pipeline.py
 # Output: 
-# - Loads 25 documents
+# - Loads 38 documents
 # - Generates embeddings for all chunks
 # - Saves to data/processed/chunks.jsonl
 # - Prints statistics and timing
@@ -403,7 +405,7 @@ print(embeddings.shape)  # (3, 384)
 
 ### Pipeline fails on import
 ```bash
-pip install -r requirements.txt --force-reinstall
+pip install -r requirements-core.txt --force-reinstall
 ```
 
 ### Unicode decode errors

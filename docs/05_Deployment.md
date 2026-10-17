@@ -186,7 +186,7 @@ environment, issuing the same commands `docker/entrypoint.sh` issues:
 
 | Mode | Command | Result |
 |---|---|---|
-| `ingest` | `RAGApplication().ingest()` | Ran; index current at 26 documents |
+| `ingest` | `RAGApplication().ingest()` | Ran; index current at 26 documents (pre-lesson corpus; now 38) |
 | `reminders` | `python src/reminders.py` | Ran; 4 deadlines in the next 14 days |
 | `serve` | `streamlit run ... --server.address=0.0.0.0 --server.headless=true` | Bound to :8501 |
 
