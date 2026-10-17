@@ -140,6 +140,9 @@ personal-assistant-ai/
 │   │   └── app.py                     # Streamlit UI over RAGApplication
 │   └── deployment/                    # (reserved)
 │
+├── web/
+│   └── index.html                     # AiMate frontend prototype (self-contained)
+│
 └── docs/
     ├── 01_Project_Proposal.md         # Problem statement, theme, dataset
     ├── 02_Prompt_Engineering.md       # Checkpoint 2 prompt architecture

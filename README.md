@@ -303,6 +303,31 @@ the lexical embedder. For full-quality embeddings:
 docker build --build-arg WITH_LOCAL_EMBEDDINGS=true -t personal-assistant-ai:full .
 ```
 
+### AiMate web interface prototype
+
+A standalone, responsive frontend prototype for the assistant UI:
+
+```bash
+# no build step - open it directly
+python -m http.server 8000 --directory web
+# then visit http://localhost:8000
+```
+
+`web/index.html` is a single self-contained file (HTML, CSS, vanilla JS) with a
+landing page, login/registration/password-recovery screens, dashboard, chat
+interface, generation workspace (text / image / summarize), and settings. Light,
+dark, and system themes; mobile-first layouts tested at 390px, 768px and 1440px.
+
+**AI responses in this file are simulated.** Replies come from a small script in
+the page, and image output is an abstract canvas composition seeded from the
+prompt — not model output. Every screen carries a visible notice saying so. The
+summarizer does genuinely process pasted text (word count, sentence selection).
+
+This prototype is deliberately separate from the Python RAG system in `src/`,
+which holds the real retrieval and generation pipeline. Wiring the two together
+means calling the Python backend from the page; an API key must never be placed
+in frontend code.
+
 ### Checking your setup
 
 ```bash
