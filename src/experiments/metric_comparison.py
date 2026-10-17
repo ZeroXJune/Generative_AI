@@ -41,6 +41,22 @@ EVALUATION_QUERIES: List[Dict[str, str]] = [
     {"query": "What time does the Generative AI class meet each week?", "expected": "schedule_semester_2026"},
     {"query": "Explain self attention and the role of queries keys and values", "expected": "notes_llm_transformers_lesson3"},
     {"query": "What is RLHF and how is the reward model trained?", "expected": "notes_llm_transformers_lesson3"},
+    # Added with the college-subject lesson set. Queries are worded naturally
+    # rather than tuned to the embedder - a query that fails for tokenisation
+    # reasons is a real measurement of the fallback's limits, not noise to be
+    # engineered away.
+    {"query": "What is the chain rule for derivatives?", "expected": "lesson_calculus_fundamentals"},
+    {"query": "What are eigenvalues and eigenvectors of a matrix?", "expected": "lesson_linear_algebra"},
+    {"query": "State Newton's three laws of motion", "expected": "lesson_physics_mechanics"},
+    {"query": "What is the mole and Avogadro's number?", "expected": "lesson_general_chemistry"},
+    {"query": "What is the difference between mitosis and meiosis?", "expected": "lesson_cell_biology"},
+    {"query": "What is hypothesis testing and the null hypothesis?", "expected": "lesson_statistics_probability"},
+    {"query": "What is opportunity cost and marginal analysis?", "expected": "lesson_microeconomics"},
+    {"query": "Explain operant conditioning and reinforcement", "expected": "lesson_psychology_intro"},
+    {"query": "What were the causes of the First World War?", "expected": "lesson_world_history_20c"},
+    {"query": "What is the difference between validity and soundness?", "expected": "lesson_logic_critical_thinking"},
+    {"query": "How do I write a strong thesis statement?", "expected": "lesson_academic_writing"},
+    {"query": "What is Big-O notation and algorithmic complexity?", "expected": "lesson_data_structures_algorithms"},
 ]
 
 TOP_K = 5

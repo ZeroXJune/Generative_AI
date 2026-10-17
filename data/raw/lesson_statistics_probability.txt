@@ -1,0 +1,84 @@
+LESSON: STATISTICS AND PROBABILITY - INFERENCE AND UNCERTAINTY
+
+COURSE LEVEL: Undergraduate, first or second year
+PREREQUISITES: Algebra II
+
+DESCRIPTIVE STATISTICS
+======================
+Measures of central tendency: the mean is the arithmetic average, the median
+the middle value when ordered, the mode the most frequent value. The median
+resists outliers; the mean does not.
+
+Measures of spread: the range is maximum minus minimum. Variance is the average
+squared deviation from the mean. Standard deviation is the square root of
+variance and shares the units of the original data.
+
+Distribution shape: a distribution is right-skewed when its tail extends
+rightward, which pulls the mean above the median.
+
+PROBABILITY FUNDAMENTALS
+========================
+Probability ranges from 0 (impossible) to 1 (certain).
+
+- Addition rule for mutually exclusive events: P(A or B) = P(A) + P(B)
+- General addition rule: P(A or B) = P(A) + P(B) - P(A and B)
+- Multiplication rule for independent events: P(A and B) = P(A) times P(B)
+- Conditional probability: P(A given B) = P(A and B) divided by P(B)
+
+Bayes' theorem relates conditional probabilities in both directions:
+P(A given B) equals P(B given A) times P(A), divided by P(B). It formalises how
+evidence should update belief.
+
+THE NORMAL DISTRIBUTION
+=======================
+The normal distribution is symmetric and bell-shaped, described entirely by its
+mean and standard deviation. Under the empirical rule, approximately 68 percent
+of observations lie within one standard deviation of the mean, 95 percent
+within two, and 99.7 percent within three.
+
+A z-score expresses how many standard deviations an observation lies from the
+mean: the observation minus the mean, divided by the standard deviation.
+
+THE CENTRAL LIMIT THEOREM
+=========================
+The sampling distribution of the sample mean approaches a normal distribution
+as sample size grows, regardless of the population's own shape, provided
+observations are independent and the sample is sufficiently large. This is why
+normal-based inference applies so widely.
+
+The standard error of the mean is the population standard deviation divided by
+the square root of the sample size. Note that quadrupling the sample size only
+halves the standard error.
+
+HYPOTHESIS TESTING
+==================
+The null hypothesis states there is no effect; the alternative states there is.
+A test computes the probability of observing data at least as extreme as the
+sample, assuming the null is true. That probability is the p-value.
+
+A small p-value indicates the data would be unlikely under the null hypothesis.
+A conventional threshold is 0.05, though the choice is a convention, not a law
+of nature.
+
+Errors: a Type I error rejects a true null (a false positive); a Type II error
+fails to reject a false null (a false negative). Statistical power is the
+probability of correctly detecting a real effect.
+
+Confidence intervals give a range of plausible parameter values. A 95 percent
+confidence interval means that across repeated sampling, 95 percent of such
+intervals would contain the true parameter.
+
+WHY IT MATTERS
+==============
+Statistics governs how evidence is evaluated in medicine, policy, and science.
+Machine learning evaluation rests on it: accuracy, precision, recall, and
+cross-validation are all statistical constructs.
+
+COMMON MISCONCEPTIONS
+=====================
+- A p-value is not the probability that the null hypothesis is true
+- Statistical significance is not practical importance; a tiny effect can be
+  significant in a large sample
+- Correlation does not establish causation; confounding variables may explain
+  an association
+- Failing to reject the null does not prove the null is true

@@ -1,0 +1,94 @@
+LESSON: DATA STRUCTURES AND ALGORITHMS
+
+COURSE LEVEL: Undergraduate, first or second year
+PREREQUISITES: Introductory programming
+
+ALGORITHMIC COMPLEXITY
+======================
+Big-O notation describes how running time or memory grows with input size,
+expressing an upper bound on growth rate while ignoring constants and
+lower-order terms.
+
+Common complexity classes, from fastest-growing to slowest:
+- O(1) constant: array indexing, hash table lookup on average
+- O(log n) logarithmic: binary search, balanced tree operations
+- O(n) linear: a single pass over a list
+- O(n log n): efficient comparison sorts such as merge sort
+- O(n^2) quadratic: nested loops over the same data, bubble sort
+- O(2^n) exponential: naive recursive subset enumeration
+
+Complexity matters at scale. At one million elements, an O(n log n) algorithm
+performs roughly twenty million operations while an O(n^2) algorithm performs a
+trillion.
+
+Distinguish best, average, and worst case. Quicksort averages O(n log n) but
+degrades to O(n^2) on already-sorted input with poor pivot selection.
+
+CORE DATA STRUCTURES
+====================
+Array: contiguous memory, O(1) access by index, O(n) insertion or deletion in
+the middle. Fixed size in most low-level languages.
+
+Linked list: nodes holding data and a pointer. O(1) insertion and deletion
+given a node reference, but O(n) access by position and worse cache locality
+than an array.
+
+Stack: last in, first out. Supports push and pop in O(1). Used for function
+call management, expression evaluation, and depth-first traversal.
+
+Queue: first in, first out. Supports enqueue and dequeue in O(1). Used for
+scheduling and breadth-first traversal.
+
+Hash table: maps keys to values using a hash function. Average O(1) insertion,
+deletion, and lookup; worst case O(n) when collisions are severe. Unordered.
+
+Binary search tree: ordered structure giving O(log n) operations when balanced,
+degrading to O(n) when it becomes a chain. Self-balancing variants such as
+AVL and red-black trees guarantee the logarithmic bound.
+
+Heap: a tree satisfying the heap property, where each parent compares
+appropriately with its children. Provides O(1) access to the minimum or maximum
+and O(log n) insertion and removal. Underlies priority queues.
+
+Graph: vertices connected by edges. Represented as an adjacency list, which is
+efficient for sparse graphs, or an adjacency matrix, which is efficient for
+dense ones.
+
+SEARCHING AND SORTING
+=====================
+Linear search examines each element: O(n), and works on unsorted data.
+
+Binary search repeatedly halves a sorted range: O(log n). It requires sorted
+input, which is the cost of its speed.
+
+Merge sort divides, sorts recursively, and merges: O(n log n) in all cases,
+stable, but requires O(n) auxiliary space.
+
+Quicksort partitions around a pivot: O(n log n) average, in-place, usually
+fastest in practice despite its worse worst case.
+
+GRAPH TRAVERSAL
+===============
+Breadth-first search explores level by level using a queue, and finds the
+shortest path in an unweighted graph.
+
+Depth-first search explores as far as possible along each branch using a stack
+or recursion, and is used for cycle detection and topological sorting.
+
+Dijkstra's algorithm finds shortest paths in a graph with non-negative edge
+weights, using a priority queue.
+
+WHY IT MATTERS
+==============
+The choice of data structure usually determines performance more than code
+optimisation does. Vector databases, for instance, rely on specialised index
+structures because comparing a query against every stored vector is O(n) and
+becomes prohibitive at scale.
+
+COMMON MISCONCEPTIONS
+=====================
+- Big-O describes growth rate, not actual speed; an O(n) algorithm can beat an
+  O(log n) one on small inputs
+- Hash tables are not ordered; relying on iteration order is a bug
+- Binary search on unsorted data does not merely run slowly, it returns wrong
+  answers

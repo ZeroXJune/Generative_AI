@@ -1,31 +1,31 @@
 {
   "corpus": {
-    "num_documents": 26,
-    "num_chunks": 150,
+    "num_documents": 38,
+    "num_chunks": 226,
     "top_k": 5
   },
   "variants": {
     "normalized": {
       "vector_norms": {
-        "min": 0.9999999403953552,
+        "min": 0.9999998807907104,
         "max": 1.0000001192092896,
         "mean": 1.0
       },
       "quality": {
         "cosine": {
-          "hit_rate@1": 0.625,
-          "hit_rate@5": 0.875,
-          "mrr": 0.6916666666666667
+          "hit_rate@1": 0.75,
+          "hit_rate@5": 0.9,
+          "mrr": 0.8
         },
         "euclidean": {
-          "hit_rate@1": 0.625,
-          "hit_rate@5": 0.875,
-          "mrr": 0.6916666666666667
+          "hit_rate@1": 0.75,
+          "hit_rate@5": 0.9,
+          "mrr": 0.8
         },
         "dot_product": {
-          "hit_rate@1": 0.625,
-          "hit_rate@5": 0.875,
-          "mrr": 0.6916666666666667
+          "hit_rate@1": 0.75,
+          "hit_rate@5": 0.9,
+          "mrr": 0.8
         }
       },
       "agreement": {
@@ -41,43 +41,43 @@
         }
       },
       "mean_retrieved_tokens": {
-        "cosine": 107.15,
-        "euclidean": 107.15,
-        "dot_product": 107.15
+        "cosine": 108.08,
+        "euclidean": 108.08,
+        "dot_product": 108.08
       },
       "timing_ms_per_query": {
-        "cosine": 0.06312235999985205,
-        "euclidean": 0.24607834500017134,
-        "dot_product": 0.005906172499976492
+        "cosine": 0.1063196779999771,
+        "euclidean": 0.22399208399997406,
+        "dot_product": 0.005950300000051811
       }
     },
     "unnormalized": {
       "vector_norms": {
-        "min": 4.7288289070129395,
-        "max": 28.730009078979492,
-        "mean": 18.711610794067383
+        "min": 5.24749755859375,
+        "max": 35.02510452270508,
+        "mean": 20.787891387939453
       },
       "quality": {
         "cosine": {
-          "hit_rate@1": 0.625,
-          "hit_rate@5": 0.875,
-          "mrr": 0.6916666666666667
+          "hit_rate@1": 0.75,
+          "hit_rate@5": 0.9,
+          "mrr": 0.8
         },
         "euclidean": {
-          "hit_rate@1": 0.125,
-          "hit_rate@5": 0.125,
-          "mrr": 0.125
+          "hit_rate@1": 0.05,
+          "hit_rate@5": 0.15,
+          "mrr": 0.09166666666666666
         },
         "dot_product": {
-          "hit_rate@1": 0.625,
-          "hit_rate@5": 0.75,
-          "mrr": 0.6875
+          "hit_rate@1": 0.8,
+          "hit_rate@5": 0.9,
+          "mrr": 0.85
         }
       },
       "agreement": {
         "mean_overlap": {
-          "cosine_vs_euclidean": 0.025,
-          "cosine_vs_dot_product": 0.8500000000000001,
+          "cosine_vs_euclidean": 0.030000000000000006,
+          "cosine_vs_dot_product": 0.7900000000000001,
           "euclidean_vs_dot_product": 0.0
         },
         "identical_order_rate": {
@@ -87,38 +87,38 @@
         }
       },
       "mean_retrieved_tokens": {
-        "cosine": 107.15,
-        "euclidean": 22.8,
-        "dot_product": 114.125
+        "cosine": 108.08,
+        "euclidean": 16.07,
+        "dot_product": 113.85
       },
       "timing_ms_per_query": {
-        "cosine": 0.056991372499908266,
-        "euclidean": 0.07275671999991573,
-        "dot_product": 0.005721587499749603
+        "cosine": 0.05531715299997586,
+        "euclidean": 0.2059507169999506,
+        "dot_product": 0.006510038999977041
       }
     }
   },
   "chroma_verification": {
     "cosine": {
       "chroma_space": "cosine",
-      "exact_order_match_with_numpy": 0.875,
+      "exact_order_match_with_numpy": 0.95,
       "score_sequence_match_with_numpy": 1.0,
-      "chroma_hit_rate@5": 0.875,
-      "indexed_chunks": 150
+      "chroma_hit_rate@5": 0.9,
+      "indexed_chunks": 226
     },
     "euclidean": {
       "chroma_space": "l2",
-      "exact_order_match_with_numpy": 0.875,
+      "exact_order_match_with_numpy": 0.95,
       "score_sequence_match_with_numpy": 1.0,
-      "chroma_hit_rate@5": 0.875,
-      "indexed_chunks": 150
+      "chroma_hit_rate@5": 0.9,
+      "indexed_chunks": 226
     },
     "dot_product": {
       "chroma_space": "ip",
-      "exact_order_match_with_numpy": 0.875,
+      "exact_order_match_with_numpy": 0.95,
       "score_sequence_match_with_numpy": 1.0,
-      "chroma_hit_rate@5": 0.875,
-      "indexed_chunks": 150
+      "chroma_hit_rate@5": 0.9,
+      "indexed_chunks": 226
     }
   }
 }

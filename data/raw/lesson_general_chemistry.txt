@@ -1,0 +1,81 @@
+LESSON: GENERAL CHEMISTRY - ATOMS, BONDING, AND REACTIONS
+
+COURSE LEVEL: Undergraduate, first year
+PREREQUISITES: Algebra, scientific notation
+
+ATOMIC STRUCTURE
+================
+An atom consists of a nucleus containing protons and neutrons, surrounded by
+electrons. The atomic number is the proton count and defines the element. The
+mass number is protons plus neutrons. Isotopes are atoms of the same element
+with differing neutron counts.
+
+Electrons occupy orbitals grouped into shells. The electron configuration
+follows the Pauli exclusion principle (no two electrons share all four quantum
+numbers), Hund's rule (orbitals of equal energy fill singly first), and the
+Aufbau principle (lower energy orbitals fill first).
+
+Valence electrons, those in the outermost shell, determine chemical behaviour.
+
+THE PERIODIC TABLE
+==================
+Elements are arranged by increasing atomic number. Columns are groups, sharing
+valence electron counts and therefore similar chemistry. Rows are periods.
+
+Periodic trends moving left to right across a period:
+- Atomic radius decreases, as increasing nuclear charge pulls electrons inward
+- Ionisation energy increases
+- Electronegativity increases
+
+Moving down a group, atomic radius increases and ionisation energy decreases,
+because valence electrons occupy shells further from the nucleus.
+
+CHEMICAL BONDING
+================
+Ionic bonds form when electrons transfer between atoms of widely differing
+electronegativity, typically a metal and a nonmetal, producing charged ions
+held by electrostatic attraction.
+
+Covalent bonds form when atoms share electron pairs. A nonpolar covalent bond
+shares electrons roughly equally; a polar covalent bond shares them unevenly.
+
+Metallic bonding involves a lattice of positive ions in a shared sea of
+delocalised electrons, which explains electrical conductivity and malleability.
+
+Intermolecular forces, weaker than bonds, include hydrogen bonding, dipole
+interactions, and London dispersion forces. Hydrogen bonding explains water's
+unusually high boiling point.
+
+THE MOLE AND STOICHIOMETRY
+==========================
+The mole is the amount of substance containing approximately 6.022 times ten to
+the twenty-third particles, known as Avogadro's number. Molar mass is the mass
+in grams of one mole.
+
+Stoichiometry uses balanced equations to relate quantities of reactants and
+products. A balanced equation conserves both mass and charge.
+
+ACIDS AND BASES
+===============
+An Arrhenius acid releases hydrogen ions in water; a base releases hydroxide
+ions. The broader Bronsted-Lowry definition treats acids as proton donors and
+bases as proton acceptors.
+
+pH equals the negative base-ten logarithm of the hydrogen ion concentration. A
+pH of 7 is neutral at 25 degrees Celsius, below 7 acidic, above 7 basic. The pH
+scale is logarithmic, so each unit represents a tenfold change in
+concentration.
+
+WHY IT MATTERS
+==============
+Chemistry explains materials, medicine, metabolism, and environmental
+processes. Stoichiometry governs industrial yield; acid-base chemistry governs
+biological buffering.
+
+COMMON MISCONCEPTIONS
+=====================
+- A balanced equation conserves atoms, not molecule counts
+- Strong and concentrated are different: strength describes the degree of
+  dissociation, concentration the amount per volume
+- Bonds do not "store" energy that is released on breaking; breaking bonds
+  requires energy, and forming them releases it

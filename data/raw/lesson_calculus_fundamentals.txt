@@ -1,0 +1,74 @@
+LESSON: CALCULUS I - LIMITS, DERIVATIVES, AND INTEGRALS
+
+COURSE LEVEL: Undergraduate, first year
+PREREQUISITES: Algebra II, Trigonometry
+
+THE LIMIT
+=========
+A limit describes the value a function approaches as its input approaches some
+point. Formally, the limit of f(x) as x approaches a equals L if, for every
+epsilon greater than zero, there exists a delta greater than zero such that
+whenever the distance from x to a is less than delta, the distance from f(x) to
+L is less than epsilon.
+
+A function is continuous at a point when three conditions hold: f(a) is
+defined, the limit exists, and the limit equals f(a).
+
+THE DERIVATIVE
+==============
+The derivative measures instantaneous rate of change. It is defined as the
+limit of the difference quotient:
+
+  f'(x) = limit as h approaches 0 of [f(x + h) - f(x)] / h
+
+Geometrically, the derivative at a point is the slope of the tangent line.
+
+Core differentiation rules:
+- Power rule: the derivative of x^n is n times x^(n-1)
+- Product rule: (fg)' = f'g + fg'
+- Quotient rule: (f/g)' = (f'g - fg') / g^2
+- Chain rule: the derivative of f(g(x)) is f'(g(x)) times g'(x)
+
+Key derivatives: the derivative of sin x is cos x; of cos x is negative sin x;
+of e^x is e^x; of the natural log of x is 1/x.
+
+APPLICATIONS OF THE DERIVATIVE
+==============================
+- Critical points occur where the derivative equals zero or is undefined
+- The first derivative test identifies local maxima and minima
+- The second derivative determines concavity; a positive second derivative
+  means concave up
+- Optimization problems minimize or maximize a quantity subject to constraints
+- Related rates connect the rates of change of two linked quantities
+
+THE INTEGRAL
+============
+Integration is the inverse operation of differentiation. The definite integral
+represents accumulated quantity, defined as the limit of Riemann sums as the
+partition width approaches zero. Geometrically it is the signed area between
+the curve and the horizontal axis.
+
+The Fundamental Theorem of Calculus links the two operations. Part one states
+that if F is defined as the integral of f from a to x, then F'(x) = f(x). Part
+two states that the integral of f from a to b equals F(b) - F(a), where F is
+any antiderivative of f.
+
+Techniques of integration include substitution (reversing the chain rule),
+integration by parts (reversing the product rule), partial fractions for
+rational functions, and trigonometric substitution.
+
+WHY IT MATTERS
+==============
+Calculus is the mathematical language of change. Physics uses derivatives for
+velocity and acceleration, economics for marginal cost and revenue, biology
+for population growth, and machine learning for gradient descent, where the
+derivative of a loss function indicates the direction of steepest improvement.
+
+COMMON MISCONCEPTIONS
+=====================
+- A function can be continuous without being differentiable; the absolute
+  value function at zero is the standard example
+- A zero derivative does not guarantee a maximum or minimum; it may be an
+  inflection point, as with x^3 at the origin
+- The definite integral yields signed area, so regions below the axis
+  contribute negatively

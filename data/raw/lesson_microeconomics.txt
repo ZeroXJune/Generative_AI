@@ -1,0 +1,96 @@
+LESSON: MICROECONOMICS - SUPPLY, DEMAND, AND MARKET STRUCTURE
+
+COURSE LEVEL: Undergraduate, first year
+PREREQUISITES: Algebra, graph interpretation
+
+CORE CONCEPTS
+=============
+Scarcity is the fundamental economic condition: wants exceed available
+resources, so choices must be made.
+
+Opportunity cost is the value of the next-best alternative forgone. It is the
+true cost of any decision, and it includes implicit as well as explicit costs.
+
+Marginal analysis evaluates decisions by comparing the additional benefit of
+one more unit against its additional cost. A rational actor continues an
+activity while marginal benefit exceeds marginal cost.
+
+Sunk costs are expenditures already incurred and unrecoverable. They should not
+influence forward-looking decisions.
+
+DEMAND
+======
+The law of demand states that, holding other factors constant, quantity
+demanded falls as price rises. The demand curve therefore slopes downward.
+
+Shifts in demand, as distinct from movement along the curve, arise from changes
+in consumer income, the prices of substitutes and complements, tastes,
+expectations, and the number of buyers.
+
+SUPPLY
+======
+The law of supply states that quantity supplied rises as price rises, so the
+supply curve slopes upward.
+
+Shifts in supply arise from changes in input prices, technology, the number of
+sellers, taxes and subsidies, and producer expectations.
+
+MARKET EQUILIBRIUM
+==================
+Equilibrium occurs where the quantity demanded equals the quantity supplied,
+determining market price and quantity.
+
+A price above equilibrium creates surplus, pushing price down. A price below
+equilibrium creates shortage, pushing price up.
+
+Price ceilings, set below equilibrium, create persistent shortages. Price
+floors, set above equilibrium, create persistent surpluses. Minimum wage is a
+price floor in the labour market.
+
+ELASTICITY
+==========
+Price elasticity of demand measures responsiveness: the percentage change in
+quantity demanded divided by the percentage change in price.
+
+Demand is elastic when the absolute value exceeds one, meaning quantity
+responds strongly. It is inelastic when below one. Goods with many substitutes,
+and non-necessities, tend to be elastic; necessities tend to be inelastic.
+
+Elasticity determines who bears a tax. The more inelastic side of the market
+bears more of the burden.
+
+MARKET STRUCTURES
+=================
+Perfect competition: many small firms, identical products, free entry and exit,
+and price-taking behaviour. Long-run economic profit tends toward zero.
+
+Monopoly: a single seller with barriers to entry. The firm is a price maker and
+produces less at a higher price than a competitive market would, generating
+deadweight loss.
+
+Monopolistic competition: many firms selling differentiated products, as in
+restaurants or clothing.
+
+Oligopoly: few firms, interdependent decisions, often analysed with game
+theory. The prisoner's dilemma explains why cartels are unstable.
+
+MARKET FAILURE
+==============
+Externalities are costs or benefits falling on third parties. Pollution is a
+negative externality; vaccination carries a positive one. Unpriced
+externalities lead markets to over- or under-produce.
+
+Public goods are non-excludable and non-rival, which creates free-rider
+problems and typically justifies public provision.
+
+WHY IT MATTERS
+==============
+Microeconomics explains pricing, wages, regulation, and the tradeoffs behind
+public policy.
+
+COMMON MISCONCEPTIONS
+=====================
+- A change in price moves along a demand curve; it does not shift it
+- Economic profit differs from accounting profit because it subtracts implicit
+  opportunity costs
+- Monopolies do not charge infinite prices; they are still bound by demand

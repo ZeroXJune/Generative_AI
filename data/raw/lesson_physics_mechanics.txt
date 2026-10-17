@@ -1,0 +1,83 @@
+LESSON: CLASSICAL MECHANICS - MOTION, FORCES, AND ENERGY
+
+COURSE LEVEL: Undergraduate, first year
+PREREQUISITES: Algebra, basic trigonometry, introductory calculus helpful
+
+KINEMATICS
+==========
+Kinematics describes motion without reference to its causes.
+
+Displacement is the change in position, a vector quantity. Velocity is the rate
+of change of displacement; speed is its magnitude. Acceleration is the rate of
+change of velocity.
+
+For constant acceleration in one dimension:
+- v = v0 + a*t
+- x = x0 + v0*t + (1/2)*a*t^2
+- v^2 = v0^2 + 2*a*(x - x0)
+
+Near Earth's surface, gravitational acceleration is approximately 9.81 metres
+per second squared, directed downward.
+
+Projectile motion decomposes into independent horizontal and vertical
+components. Horizontal velocity stays constant when air resistance is
+neglected; vertical motion undergoes constant downward acceleration.
+
+NEWTON'S LAWS OF MOTION
+=======================
+First law (inertia): an object at rest stays at rest, and an object in motion
+continues at constant velocity, unless acted on by a net external force.
+
+Second law: the net force on an object equals its mass times its acceleration,
+F = m*a. Force is measured in newtons, where one newton is one kilogram metre
+per second squared.
+
+Third law: for every action there is an equal and opposite reaction. Forces
+occur in pairs acting on different objects.
+
+Common forces: weight (mass times gravitational acceleration), normal force
+perpendicular to a surface, friction opposing relative motion, and tension
+along a rope or cable.
+
+WORK, ENERGY, AND POWER
+=======================
+Work is force times displacement in the direction of the force, measured in
+joules. Kinetic energy is one half times mass times velocity squared.
+Gravitational potential energy near Earth's surface is mass times
+gravitational acceleration times height.
+
+The work-energy theorem states that the net work done on an object equals its
+change in kinetic energy.
+
+Conservation of energy: in a closed system with only conservative forces, the
+total mechanical energy remains constant. Friction converts mechanical energy
+into thermal energy, which is why it is called non-conservative.
+
+Power is the rate of energy transfer, measured in watts, where one watt is one
+joule per second.
+
+MOMENTUM
+========
+Linear momentum is mass times velocity. Impulse is force times the time over
+which it acts, and equals the change in momentum.
+
+Conservation of momentum: in the absence of external forces, the total momentum
+of a system is constant. This holds in all collisions.
+
+Elastic collisions conserve both momentum and kinetic energy. Inelastic
+collisions conserve momentum but not kinetic energy; perfectly inelastic
+collisions leave the objects moving together.
+
+WHY IT MATTERS
+==============
+Mechanics is the foundation of engineering, from structural analysis to
+spacecraft trajectories. Its conservation laws generalise into every later
+branch of physics.
+
+COMMON MISCONCEPTIONS
+=====================
+- Motion does not require a continuing force; constant velocity requires zero
+  net force
+- Mass and weight differ: mass is an intrinsic quantity in kilograms, weight is
+  a force in newtons that depends on local gravity
+- Action-reaction pairs act on different objects and therefore never cancel

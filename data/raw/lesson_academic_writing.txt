@@ -1,0 +1,94 @@
+LESSON: ACADEMIC WRITING AND COMPOSITION
+
+COURSE LEVEL: Undergraduate, first year
+PREREQUISITES: None
+
+PURPOSE AND AUDIENCE
+====================
+Academic writing makes a claim and supports it with evidence for a reader who
+is intelligent but not already convinced. Every structural choice follows from
+that purpose.
+
+THE THESIS STATEMENT
+====================
+A thesis is a single arguable claim that the essay will defend. It belongs
+near the end of the introduction.
+
+A thesis must be arguable rather than factual. "The Second World War ended in
+1945" is a fact and cannot be a thesis. "Economic provisions of the Versailles
+Treaty contributed more to German instability than its territorial clauses" is
+arguable, specific, and defensible.
+
+Weak theses are vague, announce rather than argue ("This essay will discuss"),
+or state the obvious.
+
+PARAGRAPH STRUCTURE
+===================
+A standard body paragraph contains a topic sentence stating the paragraph's
+claim, evidence supporting it, analysis explaining how the evidence supports
+the claim, and a transition.
+
+The analysis is the part most often omitted and the part that matters most.
+Quoted evidence does not interpret itself; the writer must say what it shows
+and why it matters to the thesis.
+
+ESSAY ORGANISATION
+==================
+Introduction: establish context, narrow to the problem, state the thesis.
+
+Body: one claim per paragraph, ordered so each builds on the last. Address the
+strongest counterargument rather than the weakest.
+
+Conclusion: synthesise rather than merely summarise. State what follows from
+the argument, and what remains unresolved.
+
+EVIDENCE AND CITATION
+=====================
+Primary sources are original materials: data, documents, interviews, works
+under study. Secondary sources interpret primary ones. Scholarly sources are
+peer-reviewed.
+
+Citation serves three purposes: it credits the originator, it lets readers
+verify claims, and it situates the work within existing scholarship.
+
+Common styles: MLA in the humanities, using author and page; APA in the social
+sciences, using author and date; Chicago, which supports both notes and
+author-date formats. Consistency within a document matters more than the choice
+between them.
+
+Plagiarism is the presentation of another's work or ideas as one's own. It
+includes unattributed paraphrase, not just copied wording. Paraphrasing still
+requires citation.
+
+REVISION
+========
+Revision is structural: does the argument hold, is the evidence sufficient, is
+the order logical. Editing is sentence-level. Proofreading catches errors.
+These are distinct activities, and doing them simultaneously does all three
+badly.
+
+Practical techniques: outline the draft you actually wrote and compare it to
+the one you intended; read aloud to expose awkward syntax; cut any sentence
+that does not advance the argument.
+
+CLARITY
+=======
+- Prefer active voice unless the actor is genuinely unimportant
+- Prefer concrete nouns and strong verbs to abstraction
+- Place the main clause first
+- Delete intensifiers that add no information: very, really, quite
+- Define technical terms on first use
+
+WHY IT MATTERS
+==============
+Writing is how academic and professional work is evaluated and transmitted. The
+discipline of making a claim and defending it with evidence is itself a form of
+thinking, not merely its presentation.
+
+COMMON MISCONCEPTIONS
+=====================
+- Longer sentences and larger vocabulary do not signal sophistication; clarity
+  does
+- The five-paragraph form is a teaching scaffold, not a requirement
+- A conclusion that only restates the introduction wastes the reader's
+  attention
