@@ -1,0 +1,79 @@
+LESSON: LINEAR ALGEBRA - VECTORS, MATRICES, AND EIGENVALUES
+
+COURSE LEVEL: Undergraduate, first or second year
+PREREQUISITES: Algebra II
+
+VECTORS AND VECTOR SPACES
+=========================
+A vector is an ordered list of numbers representing magnitude and direction, or
+equivalently a point in n-dimensional space. A vector space is a set closed
+under vector addition and scalar multiplication, satisfying eight axioms
+including associativity, commutativity of addition, and the existence of a zero
+vector and additive inverses.
+
+Key operations:
+- Dot product: the sum of componentwise products. Produces a scalar.
+- Norm (length): the square root of the dot product of a vector with itself
+- Cosine of the angle between vectors: the dot product divided by the product
+  of the two norms
+- Two vectors are orthogonal when their dot product is zero
+
+MATRICES
+========
+A matrix is a rectangular array of numbers representing a linear
+transformation. Matrix multiplication composes transformations and is
+associative but NOT commutative: AB generally does not equal BA.
+
+Important properties:
+- The identity matrix has ones on the diagonal and zeros elsewhere
+- A matrix is invertible if and only if its determinant is nonzero
+- The transpose exchanges rows and columns
+- Rank is the number of linearly independent rows, equivalently columns
+
+SOLVING LINEAR SYSTEMS
+======================
+A system of linear equations is written Ax = b. Gaussian elimination reduces
+the augmented matrix to row echelon form through three elementary row
+operations: swapping rows, scaling a row, and adding a multiple of one row to
+another.
+
+A system has exactly one solution when the rank of A equals the number of
+unknowns, infinitely many when the rank is smaller and the system is
+consistent, and none when the system is inconsistent.
+
+LINEAR INDEPENDENCE AND BASIS
+=============================
+Vectors are linearly independent when no one of them can be written as a
+combination of the others. A basis is a linearly independent set that spans the
+space. The dimension of a space is the number of vectors in any basis.
+
+EIGENVALUES AND EIGENVECTORS
+============================
+An eigenvector of A is a nonzero vector v whose direction is unchanged by the
+transformation: Av = lambda times v, where lambda is the eigenvalue.
+
+Eigenvalues are found by solving the characteristic equation: the determinant
+of (A minus lambda times the identity) equals zero.
+
+Eigendecomposition expresses a matrix in terms of its eigenvalues and
+eigenvectors, which reveals the transformation's fundamental scaling behaviour
+along its invariant directions.
+
+WHY IT MATTERS
+==============
+Linear algebra underpins computer graphics (transformations as matrices),
+machine learning (data as vectors, weights as matrices), Principal Component
+Analysis (eigenvectors of the covariance matrix), and search engines
+(PageRank is an eigenvector problem).
+
+In text retrieval, documents become vectors and similarity becomes a dot
+product or cosine. For unit-length vectors the dot product equals the cosine of
+the angle between them, which is why normalisation matters so much in practice.
+
+COMMON MISCONCEPTIONS
+=====================
+- Matrix multiplication is not commutative
+- A determinant of zero means the transformation collapses space into a lower
+  dimension and cannot be inverted
+- Eigenvectors are not unique; any nonzero scalar multiple is also an
+  eigenvector for the same eigenvalue

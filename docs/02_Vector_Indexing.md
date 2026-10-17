@@ -35,7 +35,7 @@ its own and embed with something different from the index.
 
 | Parameter | Value |
 |---|---|
-| Corpus | 26 documents → **150 chunks** |
+| Corpus | 26 documents → **150 chunks** (as submitted; see §5b for the expanded replication) |
 | Chunking | 120 tokens, 30 overlap (tuned — §5) |
 | Embedding dimension | 384 |
 | Evaluation queries | 8, each with a known ground-truth document |
@@ -158,6 +158,76 @@ unrelated text into the prompt. Measured with cosine at k = 5:
 only 8 evaluation queries these differences are one or two queries wide and
 should not be over-read; 120/30 was chosen because it is best on both measures
 *and* yields context tight enough to cite precisely.
+
+---
+
+## 5b. Replication on an Expanded Corpus
+
+The results in §3 and §4 were measured on the 26-document corpus submitted for
+Checkpoint 2, using 8 ground-truth queries — and §5 flagged that 8 queries made
+each difference only one or two queries wide.
+
+The corpus was later expanded with 12 college-subject lesson documents
+(**38 documents → 226 chunks**) and the evaluation set extended to **20
+ground-truth queries**. Re-running the experiment replicates every structural
+finding, with more statistical room beneath it.
+
+### Normalized embeddings — the headline result replicates
+
+| Metric | Hit@1 | Hit@5 | MRR | Overlap@5 | Identical order |
+|---|---|---|---|---|---|
+| Cosine | 0.750 | 0.900 | 0.800 | 1.000 | 1.000 |
+| Euclidean | 0.750 | 0.900 | 0.800 | 1.000 | 1.000 |
+| Dot product | 0.750 | 0.900 | 0.800 | 1.000 | 1.000 |
+
+Still byte-identical rankings across all three metrics, now over 20 queries
+instead of 8. The algebra in §3 predicted exactly this, and a larger sample
+does not dent it — as it should not, since the result is a theorem rather than
+an empirical tendency.
+
+Absolute quality also rose (Hit@1 0.625 → 0.750, MRR 0.692 → 0.800), because
+the lesson documents are topically distinct and lexically well-separated.
+
+### Unnormalized embeddings — Euclidean collapses harder
+
+| Metric | Hit@1 | Hit@5 | MRR | Avg chunk tokens |
+|---|---|---|---|---|
+| Cosine | 0.750 | 0.900 | 0.800 | 108.1 |
+| Euclidean | **0.050** | **0.150** | **0.092** | **16.1** |
+| Dot product | 0.800 | 0.900 | 0.850 | 113.8 |
+
+Euclidean's failure is more severe on the larger corpus: MRR 0.800 → 0.092,
+and the mean retrieved chunk drops to **16.1 tokens** against a corpus average
+of 108.1. With more documents to choose from, it finds even shorter ones. The
+diagnosis in §4.1 holds and sharpens: unnormalized Euclidean retrieves *short*
+chunks, not *relevant* ones.
+
+### One honest complication
+
+On this corpus, unnormalized **dot product slightly outperformed cosine**
+(MRR 0.850 vs 0.800). That is a real measurement and it cuts against the
+tidiness of §7, so it should be stated rather than buried.
+
+It does not change the recommendation, for two reasons. First, the advantage is
+corpus-specific — it comes from dot product's length bias happening to favour
+the longer lesson documents, which are also the correct answers here. The mean
+retrieved length of 113.8 tokens against cosine's 108.1 shows the bias is still
+present; it is simply pointing the right way by luck of this corpus. Second,
+the §7 argument was never that cosine retrieves best — it was that cosine is
+the only metric whose quality does not depend on an invariant maintained
+elsewhere. A metric that wins by accident of document length is not a metric to
+rely on.
+
+### Chroma cross-check also improved
+
+| NumPy metric | Chroma space | Exact order | Score sequence | Hit@5 |
+|---|---|---|---|---|
+| Cosine | `cosine` | 0.950 | **1.000** | 0.900 |
+| Euclidean | `l2` | 0.950 | **1.000** | 0.900 |
+| Dot product | `ip` | 0.950 | **1.000** | 0.900 |
+
+Exact-order agreement rose from 0.875 to 0.950, and score sequences still match
+perfectly — confirming again that the only divergence is tie ordering.
 
 ---
 

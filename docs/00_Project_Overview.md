@@ -23,7 +23,9 @@ you a deadline is three days away unless you go looking.
 so "find relevant notes" becomes "find the nearest vectors." Then feed only
 those notes to a language model, with instructions to answer from them alone.
 
-**Current scale**: 26 documents → 150 indexed chunks → 32 Python modules.
+**Current scale**: 38 documents → 226 indexed chunks → 40 Python modules.
+The corpus holds the original 26 personal/course documents plus 12
+college-subject lesson documents (`data/raw/lesson_*.txt`).
 
 ---
 

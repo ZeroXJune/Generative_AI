@@ -1,0 +1,94 @@
+LESSON: INTRODUCTORY PSYCHOLOGY - LEARNING, MEMORY, AND COGNITION
+
+COURSE LEVEL: Undergraduate, first year
+PREREQUISITES: None
+
+WHAT PSYCHOLOGY IS
+==================
+Psychology is the scientific study of behaviour and mental processes. It relies
+on empirical methods: experiments, correlational studies, case studies, and
+observation.
+
+Major perspectives include the biological (brain and genetics), behavioural
+(observable responses), cognitive (mental processing), humanistic (growth and
+self-actualisation), and sociocultural.
+
+RESEARCH METHODS
+================
+An experiment manipulates an independent variable and measures a dependent
+variable, with random assignment to conditions. Random assignment is what
+permits causal conclusions.
+
+Correlational studies measure association without manipulation and therefore
+cannot establish causation. A correlation coefficient ranges from negative one
+to positive one; zero indicates no linear relationship.
+
+Control measures include placebo conditions, blinding, and representative
+sampling. The placebo effect demonstrates that expectation alone can change
+outcomes.
+
+CLASSICAL CONDITIONING
+======================
+Discovered by Ivan Pavlov, classical conditioning pairs a neutral stimulus with
+one that already produces a response.
+
+In Pavlov's work, food was the unconditioned stimulus and salivation the
+unconditioned response. After repeated pairing with a bell, the bell became a
+conditioned stimulus producing a conditioned response.
+
+Related processes: extinction (the response fades when pairing stops),
+spontaneous recovery, generalisation to similar stimuli, and discrimination
+between them.
+
+OPERANT CONDITIONING
+====================
+Developed by B. F. Skinner, operant conditioning shapes behaviour through
+consequences.
+
+- Positive reinforcement adds a desirable consequence
+- Negative reinforcement removes an unpleasant one
+- Positive punishment adds an unpleasant consequence
+- Negative punishment removes a desirable one
+
+Note that "negative" means removal, not undesirable. Both forms of
+reinforcement increase behaviour.
+
+Reinforcement schedules matter: variable ratio schedules, which reward after an
+unpredictable number of responses, produce the most persistent behaviour. This
+is the mechanism behind gambling.
+
+MEMORY
+======
+The three-stage model describes sensory memory (brief, large capacity),
+short-term or working memory (roughly seven items, seconds to a minute without
+rehearsal), and long-term memory (durable, effectively unlimited).
+
+Encoding moves information into storage; retrieval brings it back. Elaborative
+rehearsal, which connects new material to existing knowledge, outperforms rote
+repetition.
+
+Forgetting arises from decay, interference (where other memories compete), and
+retrieval failure. The spacing effect shows that distributed practice produces
+better retention than massed practice, which is why cramming performs poorly on
+delayed tests.
+
+COGNITIVE BIASES
+================
+- Confirmation bias: favouring evidence that supports existing beliefs
+- Availability heuristic: judging frequency by how easily examples come to mind
+- Anchoring: over-relying on the first piece of information encountered
+- Hindsight bias: believing an outcome was predictable after the fact
+
+WHY IT MATTERS
+==============
+Psychology informs education, clinical treatment, workplace design, and public
+health messaging. Its findings on spacing and retrieval practice have direct
+implications for how to study.
+
+COMMON MISCONCEPTIONS
+=====================
+- Negative reinforcement is not punishment; it increases behaviour
+- Memory does not record events like video; it reconstructs them, and
+  reconstruction introduces error
+- Most psychological traits reflect both genetics and environment rather than
+  one alone

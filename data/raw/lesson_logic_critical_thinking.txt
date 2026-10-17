@@ -1,0 +1,90 @@
+LESSON: LOGIC AND CRITICAL THINKING
+
+COURSE LEVEL: Undergraduate, first year
+PREREQUISITES: None
+
+ARGUMENTS
+=========
+An argument consists of premises offered in support of a conclusion. It is not
+a quarrel, and not a mere assertion.
+
+Deductive arguments claim that the conclusion follows necessarily from the
+premises. Inductive arguments claim only that the conclusion is probable given
+the premises.
+
+VALIDITY AND SOUNDNESS
+======================
+A deductive argument is valid when the conclusion follows necessarily from the
+premises. Validity concerns structure alone, not truth.
+
+A valid argument can have false premises and a false conclusion. For example:
+all birds are mammals; all mammals have scales; therefore all birds have
+scales. The structure is valid; every statement is false.
+
+An argument is sound when it is both valid and has all true premises. A sound
+argument necessarily has a true conclusion.
+
+For inductive arguments the corresponding terms are strength and cogency.
+
+COMMON VALID FORMS
+==================
+- Modus ponens: if P then Q; P; therefore Q
+- Modus tollens: if P then Q; not Q; therefore not P
+- Hypothetical syllogism: if P then Q; if Q then R; therefore if P then R
+- Disjunctive syllogism: either P or Q; not P; therefore Q
+
+COMMON INVALID FORMS
+====================
+- Affirming the consequent: if P then Q; Q; therefore P. Invalid, because Q may
+  have another cause.
+- Denying the antecedent: if P then Q; not P; therefore not Q. Also invalid.
+
+These two closely resemble the valid forms above, which is precisely why they
+persuade.
+
+INFORMAL FALLACIES
+==================
+- Ad hominem: attacking the arguer rather than the argument
+- Straw man: misrepresenting a position to make it easier to refute
+- False dilemma: presenting two options when more exist
+- Appeal to authority: citing authority outside its domain of expertise
+- Post hoc: inferring causation from mere sequence
+- Circular reasoning: assuming the conclusion among the premises
+- Slippery slope: asserting an extreme outcome without supporting the chain
+- Hasty generalisation: drawing a broad conclusion from insufficient cases
+- Appeal to ignorance: treating absence of disproof as proof
+
+EVALUATING EVIDENCE
+===================
+Useful questions: What is the claim, precisely? What evidence supports it? What
+is the source, and what interests does it have? Could the evidence be explained
+otherwise? What evidence would count against the claim?
+
+A claim that no possible observation could refute is unfalsifiable, and
+unfalsifiability is a weakness rather than a strength.
+
+Burden of proof rests with whoever makes a positive claim. Extraordinary claims
+require proportionately strong evidence.
+
+CORRELATION AND CAUSATION
+=========================
+An observed association may arise because one variable causes the other,
+because the causation runs the other way, because a third variable causes both
+(confounding), or by coincidence.
+
+Establishing causation generally requires controlled experiment, a plausible
+mechanism, correct temporal ordering, and the elimination of confounds.
+
+WHY IT MATTERS
+==============
+Logic is the shared standard of reasoning across disciplines. It is also the
+practical basis for evaluating news, advertising, and political claims, and it
+underlies formal reasoning in mathematics and computer science.
+
+COMMON MISCONCEPTIONS
+=====================
+- Validity does not mean truth; a valid argument can be entirely false
+- Identifying a fallacy in an argument does not establish that its conclusion
+  is false, only that this argument fails to support it
+- Inductive arguments are not defective for being uncertain; probability is
+  their proper standard

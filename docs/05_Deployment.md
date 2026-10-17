@@ -178,16 +178,58 @@ Dockerfile. Routing around an organisational egress policy was not attempted.
 - The healthcheck passes against a running container
 - Volume persistence across `docker compose down && up`
 
-**To close this gap**, run on any machine with unrestricted Docker access:
+### Runtime layer verified without the image
 
-```bash
-docker compose up --build
-docker compose ps          # expect: healthy
-curl http://localhost:8501/_stcore/health   # expect: ok
+The build is blocked, but the *application* the container would run is not.
+Each entrypoint mode was executed directly in a Linux / Python 3.11
+environment, issuing the same commands `docker/entrypoint.sh` issues:
+
+| Mode | Command | Result |
+|---|---|---|
+| `ingest` | `RAGApplication().ingest()` | Ran; index current at 26 documents |
+| `reminders` | `python src/reminders.py` | Ran; 4 deadlines in the next 14 days |
+| `serve` | `streamlit run ... --server.address=0.0.0.0 --server.headless=true` | Bound to :8501 |
+
+The Dockerfile's healthcheck was exercised against that running server:
+
+```
+GET /_stcore/health  ->  HTTP 200, body: ok
+GET /                ->  HTTP 200
 ```
 
-Capturing that output is the deployment evidence this checkpoint asks for, and
-it is the one remaining item.
+This does not prove the image builds. It does prove the healthcheck is correct
+and that the process starts under the exact flags the container uses — so if
+the build succeeds, the container serves.
+
+### Closing the gap: one command
+
+```bash
+./scripts/verify_deployment.sh
+```
+
+Run on any machine with unrestricted Docker access. It builds the image,
+starts the container, waits for the healthcheck, exercises the CLI
+entrypoints, checks the named volumes, tears down, and writes the whole
+transcript to `docs/deployment_evidence.txt`.
+
+Exit code 0 means the image builds and the container serves healthy; 1 means
+it did not, with the failure in the output. That file is the deployment
+evidence this checkpoint asks for.
+
+### Checking the environment first
+
+```bash
+python scripts/doctor.py
+```
+
+Reports whether real MiniLM embeddings and a live LLM are active, or whether
+fallbacks are silently in play. Exit code 0 = fully operational, 1 = degraded
+but working, 2 = broken.
+
+This exists because every component here degrades gracefully rather than
+crashing — good for robustness, bad for confidence, since a degraded run looks
+exactly like a working one. Run it before recording a demo or quoting
+retrieval scores as results.
 
 ---
 

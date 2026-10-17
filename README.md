@@ -112,7 +112,7 @@ personal-assistant-ai/
 - [x] **Checkpoint 2** (Weeks 5–8, Midterm, 20%): Prompt Architecture & Vector Indexing
   - Four versioned system prompts with design rationale ([docs](docs/02_Prompt_Engineering.md))
   - Chat Completion API integration with an offline fallback
-  - Chroma vector database, 26 documents → 150 indexed chunks
+  - Chroma vector database, 38 documents → 226 indexed chunks
   - Distance metric comparison: Cosine vs Euclidean vs Dot product ([docs](docs/02_Vector_Indexing.md))
 
 - [x] **Checkpoint 3** (Weeks 9–12, Semi-Final, 30%): RAG Orchestration & Application
@@ -302,6 +302,24 @@ the lexical embedder. For full-quality embeddings:
 ```bash
 docker build --build-arg WITH_LOCAL_EMBEDDINGS=true -t personal-assistant-ai:full .
 ```
+
+### Checking your setup
+
+```bash
+python scripts/doctor.py        # is this machine running the real system?
+```
+
+Reports whether real embeddings and a live LLM are active, or whether
+fallbacks are silently in play. Exit 0 = fully operational, 1 = degraded,
+2 = broken.
+
+### Capturing deployment evidence
+
+```bash
+./scripts/verify_deployment.sh  # build, start, healthcheck, capture
+```
+
+Writes a full transcript to `docs/deployment_evidence.txt`.
 
 ### Fine-tuning analysis
 

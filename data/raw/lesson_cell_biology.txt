@@ -1,0 +1,82 @@
+LESSON: CELL BIOLOGY - STRUCTURE, DIVISION, AND GENE EXPRESSION
+
+COURSE LEVEL: Undergraduate, first year
+PREREQUISITES: High school biology, basic chemistry
+
+CELL THEORY
+===========
+Three principles form the foundation of cell biology: all living organisms are
+composed of one or more cells; the cell is the basic unit of structure and
+function; and all cells arise from pre-existing cells.
+
+PROKARYOTES AND EUKARYOTES
+==========================
+Prokaryotic cells, comprising bacteria and archaea, lack a membrane-bound
+nucleus. Their DNA sits in the cytoplasm in a region called the nucleoid. They
+are typically one to five micrometres across.
+
+Eukaryotic cells, found in animals, plants, fungi, and protists, enclose their
+DNA within a nucleus and contain membrane-bound organelles. They are typically
+ten to one hundred micrometres across.
+
+MAJOR ORGANELLES
+================
+- Nucleus: houses chromosomes; site of DNA replication and transcription
+- Mitochondria: generate ATP through cellular respiration; contain their own
+  circular DNA, evidence for the endosymbiotic theory
+- Ribosomes: synthesise proteins by translating messenger RNA
+- Endoplasmic reticulum: the rough ER studded with ribosomes processes
+  proteins; the smooth ER synthesises lipids
+- Golgi apparatus: modifies, sorts, and packages proteins for transport
+- Lysosomes: contain hydrolytic enzymes that degrade waste and worn organelles
+- Chloroplasts: in plants and algae, conduct photosynthesis
+
+The plasma membrane is a phospholipid bilayer with embedded proteins, described
+by the fluid mosaic model. It is selectively permeable.
+
+TRANSPORT ACROSS MEMBRANES
+==========================
+Passive transport requires no energy and moves substances down a concentration
+gradient. Simple diffusion moves small nonpolar molecules directly; facilitated
+diffusion uses channel or carrier proteins. Osmosis is the diffusion of water
+across a semipermeable membrane.
+
+Active transport moves substances against a gradient and consumes ATP. The
+sodium-potassium pump exports three sodium ions for every two potassium ions
+imported, maintaining the membrane potential.
+
+CELL DIVISION
+=============
+Mitosis produces two genetically identical diploid daughter cells. Its stages
+are prophase (chromosomes condense), metaphase (chromosomes align at the
+equator), anaphase (sister chromatids separate), and telophase (nuclei
+re-form), followed by cytokinesis.
+
+Meiosis produces four genetically distinct haploid gametes through two
+successive divisions. Crossing over during prophase I and independent
+assortment during metaphase I generate genetic diversity.
+
+THE CENTRAL DOGMA
+=================
+Genetic information flows from DNA to RNA to protein.
+
+Transcription, occurring in the nucleus, copies a DNA template into messenger
+RNA via RNA polymerase. Translation, occurring at the ribosome, reads mRNA in
+three-base codons and assembles the corresponding amino acid chain.
+
+The genetic code uses 64 codons to specify 20 amino acids plus stop signals, so
+the code is redundant but not ambiguous: several codons may specify one amino
+acid, but no codon specifies two.
+
+WHY IT MATTERS
+==============
+Cell biology underlies medicine, genetics, and biotechnology. Cancer is
+fundamentally a disorder of cell cycle regulation; antibiotics exploit
+differences between prokaryotic and eukaryotic cells.
+
+COMMON MISCONCEPTIONS
+=====================
+- Mitosis is one phase of the cell cycle, not the whole of it; interphase
+  occupies most of a cell's life
+- Osmosis concerns water movement, not solute movement
+- DNA is not translated directly into protein; RNA is the required intermediate
