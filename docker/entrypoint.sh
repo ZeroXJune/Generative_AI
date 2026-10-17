@@ -12,8 +12,9 @@ echo "Personal Assistant AI - starting (mode: ${1:-serve})"
 case "${1:-serve}" in
   serve)
     # The index lives on a mounted volume, so it survives restarts and only
-    # has to be built the first time.
-    if [ ! -d "data/vector_store_cp3" ]; then
+    # has to be built the first time. Test for an empty directory, not a
+    # missing one: the volume mount point always exists.
+    if [ -z "$(ls -A data/vector_store_cp3 2>/dev/null)" ]; then
       echo "No index found - running initial ingestion..."
       python src/checkpoint3_demo.py >/dev/null 2>&1 || python -c "
 import sys; sys.path.insert(0, 'src')

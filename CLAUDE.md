@@ -23,8 +23,8 @@ A Retrieval-Augmented Generation system that allows users to upload documents, a
 # Clone repo (already done)
 cd /home/user/Generative_AI
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies (requirements.txt pins only have wheels for Python 3.11)
+pip install -r requirements-core.txt
 
 # Run text preprocessing demo
 python src/preprocessing/text_cleaner.py

@@ -56,7 +56,12 @@ WORKDIR /app
 COPY --chown=appuser:appuser src/ ./src/
 COPY --chown=appuser:appuser data/raw/ ./data/raw/
 COPY --chown=appuser:appuser docker/entrypoint.sh ./docker/entrypoint.sh
-RUN chmod +x ./docker/entrypoint.sh && mkdir -p data/processed && chown -R appuser:appuser data
+# Both compose volume mount points must exist here, owned by appuser: Docker
+# seeds a named volume from the image directory (ownership included), but a
+# path missing from the image is created root-owned and appuser cannot write.
+RUN chmod +x ./docker/entrypoint.sh \
+    && mkdir -p data/processed data/vector_store_cp3 \
+    && chown -R appuser:appuser data
 
 USER appuser
 EXPOSE 8501
