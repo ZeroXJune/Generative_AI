@@ -54,7 +54,12 @@ python src/experiments/metric_comparison.py
 export OPENAI_BASE_URL="http://localhost:11434/v1"   # ollama serve
 export OPENAI_MODEL="llama3.2"                       # ollama pull llama3.2
 
-# Or a hosted provider:
+# Google Gemini (the provider used for the demo) - same client, no code change:
+export OPENAI_API_KEY="your-gemini-key"
+export OPENAI_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai/"
+export OPENAI_MODEL="gemini-2.5-flash"   # check Google's current model list
+
+# Or OpenAI:
 export OPENAI_API_KEY="sk-..."
 ```
 
@@ -280,7 +285,7 @@ play — a degraded run otherwise looks identical to a working one.
 | **Embeddings** | Sentence-Transformers | Fast, <1GB, high quality (384-dim) |
 | **Vector DB** | Chroma (local) / FAISS (scale) | Simple for learning, scalable |
 | **LLM Framework** | LangChain | Standard, good docs, RAG-focused |
-| **LLM** | GPT-3.5-Turbo / Llama-2 | Production-grade, cost-effective |
+| **LLM** | Google Gemini (via OpenAI-compatible endpoint); Llama 3.2 via Ollama offline | Free tier, no client code change; local fallback needs no key |
 | **Interface** | Streamlit | Rapid development, no frontend skills |
 | **Deployment** | Docker | Reproducible, portable, cloud-ready |
 | **Fine-tuning** | PEFT (LoRA/QLoRA) | Low VRAM, maintains base knowledge |

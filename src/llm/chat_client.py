@@ -64,8 +64,14 @@ OLLAMA_BASE_URL = "http://localhost:11434/v1"
 # OpenAI SDK requires the field to be non-empty.
 LOCAL_KEY_PLACEHOLDER = "not-needed-for-local"
 
-# Hosts that genuinely require a paid credential.
-HOSTED_URL_MARKERS = ("api.openai.com", "openai.azure.com")
+# Hosts that genuinely require a real credential. Anything not listed here is
+# treated as self-hosted: it gets a placeholder key and is reported as "local",
+# so a hosted provider missing from this list is silently mislabelled.
+HOSTED_URL_MARKERS = (
+    "api.openai.com",
+    "openai.azure.com",
+    "generativelanguage.googleapis.com",  # Gemini OpenAI-compatible endpoint
+)
 
 # Reused so the offline responder scores overlap on content words only.
 # Matching on function words such as "the" makes every sentence look relevant
@@ -159,7 +165,12 @@ class ChatClient:
                 kwargs["base_url"] = self.base_url
 
             self.client = OpenAI(**kwargs)
-            self.backend = "local" if self.is_local_endpoint else "openai"
+            if self.is_local_endpoint:
+                self.backend = "local"
+            elif self.base_url and "googleapis.com" in self.base_url:
+                self.backend = "gemini"
+            else:
+                self.backend = "openai"
         except ImportError:
             # SDK missing; the offline responder keeps the pipeline usable.
             self.client = None
