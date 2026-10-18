@@ -229,6 +229,18 @@ export OPENAI_BASE_URL="https://..."    # optional: Azure, Groq, Together
 export OPENAI_MODEL="gpt-3.5-turbo"
 ```
 
+**Option C — Google Gemini.** Google serves an OpenAI-compatible endpoint, so
+the same client works unchanged:
+
+```bash
+export OPENAI_API_KEY="your-gemini-key"     # https://aistudio.google.com/apikey
+export OPENAI_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai/"
+export OPENAI_MODEL="gemini-2.5-flash"      # check Google's current model list
+```
+
+Then run `python scripts/doctor.py`: it makes one real test call and fails if
+the key, model name or URL is wrong.
+
 ### Configuring credentials with a `.env` file
 
 Rather than exporting variables in every shell, copy the template and fill it

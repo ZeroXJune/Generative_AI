@@ -104,7 +104,7 @@ alongside its text (`src/prompts/system_prompts.py`):
 | `query_rewriter` | v1 | Rewrite follow-ups | Retrieval collapse in chat |
 
 **Verified behaviour**: asked *"What is the WiFi password for the campus
-network?"* — absent from all 26 documents — the system replies exactly
+network?"* — absent from all 38 documents — the system replies exactly
 `I don't have that in your notes.` rather than inventing one.
 
 ### 4.2 Chat Completion API Integration
@@ -223,7 +223,7 @@ to prevent, appearing in the infrastructure rather than the model.
 ## 7. What Runs Today
 
 ```bash
-python src/build_index.py                     # 26 docs → 150 chunks
+python src/build_index.py                     # 38 docs → 226 chunks
 python src/checkpoint2_demo.py                # prompts + API + live queries
 python src/experiments/metric_comparison.py   # regenerates the results
 python src/reminders.py                       # deadline digest
@@ -233,9 +233,10 @@ streamlit run src/interface/app.py            # web interface
 All five verified from a clean checkout. The Streamlit interface was checked
 with `streamlit.testing.v1.AppTest`: 0 exceptions.
 
-**Environment**: Python 3.11 with `requirements.txt`. The pinned versions are
-from 2023 and need 3.11 — on Python 3.13+ several will try to compile from
-source and fail.
+**Environment**: `requirements-core.txt` on any Python 3.10+, or
+`requirements.txt` on Python 3.11. The pinned versions in `requirements.txt`
+are from 2023 — on Python 3.13+ several will try to compile from source and
+fail.
 
 ---
 

@@ -169,7 +169,8 @@ length, so turn 7 displayed as "turn 6" once trimming began.
 
 ## 5. Live Demo Results
 
-Seven queries, run against 26 documents / 204 chunks:
+Seven queries, run against 26 documents / 204 chunks (measured before the 12
+lesson documents were added; the corpus is now 38 documents):
 
 | # | Query | Rewritten | Outcome |
 |---|---|---|---|

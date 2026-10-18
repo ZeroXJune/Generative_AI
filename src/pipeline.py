@@ -13,14 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from preprocessing.text_cleaner import TextCleaner
 from preprocessing.chunker import DocumentChunker
-
-# Try to use real embedding generator, fall back to mock if network restricted
-try:
-    from embeddings.embedding_generator import EmbeddingGenerator
-    USE_MOCK_EMBEDDINGS = False
-except Exception:
-    from embeddings.embedding_generator_mock import MockEmbeddingGenerator as EmbeddingGenerator
-    USE_MOCK_EMBEDDINGS = True
+from build_index import load_embedder
 
 
 class DataPipeline:
@@ -51,17 +44,10 @@ class DataPipeline:
         self.cleaner = TextCleaner()
         self.chunker = DocumentChunker(chunk_size=chunk_size, overlap=overlap)
 
-        # Try real embeddings, fall back to mock if network restricted
-        try:
-            self.embedder = EmbeddingGenerator(model_name=embedding_model)
-        except Exception as e:
-            if "Proxy" in str(e) or "403" in str(e):
-                print("⚠ Network restricted (proxy blocking HuggingFace)")
-                print("  Falling back to mock embedding generator")
-                from embeddings.embedding_generator_mock import MockEmbeddingGenerator
-                self.embedder = MockEmbeddingGenerator(model_name=embedding_model)
-            else:
-                raise
+        # Same fallback as the index and RAG app: real MiniLM when it loads,
+        # otherwise the lexical TF-IDF embedder (missing package or blocked
+        # download), so the pipeline runs anywhere the rest of the project does.
+        self.embedder, _ = load_embedder(embedding_model)
 
         print(f"Pipeline initialized")
         print(f"  Raw data: {self.raw_dir}")
@@ -225,6 +211,8 @@ class DataPipeline:
         print(f"Embedder backend: {embedder_type}")
         if embedder_type == "mock":
             print("  ⚠ MOCK embeddings (random vectors) - not suitable for retrieval")
+        elif embedder_type.startswith("lexical"):
+            print("  ⚠ Lexical fallback - install sentence-transformers for semantic embeddings")
         print(f"Output: {self.processed_dir}")
         print("=" * 60)
 

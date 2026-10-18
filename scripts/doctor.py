@@ -173,8 +173,34 @@ def check_llm(report: Report) -> None:
             "Answers are quoted from your notes, not generated. Set "
             "OPENAI_API_KEY, or OPENAI_BASE_URL for a local Ollama server.",
         )
+        return
+
+    # A configured client proves nothing: a bad key, a retired model name or a
+    # rate limit only surfaces on the first real call, and ChatClient then
+    # falls back to the offline responder mid-demo. Make one tiny call now.
+    response = ChatClient().complete(
+        [{"role": "user", "content": "Reply with the single word: ready"}],
+        max_tokens=50,
+    )
+    if response.backend == "offline":
+        report.check(
+            FAIL,
+            f"Live backend configured ({backend}, {info['model']}) but the call failed",
+            "See the API error above. Check the key, the model name and the base URL.",
+        )
+    elif not response.content.strip():
+        report.check(
+            WARN,
+            f"Live backend: {backend} ({response.model}) returned an empty answer",
+            "Often a reasoning model spending max_tokens on thinking. Try a "
+            "non-reasoning model or raise max_tokens.",
+        )
     else:
-        report.check(OK, f"Live backend: {backend} ({info['model']})")
+        report.check(
+            OK,
+            f"Live backend: {backend} ({response.model})",
+            f"Test call answered in {response.latency_seconds:.1f}s",
+        )
 
 
 def check_data(report: Report) -> None:

@@ -108,7 +108,7 @@ Instruction fine-tuning needs thousands of high-quality (prompt, response)
 pairs. Module 1 Lesson 3 describes exactly this: human contractors writing
 ideal responses across many tasks.
 
-This project has **26 documents**. Even generating several examples per
+This project has **38 documents**. Even generating several examples per
 document yields low hundreds — an order of magnitude short, and self-generated
 pairs would teach the model to imitate its own current behaviour rather than
 improve it.
@@ -147,7 +147,7 @@ configuration would be:
 | Rank | 16 | Standard; 8 if memory-bound, 32 for more capacity |
 | Target modules | Attention q/k/v/o + MLP | Where adapters are most effective |
 | Task | **Structured extraction**, not Q&A | Behaviour, not knowledge |
-| Data | ≥1,000 verified pairs | Far beyond what 26 documents yield |
+| Data | ≥1,000 verified pairs | Far beyond what 38 documents yield |
 
 The trigger for revisiting: a corpus large enough to generate real training
 data, or a measured failure that prompting cannot fix.
