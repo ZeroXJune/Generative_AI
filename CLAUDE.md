@@ -160,6 +160,7 @@ personal-assistant-ai/
     ├── 00_Project_Overview.md         # Whole-project overview
     ├── 05_Deployment.md               # Checkpoint 4 container design
     ├── 06_Fine_Tuning_Analysis.md     # Checkpoint 4 LoRA/QLoRA analysis
+    ├── 07_Final_Demo_Runbook.md       # Steps to finish CP4 and record the demo
     └── CHECKPOINT1_REFLECTION.md      # Data challenges & solutions
 ```
 

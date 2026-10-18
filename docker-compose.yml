@@ -8,13 +8,15 @@ services:
     build:
       context: .
       args:
-        # Set to "true" for real MiniLM embeddings. Adds ~2.5 GB (PyTorch).
-        WITH_LOCAL_EMBEDDINGS: "false"
+        # Set WITH_LOCAL_EMBEDDINGS=true in .env for real MiniLM embeddings.
+        # Adds ~2.5 GB (PyTorch). Without it the app uses the lexical fallback.
+        WITH_LOCAL_EMBEDDINGS: "${WITH_LOCAL_EMBEDDINGS:-false}"
     image: personal-assistant-ai:latest
     ports:
       - "8501:8501"
     environment:
       # Optional. Without a key the app uses its offline extractive responder.
+      # For Gemini set all three in .env - the model default below is OpenAI's.
       OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
       OPENAI_BASE_URL: "${OPENAI_BASE_URL:-}"
       OPENAI_MODEL: "${OPENAI_MODEL:-gpt-3.5-turbo}"
