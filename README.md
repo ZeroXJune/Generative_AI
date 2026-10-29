@@ -382,7 +382,3 @@ docker-compose up --build
 ## Author
 
 Alber June Mumar - IS Professional Elective #4 Mini Capstone Project
-
-## License
-
-MIT
